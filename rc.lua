@@ -18,7 +18,7 @@ local wibox         = require("wibox")
 local beautiful     = require("beautiful")
 local naughty       = require("naughty")
 local lain          = require("lain")
---local menubar       = require("menubar")
+--local menubar       = require("dmenu")
 local freedesktop   = require("freedesktop")
 local hotkeys_popup = require("awful.hotkeys_popup")
                       require("awful.hotkeys_popup.keys")
@@ -106,10 +106,10 @@ local cycle_prev     = true  -- cycle with only the previously focused client or
 local editor         = "nvim"
 local browser        = "brave-browser"
 local virtualmachine = "virtualbox"
-local filemanager    = "pcmanfm" 
+local filemanager    = "pcmanfm"
+local pentablet	     = "pentablet"
 
 awful.util.terminal = terminal
---awful.util.tagnames = { "1", "2", "3", "4", "5" }
 awful.util.tagnames = { " WWW ", " VBOX ", " DOC ", " SYS " ," DEV ", " MUS ", " VID " }
 
 awful.layout.layouts = {
@@ -176,8 +176,6 @@ awful.util.tasklist_buttons = mytable.join(
 )
 
 beautiful.init(string.format("%s/.config/awesome/themes/%s/theme.lua", os.getenv("HOME"), chosen_theme))
-
--- beautiful.init(string.format("%s/.config/awesome/themes/%s/theme_personal.lua", os.getenv("HOME"), chosen_theme))
 
 -- }}}
 
@@ -539,6 +537,14 @@ globalkeys = mytable.join(
     awful.key({ modkey, "Shift" }, "f" , function () awful.spawn(pcmanfm) end,
              {description  = "run the file manager", group = "launcher"}),
 
+    --pentablet 
+    awful.key({ modkey }, "p", function () awful.spawn(pentablet) end,
+ 	     { description = "run xp-pen", group = "launcher" }),
+    
+   -- xournal
+    awful.key({ modkey, "Shitf" }, "x", function () awful.spawn("xournal") end,
+ 	     { description = "run xournal", group = "launcher" }),
+        
     -- Default
     --[[ Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
@@ -555,6 +561,7 @@ globalkeys = mytable.join(
         beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_focus, beautiful.fg_focus))
 	end,
     {description = "show dmenu", group = "hotkeys"}),
+
 
 
     awful.key({ modkey }, "x",
