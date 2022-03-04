@@ -166,5 +166,6 @@ alias commit='git commit -m'
 alias clone='git clone'
 alias branch='git branch'
 
-
+#vim mode in bash
+set -o vi
 
