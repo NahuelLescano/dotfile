@@ -341,7 +341,7 @@ globalkeys = gears.table.join(
               {description = "restore minimized", group = "client"}),
 
     -- Dmenu
-    awful.key({ modkey },            "r",     function () awful.util.spawn("dmenu_run") end,
+    awful.key({ modkey },            "r",     function () awful.util.spawn("dmenu_run -i -l 20 -p 'run:'") end,
               {description = "run dmenu", group = "launcher"}),
 
     --Brave browser
@@ -362,6 +362,16 @@ globalkeys = gears.table.join(
     --Virtual box	
     awful.key({ modkey  },            "v",     function () awful.util.spawn("virtualbox") end,
               {description = "run virtual box", group = "applications"}),
+
+    --Steam
+    awful.key({ modkey, "Shift"  },            "s",     function () awful.util.spawn("steam") end,
+              {description = "run steam", group = "applications"}),
+
+    -- IDE arduino
+    awful.key({ modkey,   },            "a",     function () awful.util.spawn("arduino") end,
+              {description = "run arduino ide", group = "applications"}),
+
+
 
         awful.key({ modkey }, "x",
               function ()
@@ -574,4 +584,4 @@ awful.spawn.with_shell("compton")
 awful.spawn.with_shell("nitrogen --restore")
 
 --Gaps
-beautiful.useless_gaps = 6
+beautiful.useless_gaps = 20
