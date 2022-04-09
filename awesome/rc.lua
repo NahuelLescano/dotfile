@@ -3,31 +3,20 @@
 pcall(require, "luarocks.loader")
 
 -- Standard awesome library
-local gears = require("gears") -- Utilities such as color parsing and objects.
-local awful = require("awful") -- Everything related to window managment.
-	      require("awful.autofocus")
-
+local gears = require("gears")
+local awful = require("awful")
+require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
-
 -- Theme handling library
 local beautiful = require("beautiful")
-
 -- Notification library
-local naughty 	    = require("naughty")
-local menubar 	    = require("menubar")
+local naughty = require("naughty")
+local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
-
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
-local hotkeys_popup = require("awful.hotkeys_popup").widget
-                      require("awful.hotkeys_popup.keys")
-local my_table      = awful.util.table or gears.table -- 4.{0,1} compatibility
---require("awful.hotkeys_popup.keys")
-
--- Load Debian menu entries
-local debian = require("debian.menu")
-local has_fdo, freedesktop = pcall(require, "freedesktop")
+require("awful.hotkeys_popup.keys")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -54,11 +43,6 @@ do
 end
 -- }}}
 
-local themes = {
-    "powerarrow-blue", -- 1
-    "powerarrow",      -- 2
-    "multicolor",      -- 3
-}
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
@@ -67,6 +51,8 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 terminal = "alacritty"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal .. " -e " .. editor
+browser = "brave-browser"
+dmenu = "dmenu_run -i -l 20 -p 'Run: '"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -77,19 +63,19 @@ modkey = "Mod4"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
+    awful.layout.suit.floating,
     awful.layout.suit.tile,
-    --awful.layout.suit.floating,
-    --awful.layout.suit.tile.left,
-    --awful.layout.suit.tile.bottom,
-    --awful.layout.suit.tile.top,
-    --awful.layout.suit.fair,
-    --awful.layout.suit.fair.horizontal,
-    --awful.layout.suit.spiral,
-    --awful.layout.suit.spiral.dwindle,
-    --awful.layout.suit.max,
-    --awful.layout.suit.max.fullscreen,
-    --awful.layout.suit.magnifier,
-    --awful.layout.suit.corner.nw,
+    -- awful.layout.suit.tile.left,
+    -- awful.layout.suit.tile.bottom,
+    -- awful.layout.suit.tile.top,
+    -- awful.layout.suit.fair,
+    -- awful.layout.suit.fair.horizontal,
+    -- awful.layout.suit.spiral,
+    -- awful.layout.suit.spiral.dwindle,
+    -- awful.layout.suit.max,
+    -- awful.layout.suit.max.fullscreen,
+    -- awful.layout.suit.magnifier,
+    -- awful.layout.suit.corner.nw,
     -- awful.layout.suit.corner.ne,
     -- awful.layout.suit.corner.sw,
     -- awful.layout.suit.corner.se,
@@ -106,24 +92,10 @@ myawesomemenu = {
    { "quit", function() awesome.quit() end },
 }
 
-local menu_awesome = { "awesome", myawesomemenu, beautiful.awesome_icon }
-local menu_terminal = { "open terminal", terminal }
-
-if has_fdo then
-    mymainmenu = freedesktop.menu.build({
-        before = { menu_awesome },
-        after =  { menu_terminal }
-    })
-else
-    mymainmenu = awful.menu({
-        items = {
-                  menu_awesome,
-                  { "Debian", debian.menu.Debian_menu.Debian },
-                  menu_terminal,
-                }
-    })
-end
-
+mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
+                                    { "open terminal", terminal }
+                                  }
+                        })
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
@@ -199,7 +171,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+    awful.tag({ "1", "2", "3", "4", "5", "6"}, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -340,40 +312,19 @@ globalkeys = gears.table.join(
               end,
               {description = "restore minimized", group = "client"}),
 
-    -- Dmenu
-    awful.key({ modkey },            "r",     function () awful.util.spawn("dmenu_run -i -l 20 -p 'run:'") end,
+    --Dmenu 
+    awful.key({ modkey },            "r",    function () awful.util.spawn(dmenu)  end,
               {description = "run dmenu", group = "launcher"}),
 
-    --Brave browser
-    awful.key({ modkey },            "b",     function () awful.util.spawn("brave-browser") end,
-              {description = "run brave", group = "applications"}),
+    -- Brave
+    awful.key({ modkey },	      "b",     function() awful.util.spawn(browser) end,
+    		{description = "run brave", group = "applications"}),
 
-    --Caja
-    awful.key({ modkey },	    "c",      function () awful.util.spawn("caja") end,
-	      {description = "run caja file browser", group = "applications"}),
-    --xp-pen
-    awful.key({ modkey },            "p",     function () awful.util.spawn("pentablet") end,
-              {description = "run pentablet", group = "applications"}),
+    -- Dolphin
+    awful.key({ modkey },	      "d",     function() awful.util.spawn("dolphin") end,
+    		{description = "run dolphin file manager", group = "applications"}),
 
-    --Openboard
-    awful.key({ modkey, "Shift" },            "o",     function () awful.util.spawn("openboard") end,
-              {description = "run openboard", group = "applications"}),
-	
-    --Virtual box	
-    awful.key({ modkey  },            "v",     function () awful.util.spawn("virtualbox") end,
-              {description = "run virtual box", group = "applications"}),
-
-    --Steam
-    awful.key({ modkey, "Shift"  },            "s",     function () awful.util.spawn("steam") end,
-              {description = "run steam", group = "applications"}),
-
-    -- IDE arduino
-    awful.key({ modkey,   },            "a",     function () awful.util.spawn("arduino") end,
-              {description = "run arduino ide", group = "applications"}),
-
-
-
-        awful.key({ modkey }, "x",
+    awful.key({ modkey }, "x",
               function ()
                   awful.prompt.run {
                     prompt       = "Run Lua code: ",
@@ -439,7 +390,6 @@ for i = 1, 9 do
     globalkeys = gears.table.join(globalkeys,
         -- View tag only.
         awful.key({ modkey }, "#" .. i + 9,
-
                   function ()
                         local screen = awful.screen.focused()
                         local tag = screen.tags[i]
@@ -548,6 +498,10 @@ awful.rules.rules = {
         }
       }, properties = { floating = true }},
 
+    -- Add titlebars to normal clients and dialogs
+    { rule_any = {type = { "normal", "dialog" }
+      }, properties = { titlebars_enabled = true }
+    },
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
     -- { rule = { class = "Firefox" },
@@ -570,18 +524,58 @@ client.connect_signal("manage", function (c)
     end
 end)
 
+-- Add a titlebar if titlebars_enabled is set to true in the rules.
+client.connect_signal("request::titlebars", function(c)
+    -- buttons for the titlebar
+    local buttons = gears.table.join(
+        awful.button({ }, 1, function()
+            c:emit_signal("request::activate", "titlebar", {raise = true})
+            awful.mouse.client.move(c)
+        end),
+        awful.button({ }, 3, function()
+            c:emit_signal("request::activate", "titlebar", {raise = true})
+            awful.mouse.client.resize(c)
+        end)
+    )
+
+    awful.titlebar(c) : setup {
+        { -- Left
+            awful.titlebar.widget.iconwidget(c),
+            buttons = buttons,
+            layout  = wibox.layout.fixed.horizontal
+        },
+        { -- Middle
+            { -- Title
+                align  = "center",
+                widget = awful.titlebar.widget.titlewidget(c)
+            },
+            buttons = buttons,
+            layout  = wibox.layout.flex.horizontal
+        },
+        { -- Right
+            awful.titlebar.widget.floatingbutton (c),
+            awful.titlebar.widget.maximizedbutton(c),
+            awful.titlebar.widget.stickybutton   (c),
+            awful.titlebar.widget.ontopbutton    (c),
+            awful.titlebar.widget.closebutton    (c),
+            layout = wibox.layout.fixed.horizontal()
+        },
+        layout = wibox.layout.align.horizontal
+    }
+end)
+
 -- Enable sloppy focus, so that focus follows mouse.
---client.connect_signal("mouse::enter", function(c)
- --   c:emit_signal("request::activate", "mouse_enter", {raise = false})
---end)
+client.connect_signal("mouse::enter", function(c)
+    c:emit_signal("request::activate", "mouse_enter", {raise = false})
+end)
 
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
 -- Autostart Applications
-awful.spawn.with_shell("compton")
+awful.spawn.with_shell("picom")
 awful.spawn.with_shell("nitrogen --restore")
 
---Gaps
+-- Gaps
 beautiful.useless_gaps = 20
