@@ -138,6 +138,18 @@ ex ()
 
 ## ALIASES ##
 
+# pacman package manager
+alias update='sudo pacman -Syu'
+alias install='sudo pacman -S'
+alias find='pacman -Ss'
+alias remove='sudo pacman -R'
+
+# yay AUR helper
+alias yay-in='yay -S'
+alias yay-find='yay -Ss'
+alias yay-syc='yay -Sy'
+alias yay-up='yay -Qu'
+alias yay-sycup='yay -Sy && yay -Qu'
 
 # ls with all flags
 alias ls='ls -lah --color=auto'
