@@ -135,3 +135,35 @@ ex ()
     echo "'$1' is not a valid file"
   fi
 }
+
+## ALIASES ##
+
+
+# ls with all flags
+alias ls='ls -lah --color=auto'
+
+# cd up directories
+alias .1='cd ..'
+alias .2='cd ../..'
+alias .3='cd ../../..'
+
+# Confirmations
+alias mv='mv -i'
+alias cp='cp -i'
+alias rm='rm -i'
+alias rmdir='rmdir -i'
+alias ln='ln -i'
+
+# Shutdown the machine
+alias shutdown='shutdown now'
+
+# vim
+alias vim='nvim'
+
+# git
+alias init='git init'
+alias addall='git add .'
+alias status='git status'
+alias pull='git pull'
+alias push='git push'
+alias clone='git clone'
