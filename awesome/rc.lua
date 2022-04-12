@@ -51,8 +51,10 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 terminal = "alacritty"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal .. " -e " .. editor
-browser = "brave-browser"
+browser = "brave"
 dmenu = "dmenu_run -i -l 20 -p 'Run: '"
+fileManager = "pcmanfm"
+ide = "org.eclipse.Java"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -218,7 +220,7 @@ globalkeys = gears.table.join(
               end,
               {description = "restore minimized", group = "client"}),
 
-    --Dmenu 
+    -- Dmenu 
     awful.key({ modkey },            "r",    function () awful.util.spawn(dmenu)  end,
               {description = "run dmenu", group = "launcher"}),
 
@@ -226,10 +228,10 @@ globalkeys = gears.table.join(
     awful.key({ modkey },	      "b",     function() awful.util.spawn(browser) end,
     		{description = "run brave", group = "applications"}),
 
-    -- Dolphin
-    awful.key({ modkey },	      "d",     function() awful.util.spawn("dolphin") end,
-    		{description = "run dolphin file manager", group = "applications"}),
-
+    -- Pcmanfm
+    awful.key({ modkey },	      "d",     function() awful.util.spawn(fileManager) end,
+    		{description = "run pcmanfm file manager", group = "applications"}),
+    
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"})
