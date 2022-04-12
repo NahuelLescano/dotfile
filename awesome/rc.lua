@@ -54,7 +54,7 @@ editor_cmd = terminal .. " -e " .. editor
 browser = "brave"
 dmenu = "dmenu_run -i -l 20 -p 'Run: '"
 fileManager = "pcmanfm"
-ide = "org.eclipse.Java"
+musicPlayer = "spotify"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -232,6 +232,10 @@ globalkeys = gears.table.join(
     awful.key({ modkey },	      "d",     function() awful.util.spawn(fileManager) end,
     		{description = "run pcmanfm file manager", group = "applications"}),
     
+    -- Spotify
+    awful.key({ modkey },	      "o",     function() awful.util.spawn(musicPlayer) end,
+    		{description = "run spotify music player", group = "applications"}),
+
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"})
