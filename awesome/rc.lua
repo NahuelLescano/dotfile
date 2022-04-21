@@ -55,6 +55,7 @@ browser = "brave"
 dmenu = "dmenu_run -i -l 20 -p 'Run: '"
 fileManager = "pcmanfm"
 musicPlayer = "spotify"
+virtualManager = "virt-manager"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -62,6 +63,7 @@ musicPlayer = "spotify"
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
+alt = "Mod1" 
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
@@ -124,7 +126,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "1", "2", "3", "4", "5", "6"}, s, awful.layout.layouts[1])
+    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9"}, s, awful.layout.layouts[1])
 
 end)
 -- }}}
@@ -229,16 +231,17 @@ globalkeys = gears.table.join(
     		{description = "run brave", group = "applications"}),
 
     -- Pcmanfm
-    awful.key({ modkey },	      "d",     function() awful.util.spawn(fileManager) end,
+    awful.key({ modkey },	      "p",     function() awful.util.spawn(fileManager) end,
     		{description = "run pcmanfm file manager", group = "applications"}),
     
     -- Spotify
-    awful.key({ modkey },	      "o",     function() awful.util.spawn(musicPlayer) end,
+    awful.key({ alt },	      "s",     function() awful.util.spawn(musicPlayer) end,
     		{description = "run spotify music player", group = "applications"}),
+    
+    -- Virtual manager
+    awful.key({ modkey },	      "v",     function() awful.util.spawn(virtualManager) end,
+    		{description = "run virt-manager", group = "applications"})
 
-    -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end,
-              {description = "show the menubar", group = "launcher"})
 )
 
 clientkeys = gears.table.join(
@@ -369,7 +372,7 @@ awful.rules.rules = {
      }
     },
 
-    -- Floating clients.
+-- Floating clients.
     { rule_any = {
         instance = {
           "DTA",  -- Firefox addon DownThemAll.
@@ -438,4 +441,4 @@ awful.spawn.with_shell("nm-applet")
 awful.spawn.with_shell("~/.config/polybar/launch.sh")
 
 -- Gaps
-beautiful.useless_gaps = 5 
+beautiful.useless_gaps = 10 
