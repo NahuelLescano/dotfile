@@ -141,7 +141,7 @@ ex ()
 # pacman package manager
 alias update='sudo pacman -Syu'
 alias install='sudo pacman -S'
-alias find='pacman -Ss'
+alias search='pacman -Ss'
 alias remove='sudo pacman -R'
 
 # yay AUR helper
@@ -176,6 +176,7 @@ alias vim='nvim'
 alias init='git init'
 alias addall='git add .'
 alias status='git status'
+alias commit='git commit -m'
 alias pull='git pull'
 alias push='git push'
 alias clone='git clone'
