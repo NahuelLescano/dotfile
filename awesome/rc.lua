@@ -4,19 +4,27 @@ pcall(require, "luarocks.loader")
 
 -- Standard awesome library
 local gears = require("gears")
+
 local awful = require("awful")
 require("awful.autofocus")
+
 -- Widget and layout library
-local wibox = require("wibox")
+--local wibox = require("wibox")
+
 -- Theme handling library
 local beautiful = require("beautiful")
+
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
+
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
+
+-- Extra library
+--require("collision")()
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -54,8 +62,10 @@ editor_cmd = terminal .. " -e " .. editor
 browser = "brave"
 dmenu = "dmenu_run -i -l 20 -p 'Run: '"
 fileManager = "pcmanfm"
+vifm = terminal .. " -e " .. "vifm"
 musicPlayer = "spotify"
 virtualManager = "virt-manager"
+imageBrowser = "nitrogen"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -63,7 +73,7 @@ virtualManager = "virt-manager"
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
-alt = "Mod1" 
+alt = "Mod1"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
@@ -222,7 +232,7 @@ globalkeys = gears.table.join(
               end,
               {description = "restore minimized", group = "client"}),
 
-    -- Dmenu 
+    -- Dmenu
     awful.key({ modkey },            "r",    function () awful.util.spawn(dmenu)  end,
               {description = "run dmenu", group = "launcher"}),
 
@@ -233,15 +243,25 @@ globalkeys = gears.table.join(
     -- Pcmanfm
     awful.key({ modkey },	      "p",     function() awful.util.spawn(fileManager) end,
     		{description = "run pcmanfm file manager", group = "applications"}),
-    
+
+    -- Vifm
+    awful.key({ alt },	      "p",     function() awful.util.spawn(vifm) end,
+    		{description = "run vifm file manager", group = "applications"}),
+
     -- Spotify
     awful.key({ alt },	      "s",     function() awful.util.spawn(musicPlayer) end,
     		{description = "run spotify music player", group = "applications"}),
-    
+
     -- Virtual manager
     awful.key({ modkey },	      "v",     function() awful.util.spawn(virtualManager) end,
-    		{description = "run virt-manager", group = "applications"})
+    		{description = "run virt-manager", group = "applications"}),
 
+    -- Nitrogen
+    awful.key({ alt },	      "n",     function() awful.util.spawn(imageBrowser) end,
+    		{description = "run nitrogen image browser", group = "applications"}),
+    -- Zoom
+    awful.key({ alt },	      "z",     function() awful.util.spawn("zoom") end,
+    		{description = "run zoom", group = "applications"})
 )
 
 clientkeys = gears.table.join(
@@ -389,6 +409,7 @@ awful.rules.rules = {
           "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
           "Wpa_gui",
           "veromix",
+          "zoom",
           "xtightvncviewer"},
 
         -- Note that the name property shown in xprop might be set slightly after creation of the client
@@ -441,4 +462,4 @@ awful.spawn.with_shell("nm-applet")
 awful.spawn.with_shell("~/.config/polybar/launch.sh")
 
 -- Gaps
-beautiful.useless_gaps = 10 
+beautiful.useless_gaps = 10
