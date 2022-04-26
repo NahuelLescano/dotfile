@@ -172,6 +172,12 @@ alias shutdown='shutdown now'
 # vim
 alias vim='nvim'
 
+# vifm
+alias vf='vifm'
+
+# Dotfike directory
+alias dotfile='cd ~/Documentos/dotfile'
+
 # git
 alias init='git init'
 alias addall='git add .'
