@@ -66,6 +66,9 @@ vifm = terminal .. " -e " .. "vifm"
 musicPlayer = "spotify"
 virtualManager = "virt-manager"
 imageBrowser = "nitrogen"
+polybarRestart = "polybar -r"
+shutdown = "shutdown now"
+reboot = "reboot"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -136,7 +139,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9"}, s, awful.layout.layouts[1])
+    awful.tag({ "1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9"}, s, awful.layout.layouts[1])
 
 end)
 -- }}}
@@ -245,7 +248,7 @@ globalkeys = gears.table.join(
     		{description = "run pcmanfm file manager", group = "applications"}),
 
     -- Vifm
-    awful.key({ alt },	      "p",     function() awful.util.spawn(vifm) end,
+    awful.key({ alt },	      "v",     function() awful.util.spawn(vifm) end,
     		{description = "run vifm file manager", group = "applications"}),
 
     -- Spotify
@@ -259,10 +262,24 @@ globalkeys = gears.table.join(
     -- Nitrogen
     awful.key({ alt },	      "n",     function() awful.util.spawn(imageBrowser) end,
     		{description = "run nitrogen image browser", group = "applications"}),
+
     -- Zoom
     awful.key({ alt },	      "z",     function() awful.util.spawn("zoom") end,
-    		{description = "run zoom", group = "applications"})
-)
+    		{description = "run zoom", group = "applications"}),
+
+    -- Power off
+    awful.key({ alt },	      "p",     function() awful.util.spawn(shutdown) end,
+    		{description = "power off the system", group = "system"}),
+
+    -- Reboot
+    awful.key({ alt },	      "r",     function() awful.util.spawn(reboot) end,
+    		{description = "reboot the system", group = "system"}),
+
+    -- Reload polybar
+    awful.key({ modkey, alt },	      "r",     function() awful.util.spawn(polybarRestart) end,
+    		{description = "reload polybar", group = "polybar"})
+
+   )
 
 clientkeys = gears.table.join(
     awful.key({ modkey,           }, "f",
@@ -398,6 +415,7 @@ awful.rules.rules = {
           "DTA",  -- Firefox addon DownThemAll.
           "copyq",  -- Includes session name in class.
           "pinentry",
+          "zoom",
         },
         class = {
           "Arandr",
@@ -409,7 +427,6 @@ awful.rules.rules = {
           "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
           "Wpa_gui",
           "veromix",
-          "zoom",
           "xtightvncviewer"},
 
         -- Note that the name property shown in xprop might be set slightly after creation of the client
