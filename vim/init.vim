@@ -3,7 +3,7 @@ call plug#begin()
 
 " Basic plugs
 Plug 'https://github.com/vim-airline/vim-airline' 	    " Status bar
-Plug 'https://github.com/rafi/awesome-vim-colorschemes' " Retro Scheme
+Plug 'https://github.com/rafi/awesome-vim-colorschemes' " Retro scheme
 Plug 'itchyny/lightline.vim'                       	    " Lightline statusbar
 Plug 'suan/vim-instant-markdown', {'rtp': 'after'} 	    " Markdown Preview
 Plug 'frazrepo/vim-rainbow'
@@ -26,7 +26,7 @@ Plug 'junegunn/goyo.vim'                           	    " Distraction-free viewi
 Plug 'junegunn/limelight.vim'                      	    " Hyperfocus on a range
 Plug 'junegunn/vim-emoji'                          	    " Vim needs emojis!
 
-call plug#end() 
+call plug#end()
 
 " Brief help
 " :PluginList       - lists configured plugins
@@ -39,15 +39,22 @@ call plug#end()
 set mouse=nicr
 set mouse=a
 
-set encoding=UTF-8
+set cursorline
+
+set encoding=UTF-8          " Support for encoding
 set autoindent
-set number                  " Display line numbers
+set number
 set path+=**			    " Searches current directory recursively.
 set wildmenu			    " Display all matches when tab complete.
 set incsearch               " Incremental search
 set hidden                  " Needed to keep multiple buffers open
 set t_Co=256                " Set if term supports 256 colors.
 set clipboard=unnamedplus   " Copy/paste between vim and other programs.
+
+colorscheme minimalist      " My colorscheme of choice
+
+" Remove trailing whitespace on save
+autocmd BufWritePre * %s/\s\+$//e
 
 " Key bindings
 "nnoremap <Up>    :resize -2<CR>
@@ -75,27 +82,6 @@ let NERDTreeShowLineNumbers=1
 let NERDTreeShowHidden=1
 let NERDTreeMinimalUI = 1
 let g:NERDTreeWinSize=38
-
-" Color and theme
-highlight Normal           guifg=#dfdfdf ctermfg=15   guibg=#282c34 ctermbg=none  cterm=none
-highlight LineNr           guifg=#5b6268 ctermfg=8    guibg=#282c34 ctermbg=none  cterm=none
-highlight CursorLineNr     guifg=#202328 ctermfg=7    guifg=#5b6268 ctermbg=8     cterm=none
-highlight VertSplit        guifg=#1c1f24 ctermfg=0    guifg=#5b6268 ctermbg=8     cterm=none
-highlight Statement        guifg=#98be65 ctermfg=2    guibg=none    ctermbg=none  cterm=none
-highlight Directory        guifg=#51afef ctermfg=4    guibg=none    ctermbg=none  cterm=none
-highlight StatusLine       guifg=#202328 ctermfg=7    guifg=#5b6268 ctermbg=8     cterm=none
-highlight StatusLineNC     guifg=#202328 ctermfg=7    guifg=#5b6268 ctermbg=8     cterm=none
-highlight NERDTreeClosable guifg=#98be65 ctermfg=2
-highlight NERDTreeOpenable guifg=#5b6268 ctermfg=8
-highlight Comment          guifg=#51afef ctermfg=4    guibg=none    ctermbg=none  cterm=italic
-highlight Constant         guifg=#3071db ctermfg=12   guibg=none    ctermbg=none  cterm=none
-highlight Special          guifg=#51afef ctermfg=4    guibg=none    ctermbg=none  cterm=none
-highlight Identifier       guifg=#5699af ctermfg=6    guibg=none    ctermbg=none  cterm=none
-highlight PreProc          guifg=#c678dd ctermfg=5    guibg=none    ctermbg=none  cterm=none
-highlight String           guifg=#3071db ctermfg=12   guibg=none    ctermbg=none  cterm=none
-highlight Number           guifg=#ff6c6b ctermfg=1    guibg=none    ctermbg=none  cterm=none
-highlight Function         guifg=#ff6c6b ctermfg=1    guibg=none    ctermbg=none  cterm=none
-highlight Visual           guifg=#dfdfdf ctermfg=1    guibg=#1c1f24 ctermbg=none  cterm=none
 
 " Vifm
 map <Leader>vv :Vifm<CR>
