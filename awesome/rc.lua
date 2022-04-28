@@ -59,6 +59,7 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 terminal = "alacritty"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal .. " -e " .. editor
+
 browser = "brave"
 dmenu = "dmenu_run -i -l 20 -p 'Run: '"
 fileManager = "pcmanfm"
@@ -139,7 +140,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9"}, s, awful.layout.layouts[1])
+    awful.tag({ " www ", " pdf ", " term ", " sys ", " prog ", " zoom ", " video ", " audio ", " music "}, s, awful.layout.layouts[1])
 
 end)
 -- }}}
@@ -263,11 +264,7 @@ globalkeys = gears.table.join(
     awful.key({ alt },	      "n",     function() awful.util.spawn(imageBrowser) end,
     		{description = "run nitrogen image browser", group = "applications"}),
 
-    -- Zoom
-    awful.key({ alt },	      "z",     function() awful.util.spawn("zoom") end,
-    		{description = "run zoom", group = "applications"}),
-
-    -- Power off
+       -- Power off
     awful.key({ alt },	      "p",     function() awful.util.spawn(shutdown) end,
     		{description = "power off the system", group = "system"}),
 
@@ -415,7 +412,6 @@ awful.rules.rules = {
           "DTA",  -- Firefox addon DownThemAll.
           "copyq",  -- Includes session name in class.
           "pinentry",
-          "zoom",
         },
         class = {
           "Arandr",
