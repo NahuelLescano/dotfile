@@ -175,8 +175,17 @@ alias vim='nvim'
 # vifm
 alias vf='vifm'
 
-# Dotfike directory
-alias dotfile='cd ~/Documentos/dotfile'
+# Dotfile directory
+alias dotfile='cd ~/Documentos/dotfile/'
+
+# Awesome directory
+alias awesome='cd ~/.config/awesome/'
+
+# Polybar directory
+alias polybar='cd ~/.config/polybar/'
+
+# Nvim directory
+alias v='cd ~/.config/nvim/'
 
 # git
 alias init='git init'
