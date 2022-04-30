@@ -163,7 +163,6 @@ alias .3='cd ../../..'
 alias mv='mv -i'
 alias cp='cp -i'
 alias rm='rm -i'
-alias rmdir='rmdir -i'
 alias ln='ln -i'
 
 # Shutdown the machine
@@ -198,3 +197,6 @@ alias clone='git clone'
 
 # Colorscript
 colorscript -r
+
+# Starship
+eval "$(starship init bash)"
