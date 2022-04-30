@@ -195,3 +195,6 @@ alias commit='git commit -m'
 alias pull='git pull'
 alias push='git push'
 alias clone='git clone'
+
+# Colorscript
+colorscript -r
