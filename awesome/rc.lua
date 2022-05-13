@@ -4,12 +4,11 @@ pcall(require, "luarocks.loader")
 
 -- Standard awesome library
 local gears = require("gears")
-
 local awful = require("awful")
 require("awful.autofocus")
 
 -- Widget and layout library
---local wibox = require("wibox")
+local wibox = require("wibox")
 
 -- Theme handling library
 local beautiful = require("beautiful")
@@ -22,9 +21,6 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
-
--- Extra library
---require("collision")()
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -55,9 +51,12 @@ end
 -- Themes define colours, icons, font and wallpapers.
 beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
+-- Use correct status icon size
+awesome.set_preferred_icon_size(32)
+
 -- This is used later as the default terminal and editor to run.
 terminal = "alacritty"
-editor = os.getenv("EDITOR") or "nvim"
+editor = os.getenv("nvim") or "nano"
 editor_cmd = terminal .. " -e " .. editor
 
 browser = "brave"
@@ -67,7 +66,6 @@ vifm = terminal .. " -e " .. "vifm"
 musicPlayer = "spotify"
 virtualManager = "virt-manager"
 imageBrowser = "nitrogen"
-polybarRestart = "polybar -r"
 shutdown = "shutdown now"
 reboot = "reboot"
 
@@ -90,9 +88,9 @@ awful.layout.layouts = {
     -- awful.layout.suit.fair.horizontal,
     -- awful.layout.suit.spiral,
     -- awful.layout.suit.spiral.dwindle,
-    awful.layout.suit.max,
+     awful.layout.suit.max,
     -- awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier,
+     awful.layout.suit.magnifier,
     -- awful.layout.suit.corner.nw,
     -- awful.layout.suit.corner.ne,
     -- awful.layout.suit.corner.sw,
@@ -100,25 +98,59 @@ awful.layout.layouts = {
 }
 -- }}}
 
--- {{{ Menu
--- Create a launcher widget and a main menu
-myawesomemenu = {
-   { "hotkeys", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
-   { "quit", function() awesome.quit() end },
-}
-
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "open terminal", terminal }
-                                  }
-                        })
-
+mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
+                                     menu = mymainmenu })
 
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
+
+-- Keyboard map indicator and switcher
+mykeyboardlayout = awful.widget.keyboardlayout()
+
+-- {{{ Wibar
+-- Create a textclock widget
+mytextclock = wibox.widget.textclock()
+
+-- Create a wibox for each screen and add it
+local taglist_buttons = gears.table.join(
+                    awful.button({ }, 1, function(t) t:view_only() end),
+                    awful.button({ modkey }, 1, function(t)
+                                              if client.focus then
+                                                  client.focus:move_to_tag(t)
+                                              end
+                                          end),
+                    awful.button({ }, 3, awful.tag.viewtoggle),
+                    awful.button({ modkey }, 3, function(t)
+                                              if client.focus then
+                                                  client.focus:toggle_tag(t)
+                                              end
+                                          end),
+                    awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
+                    awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
+                )
+
+local tasklist_buttons = gears.table.join(
+                     awful.button({ }, 1, function (c)
+                                              if c == client.focus then
+                                                  c.minimized = true
+                                              else
+                                                  c:emit_signal(
+                                                      "request::activate",
+                                                      "tasklist",
+                                                      {raise = true}
+                                                  )
+                                              end
+                                          end),
+                     awful.button({ }, 3, function()
+                                              awful.menu.client_list({ theme = { width = 250 } })
+                                          end),
+                     awful.button({ }, 4, function ()
+                                              awful.client.focus.byidx(1)
+                                          end),
+                     awful.button({ }, 5, function ()
+                                              awful.client.focus.byidx(-1)
+                                          end))
 
 local function set_wallpaper(s)
     -- Wallpaper
@@ -140,14 +172,60 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ " www ", " pdf ", " term ", " sys ", " prog ", " zoom ", " video ", " audio ", " music "}, s, awful.layout.layouts[1])
+    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
 
+    -- Create a promptbox for each screen
+    s.mypromptbox = awful.widget.prompt()
+    -- Create an imagebox widget which will contain an icon indicating which layout we're using.
+    -- We need one layoutbox per screen.
+    s.mylayoutbox = awful.widget.layoutbox(s)
+    s.mylayoutbox:buttons(gears.table.join(
+                           awful.button({ }, 1, function () awful.layout.inc( 1) end),
+                           awful.button({ }, 3, function () awful.layout.inc(-1) end),
+                           awful.button({ }, 4, function () awful.layout.inc( 1) end),
+                           awful.button({ }, 5, function () awful.layout.inc(-1) end)))
+    -- Create a taglist widget
+    s.mytaglist = awful.widget.taglist {
+        screen  = s,
+        filter  = awful.widget.taglist.filter.all,
+        buttons = taglist_buttons
+    }
+
+    -- Create a tasklist widget
+    s.mytasklist = awful.widget.tasklist {
+        screen  = s,
+        filter  = awful.widget.tasklist.filter.currenttags,
+        buttons = tasklist_buttons
+    }
+
+    -- Create the wibox
+    s.mywibox = awful.wibar({ position = "top", screen = s })
+
+    -- Create systray
+    s.systray = wibox.widget.systray()
+
+    -- Add widgets to the wibox
+    s.mywibox:setup {
+        layout = wibox.layout.align.horizontal,
+        { -- Left widgets
+            layout = wibox.layout.fixed.horizontal,
+            mylauncher,
+            s.mytaglist,
+            s.mypromptbox,
+        },
+        s.mytasklist, -- Middle widget
+        { -- Right widgets
+            layout = wibox.layout.fixed.horizontal,
+            mykeyboardlayout,
+            s.systray, mytextclock,
+            s.mylayoutbox,
+        },
+    }
 end)
 -- }}}
 
 -- {{{ Mouse bindings
 root.buttons(gears.table.join(
-    awful.button({ }, 3, function () mymainmenu:toggle() end),
     awful.button({ }, 4, awful.tag.viewnext),
     awful.button({ }, 5, awful.tag.viewprev)
 ))
@@ -241,42 +319,48 @@ globalkeys = gears.table.join(
               {description = "run dmenu", group = "launcher"}),
 
     -- Brave
-    awful.key({ modkey },	      "b",     function() awful.util.spawn(browser) end,
-    		{description = "run brave", group = "applications"}),
+    awful.key({ modkey },             "b",     function() awful.util.spawn(browser) end,
+                {description = "run brave", group = "applications"}),
 
     -- Pcmanfm
-    awful.key({ modkey },	      "p",     function() awful.util.spawn(fileManager) end,
-    		{description = "run pcmanfm file manager", group = "applications"}),
+    awful.key({ modkey },             "p",     function() awful.util.spawn(fileManager) end,
+                {description = "run pcmanfm file manager", group = "applications"}),
 
     -- Vifm
-    awful.key({ alt },	      "v",     function() awful.util.spawn(vifm) end,
-    		{description = "run vifm file manager", group = "applications"}),
+    awful.key({modkey,  alt },        "v",     function() awful.util.spawn(vifm) end,
+                {description = "run vifm file manager", group = "applications"}),
 
     -- Spotify
-    awful.key({ alt },	      "s",     function() awful.util.spawn(musicPlayer) end,
-    		{description = "run spotify music player", group = "applications"}),
+    awful.key({ alt },        "s",     function() awful.util.spawn(musicPlayer) end,
+                {description = "run spotify music player", group = "applications"}),
 
     -- Virtual manager
-    awful.key({ modkey },	      "v",     function() awful.util.spawn(virtualManager) end,
-    		{description = "run virt-manager", group = "applications"}),
+    awful.key({ modkey },             "v",     function() awful.util.spawn(virtualManager) end,
+                {description = "run virt-manager", group = "applications"}),
 
     -- Nitrogen
-    awful.key({ alt },	      "n",     function() awful.util.spawn(imageBrowser) end,
-    		{description = "run nitrogen image browser", group = "applications"}),
+    awful.key({ alt },        "n",     function() awful.util.spawn(imageBrowser) end,
+                {description = "run nitrogen image browser", group = "applications"}),
 
        -- Power off
-    awful.key({ alt },	      "p",     function() awful.util.spawn(shutdown) end,
-    		{description = "power off the system", group = "system"}),
+    awful.key({ alt },        "p",     function() awful.util.spawn(shutdown) end,
+                {description = "power off the system", group = "system"}),
 
     -- Reboot
-    awful.key({ alt },	      "r",     function() awful.util.spawn(reboot) end,
-    		{description = "reboot the system", group = "system"}),
+    awful.key({ alt },        "r",     function() awful.util.spawn(reboot) end,
+                {description = "reboot the system", group = "system"}),
 
-    -- Reload polybar
-    awful.key({ modkey, alt },	      "r",     function() awful.util.spawn(polybarRestart) end,
-    		{description = "reload polybar", group = "polybar"})
-
-   )
+    awful.key({ modkey }, "x",
+              function ()
+                  awful.prompt.run {
+                    prompt       = "Run Lua code: ",
+                    textbox      = awful.screen.focused().mypromptbox.widget,
+                    exe_callback = awful.util.eval,
+                    history_path = awful.util.get_cache_dir() .. "/history_eval"
+                  }
+              end,
+              {description = "lua execute prompt", group = "awesome"})
+)
 
 clientkeys = gears.table.join(
     awful.key({ modkey,           }, "f",
@@ -406,7 +490,7 @@ awful.rules.rules = {
      }
     },
 
--- Floating clients.
+    -- Floating clients.
     { rule_any = {
         instance = {
           "DTA",  -- Firefox addon DownThemAll.
@@ -436,6 +520,7 @@ awful.rules.rules = {
           "pop-up",       -- e.g. Google Chrome's (detached) Developer Tools.
         }
       }, properties = { floating = true }},
+
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
     -- { rule = { class = "Firefox" },
@@ -472,7 +557,4 @@ awful.spawn.with_shell("picom")
 awful.spawn.with_shell("nitrogen --restore")
 awful.spawn.with_shell("kmix")
 awful.spawn.with_shell("nm-applet")
-awful.spawn.with_shell("~/.config/polybar/launch.sh")
 
--- Gaps
-beautiful.useless_gaps = 10
