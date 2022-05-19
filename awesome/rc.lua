@@ -89,7 +89,7 @@ awful.layout.layouts = {
     -- awful.layout.suit.spiral,
     -- awful.layout.suit.spiral.dwindle,
      awful.layout.suit.max,
-    -- awful.layout.suit.max.fullscreen,
+     awful.layout.suit.max.fullscreen,
      awful.layout.suit.magnifier,
     -- awful.layout.suit.corner.nw,
     -- awful.layout.suit.corner.ne,
@@ -403,7 +403,55 @@ clientkeys = gears.table.join(
             c.maximized_horizontal = not c.maximized_horizontal
             c:raise()
         end ,
-        {description = "(un)maximize horizontally", group = "client"})
+        {description = "(un)maximize horizontally", group = "client"}),
+
+    -- Resize windows
+    awful.key({ modkey, "Control" }, "Up", function (c)
+      if c.floating then
+        c:relative_move( 0, 0, 0, -10)
+      else
+        awful.client.incwfact(0.025)
+      end
+    end,
+    {description = "Floating Resize Vertical -", group = "client"}),
+    awful.key({ modkey, "Control" }, "Down", function (c)
+      if c.floating then
+        c:relative_move( 0, 0, 0,  10)
+      else
+        awful.client.incwfact(-0.025)
+      end
+    end,
+    {description = "Floating Resize Vertical +", group = "client"}),
+    awful.key({ modkey, "Control" }, "Left", function (c)
+      if c.floating then
+        c:relative_move( 0, 0, -10, 0)
+      else
+        awful.tag.incmwfact(-0.025)
+      end
+    end,
+    {description = "Floating Resize Horizontal -", group = "client"}),
+    awful.key({ modkey, "Control" }, "Right", function (c)
+      if c.floating then
+        c:relative_move( 0, 0,  10, 0)
+      else
+        awful.tag.incmwfact(0.025)
+      end
+    end,
+    {description = "Floating Resize Horizontal +", group = "client"}),
+
+    -- Moving floating windows
+    awful.key({ modkey, "Shift"   }, "Down", function (c)
+      c:relative_move(  0,  10,   0,   0) end,
+    {description = "Floating Move Down", group = "client"}),
+    awful.key({ modkey, "Shift"   }, "Up", function (c)
+      c:relative_move(  0, -10,   0,   0) end,
+    {description = "Floating Move Up", group = "client"}),
+    awful.key({ modkey, "Shift"   }, "Left", function (c)
+      c:relative_move(-10,   0,   0,   0) end,
+    {description = "Floating Move Left", group = "client"}),
+    awful.key({ modkey, "Shift"   }, "Right", function (c)
+      c:relative_move( 10,   0,   0,   0) end,
+    {description = "Floating Move Right", group = "client"})
 )
 
 -- Bind all key numbers to tags.
@@ -521,10 +569,27 @@ awful.rules.rules = {
         }
       }, properties = { floating = true }},
 
+      -- Remove titlebars to normal clients and dialogs
+    { rule_any = {type = { "normal", "dialog" }
+      }, properties = { titlebars_enabled = false }
 
-    -- Set Firefox to always map on the tag named "2" on screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { screen = 1, tag = "2" } },
+    },
+
+    { rule = { class = "brave" },
+      properties = { screen = 1, tag = "1" }
+    },
+
+    { rule = { class = "discord" },
+      properties = { screen = 1, tag = "7" }
+    },
+
+    { rule = { class = "spotify" },
+      properties = { screen = 1, tag = "8" }
+    },
+
+    { rule = { class = "zoom" },
+      properties = { screen = 1, tag = "9" }
+    },
 }
 -- }}}
 
@@ -543,6 +608,40 @@ client.connect_signal("manage", function (c)
     end
 end)
 
+-- Functions
+
+-- Add a titlebar if titlebars_enabled is set to true in the rules.
+client.connect_signal("request::titlebars", function(c)
+    -- buttons for the titlebar
+    local buttons = gears.table.join(
+        awful.button({ }, 1, function()
+            c:emit_signal("request::activate", "titlebar", {raise = true})
+            awful.mouse.client.move(c)
+        end),
+        awful.button({ }, 3, function()
+            c:emit_signal("request::activate", "titlebar", {raise = true})
+            awful.mouse.client.resize(c)
+        end)
+    )
+
+    awful.titlebar(c) : setup {
+        { -- Left
+            awful.titlebar.widget.iconwidget(c),
+            buttons = buttons,
+            layout  = wibox.layout.fixed.horizontal
+        },
+        { -- Middle
+            { -- Title
+                align  = "center",
+                widget = awful.titlebar.widget.titlewidget(c)
+            },
+            buttons = buttons,
+            layout  = wibox.layout.flex.horizontal
+        },
+        layout = wibox.layout.align.horizontal
+    }
+end)
+
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)
     c:emit_signal("request::activate", "mouse_enter", {raise = false})
@@ -557,4 +656,5 @@ awful.spawn.with_shell("picom")
 awful.spawn.with_shell("nitrogen --restore")
 awful.spawn.with_shell("kmix")
 awful.spawn.with_shell("nm-applet")
+awful.spawn.with_shell("mpv ~/Descargas/startup--computer--short-musical-style-phrase--7-sound-effect-19451905.mp3")
 
