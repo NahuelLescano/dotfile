@@ -10,9 +10,6 @@ Plug 'frazrepo/vim-rainbow'
 
 " File manager in vim
 Plug 'vifm/vifm.vim'                               	    " Vifm
-Plug 'scrooloose/nerdtree'                          	" Nerdtree
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'     	    " Highlighting Nerdtree
-Plug 'ryanoasis/vim-devicons'                      	    " Icons for Nerdtree
 
 " Productivity
 Plug 'jreybert/vimagit'
@@ -73,15 +70,6 @@ set expandtab                   " Use spaces instead of tabs.
 set smarttab                    " Be smart using tabs ;)
 set shiftwidth=4                " One tab == four spaces.
 set tabstop=4                   " One tab == four spaces.
-
-" Nerdtree
-map <C-n> :NERDTreeToggle<CR>
-let g:NERDTreeDirArrowExpandable = '►'
-let g:NERDTreeDirArrowCollapsible = '▼'
-let NERDTreeShowLineNumbers=1
-let NERDTreeShowHidden=1
-let NERDTreeMinimalUI = 1
-let g:NERDTreeWinSize=38
 
 " Vifm
 map <Leader>vv :Vifm<CR>
