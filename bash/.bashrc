@@ -137,27 +137,21 @@ ex ()
 }
 
 ## ALIASES ##
-
-# pacman package manager
-alias update='sudo pacman -Syu'
-alias install='sudo pacman -S'
-alias search='pacman -Ss'
-alias remove='sudo pacman -R'
-
-# yay AUR helper
-alias yay-in='yay -S'
-alias yay-find='yay -Ss'
-alias yay-syc='yay -Sy'
-alias yay-up='yay -Qu'
-alias yay-sycup='yay -Sy && yay -Qu'
+# pacman and yay
+alias pacsyu='sudo pacman -Syu'                  # update only standard pkgs
+alias pacsyyu='sudo pacman -Syyu'                # Refresh pkglist & update standard pkgs
+alias yaysua='yay -Sua --noconfirm'              # update only AUR pkgs (yay)
+alias yaysyu='yay -Syu --noconfirm'              # update standard pkgs and AUR pkgs (yay)
+alias cleanup='sudo pacman -Rns $(pacman -Qtdq)' # remove orphaned packages
 
 # ls with all flags
 alias ls='ls -lah --color=auto'
 
 # cd up directories
-alias .1='cd ..'
-alias .2='cd ../..'
+alias ..='cd ..'
+alias ...='cd ../..'
 alias .3='cd ../../..'
+alias .4='cd ../../..'
 
 # Confirmations
 alias mv='mv -i'
@@ -168,9 +162,6 @@ alias ln='ln -i'
 # Shutdown the machine
 alias shutdown='shutdown now'
 
-# vim
-alias vim='nvim'
-
 # vifm
 alias vf='vifm'
 
@@ -179,9 +170,6 @@ alias dotfile='cd ~/Documentos/dotfile/'
 
 # Awesome directory
 alias awesome='cd ~/.config/awesome/'
-
-# Polybar directory
-alias polybar='cd ~/.config/polybar/'
 
 # Nvim directory
 alias v='cd ~/.config/nvim/'

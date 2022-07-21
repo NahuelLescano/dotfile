@@ -99,9 +99,6 @@ awful.layout.layouts = {
 }
 -- }}}
 
-mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
-                                     menu = mymainmenu })
-
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
@@ -210,7 +207,6 @@ awful.screen.connect_for_each_screen(function(s)
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            mylauncher,
             s.mytaglist,
             s.mypromptbox,
         },
@@ -572,8 +568,8 @@ awful.rules.rules = {
 
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { screen = 1, tag = "2" } },
+    { rule = { class = "brave" },
+       properties = { screen = 1, tag = "2" } },
 }
 -- }}}
 
@@ -602,9 +598,8 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- }}}
 
 -- Autostart Applications
-awful.spawn.with_shell("picom")
 awful.spawn.with_shell("nitrogen --restore")
-awful.spawn.with_shell("kmix")
-awful.spawn.with_shell("nm-applet")
+awful.spawn.with_shell("kmix &")
+awful.spawn.with_shell("nm-applet &")
 awful.spawn.with_shell("mpv ~/Descargas/startup--computer--short-musical-style-phrase--7-sound-effect-19451905.mp3")
 
