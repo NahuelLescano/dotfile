@@ -13,8 +13,6 @@ set TERM "xterm-256color" # Sets the terminal type
 fish_vi_key_bindings      # set vi mode
 set fish_greeting         # Supresses fish's intro message
 
-neofetch
-
 ## AUTOCOMPLETE AND HIGHLIGHT COLORS ##
 set fish_color_normal brcyan
 set fish_color_autosuggestion '#7d7d7d'
@@ -94,6 +92,44 @@ function spark -d "sparkline generator"
 end
 ## END OF SPARK ##
 
+## FUNCTIONS ##
+function __history_previous_command
+    switch (commandline -t)
+        case "|"
+            commandline -t $history[1]; commandline -f repaint
+
+        case "*"
+            commandline -i !
+
+    end
+
+end
+
+function __history_previous_command_arguments
+    switch (commandline -t)
+        case "!"
+            commandline -t ""
+            commandline -f history-token-search-backward
+
+        case "*"
+            commandline -i '$'
+
+    end
+
+end
+
+# The bindings for !! and !$
+if [ "$fish_key_binding" = "fish_vi_bindings" ]
+    bind -Minsert ! __history_previous_command
+    bind -Minsert '$' __history_previous_command_arguments
+
+else
+    bind ! __history_previous_command
+    bind '$' __history_previous_command_arguments
+
+end
+
+## END OF FUNCTIONS ##
 
 ## ALIASES AND ABBREVIATIONS##
 alias clear='echo -en "\x1b[2J\x1b[1;1H" ; echo; echo; seq 1 (tput cols) | sort -R | spark | lolcat; echo; echo'
@@ -129,3 +165,5 @@ abbr --add commit git commit -m
 abbr --add pull git pull origin
 abbr --add push git push origin
 
+# Colorscript
+colorscript -r
