@@ -36,9 +36,17 @@ call plug#end()
 set mouse=nicr
 set mouse=a
 
+let g:netrw_liststyle = 3
+
 set cursorline
+set hlsearch                " Enable highlight seatch pattern
+set confirm                 " Display confirmation dialog when closing unsaved file
 
 set encoding=UTF-8          " Support for encoding
+
+set undofile                " Mantain undo history between sessions
+set undodir=~/.nvim/undodir
+
 set autoindent
 set number
 set path+=**			    " Searches current directory recursively.
@@ -87,9 +95,6 @@ let g:vimwiki_list = [{'path': '~/vimwiki/',
 "let g:instant_markdown_browser = "surf"      " Uses surf for preview
 "map <Leader>md :InstantMarkdownPreview<CR>   " Previews .md file
 "map <Leader>ms :InstantMarkdownStop<CR>      " Kills the preview
-
-" Fix sizing bug with Alacritty terminal
-autocmd VimEnter * :silent exec "!kill -s SIGWINCH $PPID"
 
 " Split and tabbed files
 set splitbelow splitright
