@@ -167,3 +167,6 @@ abbr --add push git push origin
 
 # Colorscript
 colorscript -r
+
+# Starship
+starship init fish | source
