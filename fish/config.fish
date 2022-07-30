@@ -159,6 +159,7 @@ alias rm='rm -i'
 # git
 abbr --add addup git add -u
 abbr --add addall git add .
+abbr --add status git status
 abbr --add branch git branch
 abbr --add clone git clone
 abbr --add commit git commit -m
