@@ -19,19 +19,5 @@ vimcmd_visual_symbol = "[V](bold yellow)"   # The "vimcmd_visual_symbol" segment
 [package]
 disabled = true
 
-# Git stuff
-[git_branch]
-truncation_length = 4
-truncation_symbol = ""
-
-[git_commit]
-commit_hash_length = 4
-
-[git_state]
-format = '[\($state( $progress_current of $progress_total)\)]($style) '
-cherry_pick = "[🍒 PICKING](bold red)"
-
-[git_metrics]
+[sudo]
 disabled = false
-added_style = "bold blue"
-format = '[+$added]($added_style)/[-$deleted]($deleted_style) '
