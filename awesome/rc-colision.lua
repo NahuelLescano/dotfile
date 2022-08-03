@@ -158,7 +158,6 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    --awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
     awful.tag({ " DEV ", " WWW ", " SYS ", " DOC ", " MUS ", " VID "}, s, awful.layout.layouts[1])
 
 -- {{{ Menu
@@ -330,19 +329,8 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
 
-    awful.key({ modkey, ctrlkey }, "n",
-              function ()
-                  local c = awful.client.restore()
-                  -- Focus restored client
-                  if c then
-                    c:emit_signal(
-                        "request::activate", "key.unminimize", {raise = true}
-                    )
-                  end
-              end,
-              {description = "restore minimized", group = "client"}),
-
-	-- Costum shortcuts
+    
+    -- Costum shortcuts
 	-- Dmenu
 	awful.key({ modkey, "Shift" },            "Return",     function () awful.util.spawn(dmenu) end,
               {description = "run dmenu", group = "launcher"}),
@@ -441,12 +429,15 @@ clientkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "Down", function (c)
       c:relative_move(  0,  10,   0,   0) end,
     {description = "Floating Move Down", group = "client"}),
+
     awful.key({ modkey, "Shift"   }, "Up", function (c)
       c:relative_move(  0, -10,   0,   0) end,
     {description = "Floating Move Up", group = "client"}),
+
     awful.key({ modkey, "Shift"   }, "Left", function (c)
       c:relative_move(-10,   0,   0,   0) end,
     {description = "Floating Move Left", group = "client"}),
+
     awful.key({ modkey, "Shift"   }, "Right", function (c)
       c:relative_move( 10,   0,   0,   0) end,
     {description = "Floating Move Right", group = "client"})
