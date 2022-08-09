@@ -59,16 +59,22 @@ awesome.set_preferred_icon_size(32)
 local terminal = "alacritty"
 local editor = os.getenv("EDITOR") or "nvim"
 local editor_cmd = terminal .. " -e " .. editor
+local emacs = "emacsclient -c -a 'emacs'"
 local browser = "brave"
 local dmenu = "dmenu_run -i -l 20 -p 'Run: '"
-local fileManager = "pcmanfm"
-local vifm = terminal .. " -e " .. "vifm"
-local musicPlayer = "spotify"
-local virtualManager = "virt-manager"
-local imageBrowser = "nitrogen"
+local file_manager = "pcmanfm"
+local vifm = terminal .. " -e vifm"
+local music_player = "spotify"
+local virtual_manager = "virt-manager"
+local image_browser = "nitrogen"
 
-local shutdown = "shutdown now"
-local reboot = "reboot"
+local telegram = "org.telegram.desktop"
+local discord = "com.discordapp.Discord"
+local zoom = "us.zoom.Zoom"
+
+local shutdown = "systemctl poweroff"
+local reboot = "systemctl suspend"
+local sleep = "systemctl sleep"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -77,6 +83,7 @@ local reboot = "reboot"
 -- However, you can use another modifier like Mod1, but it may interact with others.
 local modkey = "Mod4"
 local alt = "Mod1"
+local ctrlkey = "Control"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
@@ -170,9 +177,32 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    --awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+    awful.tag({ "DEV", " WWW", " SYS", " VBOX", " MUS", " BOOK", " CHAT", " ZOOM"}, s, awful.layout.layouts[1])
 
-    awful.tag({ " DEV ", " WWW ", " SYS ", " DOC ", " MUS ", " VID "}, s, awful.layout.layouts[1])
+    -- {{{ Menu
+    -- Create a launcher widget, a main mane and a bye bye menu
+    local my_awesome_menu = {
+        { "Manual", terminal .. " -e man awesome" },
+        { "Key bindings", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
+        { "Edit config", emacs .. " " .. awesome.conffile },
+        { "Restart awesome", awesome.restart },
+    }
+
+    local bye_bye = {
+        { "Log out", function() awesome.quit() end },
+        { "Sleep", sleep },
+        { "Reboot", reboot },
+        { "Shutdown", shutdown },
+    }
+
+    local my_main_menu = awful.menu({ items = { { "awesome", my_awesome_menu, beautiful.awesome_icon },
+                                                { "bye bye", bye_bye, beautiful.awesome_icon },
+                                                { "open a terminal", terminal }
+                                   }
+                            })
+
+    local my_launcher = awful.widget.launcher({ image = beautiful.awesome_icon,
+                                                menu = my_main_menu })
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -210,6 +240,7 @@ awful.screen.connect_for_each_screen(function(s)
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
+            my_launcher,
             s.mytaglist,
             s.mypromptbox,
         },
@@ -265,10 +296,10 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end,
               {description = "swap with previous client by index", group = "client"}),
 
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
+    awful.key({ modkey, ctrlkey }, "j", function () awful.screen.focus_relative( 1) end,
               {description = "focus the next screen", group = "screen"}),
 
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
+    awful.key({ modkey, ctrlkey }, "k", function () awful.screen.focus_relative(-1) end,
               {description = "focus the previous screen", group = "screen"}),
 
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
@@ -287,7 +318,7 @@ globalkeys = gears.table.join(
     awful.key({ modkey,           }, "Return", function () awful.spawn(terminal) end,
               {description = "open a terminal", group = "launcher"}),
 
-    awful.key({ modkey, "Control" }, "r", awesome.restart,
+    awful.key({ modkey, ctrlkey }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
 
     awful.key({ modkey, "Shift"   }, "q", awesome.quit,
@@ -305,10 +336,10 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "l",     function () awful.tag.incnmaster(-1, nil, true) end,
               {description = "decrease the number of master clients", group = "layout"}),
 
-    awful.key({ modkey, "Control" }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
+    awful.key({ modkey, ctrlkey }, "h",     function () awful.tag.incncol( 1, nil, true)    end,
               {description = "increase the number of columns", group = "layout"}),
 
-    awful.key({ modkey, "Control" }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
+    awful.key({ modkey, ctrlkey }, "l",     function () awful.tag.incncol(-1, nil, true)    end,
               {description = "decrease the number of columns", group = "layout"}),
 
     awful.key({ modkey,           }, "space", function () awful.layout.inc( 1)                end,
@@ -317,6 +348,7 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
 
+    -- Costum key bindings
     -- Dmenu
     awful.key({ modkey },            "r",    function () awful.util.spawn(dmenu)  end,
               {description = "run dmenu", group = "launcher"}),
@@ -326,7 +358,7 @@ globalkeys = gears.table.join(
                 {description = "run brave", group = "applications"}),
 
     -- Pcmanfm
-    awful.key({ modkey },             "p",     function() awful.util.spawn(fileManager) end,
+    awful.key({ modkey },             "p",     function() awful.util.spawn(file_manager) end,
                 {description = "run pcmanfm file manager", group = "applications"}),
 
     -- Vifm
@@ -334,20 +366,40 @@ globalkeys = gears.table.join(
                 {description = "run vifm file manager", group = "applications"}),
 
     -- Spotify
-    awful.key({ "Control", alt },        "s",     function() awful.util.spawn(musicPlayer) end,
+    awful.key({ ctrlkey, modkey },        "s",     function() awful.util.spawn(music_player) end,
                 {description = "run spotify music player", group = "applications"}),
 
     -- Virtual manager
-    awful.key({ modkey },             "v",     function() awful.util.spawn(virtualManager) end,
+    awful.key({ modkey },             "v",     function() awful.util.spawn(virtual_manager) end,
                 {description = "run virt-manager", group = "applications"}),
 
+    -- Doom emacs
+    awful.key({ modkey },             "d",     function() awful.util.spawn(emacs) end,
+                {description = "run doom emacs", group = "applications"}),
+
+    -- Telegram
+    awful.key({ modkey },             "t",     function() awful.util.spawn(telegram) end,
+                {description = "run telegram desktop", group = "applications"}),
+
+    -- Discord
+    awful.key({ ctrlkey, modkey },             "d",     function() awful.util.spawn(discord) end,
+                {description = "run discord app", group = "applications"}),
+
+    -- Zoom
+    awful.key({ modkey },             "z",     function() awful.util.spawn(zoom) end,
+                {description = "run zoom", group = "applications"}),
+
     -- Power off
-    awful.key({"Control", alt },        "p",     function() awful.util.spawn(shutdown) end,
+    awful.key({ ctrlkey, alt },        "p",     function() awful.util.spawn(shutdown) end,
                 {description = "power off the system", group = "system"}),
 
     -- Reboot
-    awful.key({ "Control", alt },        "r",     function() awful.util.spawn(reboot) end,
+    awful.key({ ctrlkey, alt },        "r",     function() awful.util.spawn(reboot) end,
                 {description = "reboot the system", group = "system"}),
+
+    -- Slepp
+    awful.key({ ctrlkey, alt },        "s",     function() awful.util.spawn(sleep) end,
+                {description = "suspend the system", group = "system"}),
 
     awful.key({ modkey }, "x",
               function ()
@@ -372,10 +424,10 @@ clientkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "c",      function (c) c:kill()                         end,
               {description = "close", group = "client"}),
 
-    awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
+    awful.key({ modkey, ctrlkey }, "space",  awful.client.floating.toggle                     ,
               {description = "toggle floating", group = "client"}),
 
-    awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end,
+    awful.key({ modkey, ctrlkey }, "Return", function (c) c:swap(awful.client.getmaster()) end,
               {description = "move to master", group = "client"}),
 
     awful.key({ modkey,           }, "o",      function (c) c:move_to_screen()               end,
@@ -385,7 +437,7 @@ clientkeys = gears.table.join(
               {description = "toggle keep on top", group = "client"}),
 
        -- Resize windows
-    awful.key({ modkey, "Control" }, "Up", function (c)
+    awful.key({ modkey, ctrlkey }, "Up", function (c)
       if c.floating then
         c:relative_move( 0, 0, 0, -10)
       else
@@ -394,7 +446,7 @@ clientkeys = gears.table.join(
     end,
     {description = "Floating Resize Vertical -", group = "client"}),
 
-    awful.key({ modkey, "Control" }, "Down", function (c)
+    awful.key({ modkey, ctrlkey }, "Down", function (c)
       if c.floating then
         c:relative_move( 0, 0, 0,  10)
       else
@@ -403,7 +455,7 @@ clientkeys = gears.table.join(
     end,
     {description = "Floating Resize Vertical +", group = "client"}),
 
-    awful.key({ modkey, "Control" }, "Left", function (c)
+    awful.key({ modkey, ctrlkey }, "Left", function (c)
       if c.floating then
         c:relative_move( 0, 0, -10, 0)
       else
@@ -412,7 +464,7 @@ clientkeys = gears.table.join(
     end,
     {description = "Floating Resize Horizontal -", group = "client"}),
 
-    awful.key({ modkey, "Control" }, "Right", function (c)
+    awful.key({ modkey, ctrlkey }, "Right", function (c)
       if c.floating then
         c:relative_move( 0, 0,  10, 0)
       else
@@ -425,12 +477,15 @@ clientkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "Down", function (c)
       c:relative_move(  0,  10,   0,   0) end,
     {description = "Floating Move Down", group = "client"}),
+
     awful.key({ modkey, "Shift"   }, "Up", function (c)
       c:relative_move(  0, -10,   0,   0) end,
     {description = "Floating Move Up", group = "client"}),
+
     awful.key({ modkey, "Shift"   }, "Left", function (c)
       c:relative_move(-10,   0,   0,   0) end,
     {description = "Floating Move Left", group = "client"}),
+
     awful.key({ modkey, "Shift"   }, "Right", function (c)
       c:relative_move( 10,   0,   0,   0) end,
     {description = "Floating Move Right", group = "client"})
@@ -452,7 +507,7 @@ for i = 1, 9 do
                   end,
                   {description = "view tag #"..i, group = "tag"}),
         -- Toggle tag display.
-        awful.key({ modkey, "Control" }, "#" .. i + 9,
+        awful.key({ modkey, ctrlkey }, "#" .. i + 9,
                   function ()
                       local screen = awful.screen.focused()
                       local tag = screen.tags[i]
@@ -473,7 +528,7 @@ for i = 1, 9 do
                   end,
                   {description = "move focused client to tag #"..i, group = "tag"}),
         -- Toggle tag on focused client.
-        awful.key({ modkey, "Control", "Shift" }, "#" .. i + 9,
+        awful.key({ modkey, ctrlkey, "Shift" }, "#" .. i + 9,
                   function ()
                       if client.focus then
                           local tag = client.focus.screen.tags[i]
@@ -551,19 +606,37 @@ awful.rules.rules = {
         }
       }, properties = { floating = true }},
 
+    -- Set Doom emacs to always map on the tag named "1" on screen 1.
+    { rule = { class = emacs },
+       properties = { screen = 1, tag = "1" } },
 
     -- Set Brave to always map on the tag named "2" on screen 1.
-    { rule = { class = "brave" },
+    { rule = { class = browser },
        properties = { screen = 1, tag = "2" } },
 
     -- Set pcmanfm to always map on the tag named "3" on screen 1.
-     { rule = { class = "pcmanfm" },
+     { rule = { class = file_manager },
        properties = { screen = 1, tag = "3" } },
 
-    -- Set zathura to always map on the tag named "4" on screen 1.
-     { rule = { class = "zathura" },
+    -- Set virt manager to always map on the tag named "4" on screen 1.
+     { rule = { class = virtual_manager },
        properties = { screen = 1, tag = "4" } },
 
+    -- Set spotify to always map on the tag named "5" on screen 1.
+     { rule = { class = music_player },
+       properties = { screen = 1, tag = "5" } },
+
+    -- Set zathura to always map on the tag named "6" on screen 1.
+     { rule = { class = "zathura" },
+       properties = { screen = 1, tag = "6" } },
+
+    -- Set telegram to always map on the tag named "7" on screen 1.
+     { rule = { class = telegram },
+       properties = { screen = 1, tag = "7" } },
+
+    -- Set zoom to always map on the tag named "8" on screen 1.
+     { rule = { class = zoom },
+       properties = { screen = 1, tag = "6" } },
 }
 -- }}}
 
@@ -651,9 +724,6 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("property::maximized", border_adjust)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
-
--- Adding gaps
-beautiful.useless_gap = 2
 
 -- Autostart Applications
 awful.spawn.with_shell("lxsession")
