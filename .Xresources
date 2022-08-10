@@ -1,0 +1,40 @@
+# https://distro.tube/
+
+Xft.dpi: 96
+Xft.antialias: true
+Xft.hinting: true
+Xft.rgba: rgb
+Xft.autohint: true
+Xft.lcdfilter: lcdfilter
+
+XTerm*renderFont: true
+XTerm*faceName: 
+		xft: Mononoki Nerd Font, \
+		xft: JoyPixels:size=12, \
+		xft: Monospace:style=Medium:size=12
+
+XTerm*faceSize: 11
+
+## Allow xterm to report the TERM variable correctly
+xTerm.termName: xterm-256color
+## UTF-8
+XTerm,vt100.locate: true
+
+## Keybindings
+XTerm.vt100.translations: #override \n\
+ 	Ctrl <Keu> j: smaller-vt-font() \n\
+	Ctrl <Key> k: larger-vt-font() \n\
+	Ctrl Shitf <Key>C:copy-selection(CLIPBOARD) \n\
+	Ctrl Shitf <Key>V:insert-selection(CLIPBOARD) 
+## Every shell is a login shell by default (for inclusion of all necessary variables)
+XTerm*loginshell: true
+
+## Scrolling
+XTerm*savelines: 4096
+
+## Double-click to select whole URLs
+XTerm.charClass: 33:48, 36-47:48, 58-59:48, 61:48, 63-64:48, 95:48, 95:48, 126:48
+
+## Themes
+ *foreground: rgb: b2/b2/b2
+ *background: rgb: 08/08/08
