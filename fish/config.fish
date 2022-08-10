@@ -1,17 +1,16 @@
-if status --is-login
-      startx
-end
-
 ## ADDING TO THE PATH
 # First line removes the paths; second line sets it. Without the first line,
 # the path gets massive and fish become very slow.
 set -e fish_user_paths
 set -U fish_user_paths $HOME/.local/bin $HOME/Applications $fish_user_paths
 
-set EDITOR nvim           # Set the editor
-set TERM "xterm-256color" # Sets the terminal type
-fish_vi_key_bindings      # set vi mode
-set fish_greeting         # Supresses fish's intro message
+export PATH="$HOME/.emacs.d/bin:$PATH"
+
+set TERM "xterm-256color"                   # Sets the terminal type
+fish_vi_key_bindings                        # set vi mode
+set fish_greeting                           # Supresses fish's intro message
+set EDITOR "emacsclient -c -a ''"           # Set emacs in the terminal
+set visual "emacsclient -c -a 'emacs'"      # Set emacs in GUI mode
 
 ## AUTOCOMPLETE AND HIGHLIGHT COLORS ##
 set fish_color_normal brcyan
@@ -132,29 +131,46 @@ end
 ## END OF FUNCTIONS ##
 
 ## ALIASES AND ABBREVIATIONS##
+# Aliases
 alias clear='echo -en "\x1b[2J\x1b[1;1H" ; echo; echo; seq 1 (tput cols) | sort -R | spark | lolcat; echo; echo'
 
+# Changing ls with exa
+alias ls='exa -al --color=always --color-scale --group-directories-first' # Listing the files.
+alias lt='exa -aT --color=always --color-scale --group-directories-first' # Listing the files with tree view.
+
+# confirm before overwriting something
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+
+#emacs client
+alias emacs="emacsclient -c -a 'emacs'"
+
+#Abbreviations
 # navigation
 abbr --add .. cd ..
 abbr --add ... cd ../..
 abbr --add .3 cd ../../..
 abbr --add .4 cd ../../../..
 
-# Changing ls with exa
-alias ls='exa -al --color=always --color-scale --group-directories-first' # Listing the files.
-alias lt='exa -aT --color=always --color-scale --group-directories-first' # Listing the files with tree view.
+# pacman and paru
+abbr --add pacin sudo pacman -S                       # install programs
+abbr --add pacrm sudo pacman -Rns                     # remove programs and all dependencies
+abbr --add pacss pacman -Ss                           # search for specific program
+abbr --add pacsyu sudo pacman -Syu                    # update only standard packages
+abbr --add pacsyyu sudo pacman -Syyu                  # refresh pkglist and update standard pkgs
+abbr --add cleanup sudo pacman -Rns (pacman -Qtdq)    # remove orphaned packages
 
-# pacman and yay
-abbr --add pacin sudo pacman -S                     # install programs
-abbr --add pacsyu sudo pacman -Syu                  # update only standard packages
-abbr --add pacsyyu sudo pacman -Syyu                # refresh pkglist and update standard pkgs
-abbr --add cleanup sudo pacman -Rns (pacman -Qtdq)  # remove orphaned packages
-abbr --add yaysua yay -Sua --noconfirm              # update only AUR packages
+abbr --add parusua paru -Sua --noconfirm              # update only AUR packages
+abbr --add paruin paru -S                             # install AUR package
+abbr --add parurm paru -Rns                           # remove AUR package and all dependencies
+abbr --add paruss paru -Ss                            # search for specific AUR package
 
-# confirm before overwriting something
-alias cp='cp -i'
-alias mv='mv -i'
-alias rm='rm -i'
+# snap
+abbr --add snapin sudo snap install                   # install snap programs
+abbr --add snaprm sudo snap remove                    # remove snap programs
+abbr --add snapup sudo snap refresh                   # update snap programs
+abbr --add snapss snap find                           # find snap program
 
 # git
 abbr --add addup git add -u
