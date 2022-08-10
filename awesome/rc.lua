@@ -67,6 +67,8 @@ local vifm = terminal .. " -e vifm"
 local music_player = "spotify"
 local virtual_manager = "virt-manager"
 local image_browser = "nitrogen"
+local sound_player = "ffplay -nodisp -autoexit" -- The program that will play system sounds
+local media_player = "mpv"
 
 local telegram = "org.telegram.desktop"
 local discord = "com.discordapp.Discord"
@@ -203,6 +205,13 @@ awful.screen.connect_for_each_screen(function(s)
 
     local my_launcher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                                 menu = my_main_menu })
+
+    -- Sounds
+    local sound_dir = "/home/nahuel/Descargas/" -- The directory where the sound is located
+
+    startup_sound = sound_dir .. "startup--computer--short-musical-style-phrase--18-sound-effect-88281251.mp3"
+    shutdown_sound = sound_dir .. "shutdown--computer--short-musical-style-phrase--2-sound-effect-4574585.mp3"
+    dmenu_sound = sound_dir .. "mixkit-fast-small-sweep-transition-166.wav"
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -726,6 +735,7 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- }}}
 
 -- Autostart Applications
+awful.spawn.with_shell(sound_player .. startup_sound)
 awful.spawn.with_shell("lxsession")
 awful.spawn.with_shell("nitrogen --restore")
 awful.spawn.with_shell("nm-applet")
