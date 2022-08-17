@@ -10,7 +10,6 @@ disabled = true
 
 # Replace the "❯" symbol in the prompt with "➜ "
 [character]                                 # The name of the module we are configuring is "character"
-success_symbol = "[➜ ](bold green)"         # The "success_symbol" segment is being set to "➜" with the color "bold green"
 error_symbol = "[✗](bold red) "             # The "error_symbol" segment is being set to "x" with the color "bold red"
 vicmd_symbol = "[N](bold green) "           # The "vicmd_symbol" segment is being set to "N" (Normal mode) with the color "bold green"
 vimcmd_visual_symbol = "[V](bold yellow)"   # The "vimcmd_visual_symbol" segment is being set to "V" (Visual mode) with the color "bold yellow"
@@ -19,5 +18,21 @@ vimcmd_visual_symbol = "[V](bold yellow)"   # The "vimcmd_visual_symbol" segment
 [package]
 disabled = true
 
-[sudo]
-disabled = false
+[python]
+symbol = " "
+
+[c]
+symbol = " "
+format = "via [$name $version]($style)"
+
+[helm]
+symbol = " "
+format = "via [⎈ $version](bold white) "
+
+[lua]
+format = "via [ $version](bold white) "
+
+[git_branch]
+symbol = " "
+truncation_length = 4
+truncation_symbol = ""
