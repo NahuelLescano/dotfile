@@ -75,7 +75,7 @@ local discord = "com.discordapp.Discord"
 local zoom = "us.zoom.Zoom"
 
 local shutdown = "systemctl poweroff"
-local reboot = "systemctl suspend"
+local reboot = "systemctl reboot"
 local sleep = "systemctl sleep"
 
 -- Default modkey.
