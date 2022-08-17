@@ -53,7 +53,7 @@ end
 beautiful.init("~/.config/awesome/theme.lua")
 
 -- Use correct status icon size
-awesome.set_preferred_icon_size(32)
+awesome.set_preferred_icon_size(33)
 
 -- This is used later as the default terminal and editor to run.
 local terminal = "alacritty"
@@ -186,20 +186,20 @@ awful.screen.connect_for_each_screen(function(s)
     local my_awesome_menu = {
         { "Manual", terminal .. " -e man awesome" },
         { "Key bindings", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
-        { "Edit config", emacs .. " " .. awesome.conffile },
+        { " Edit config", editor_cmd .. " " .. awesome.conffile },
         { "Restart awesome", awesome.restart },
     }
 
     local bye_bye = {
-        { "Log out", function() awesome.quit() end },
-        { "Sleep", sleep },
-        { "Reboot", reboot },
-        { "Shutdown", shutdown },
+        { " log out", function() awesome.quit() end },
+        { " sleep", sleep },
+        { " reboot", reboot },
+        { " shutdown", shutdown },
     }
 
-    local my_main_menu = awful.menu({ items = { { "awesome", my_awesome_menu, beautiful.awesome_icon },
-                                                { "bye bye", bye_bye, beautiful.awesome_icon },
-                                                { "open a terminal", terminal }
+    local my_main_menu = awful.menu({ items = { { "awesome", my_awesome_menu },
+                                                { " ", bye_bye },
+                                                { " ", terminal }
                                    }
                             })
 
