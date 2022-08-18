@@ -1,3 +1,7 @@
+-- References:
+-- https://github.com/numToStr/dotfiles/tree/master/neovim/.config/nvim/
+-- https://www.youtube.com/watch?v=m62UCkdQ8Ck&t=698s
+
 local g   = vim.g
 local o   = vim.o
 local A   = vim.api
@@ -73,13 +77,18 @@ local function map(m, k, v)
 end
 
 -- Vifm
---map('n', '<leader>vv', :Vifm<CR>)
---map('n', '<leader>vs', :VsplitVifm<CR>)
---map('n', '<leader>sp', :SplitVifm<CR>)
---map('n', '<leader>dv', :DiffVifm<CR>)
---map('n', '<leader>tv', :TabVifm>CR>)
+map('n', '<leader>vv', ':Vifm<CR>')
+map('n', '<leader>vs', ':VsplitVifm<CR>')
+map('n', '<leader>sp', ':SplitVifm<CR>')
+map('n', '<leader>dv', ':DiffVifm<CR>')
+map('n', '<leader>tv', ':TabVifm>CR>')
 
 require('lualine').setup()
+
+require('lspconfig')['pyright'].setup{
+    on_attach = on_attach,
+    flags = lsp_flags,
+}
 
 -- COLORSCHEMES
 -- Uncomment just ONE of the following colorschemes!
@@ -95,6 +104,13 @@ local ok, _ = pcall(vim.cmd, 'colorscheme base16-ayu-dark')
 -- local ok, _ = pcall(vim.cmd, 'colorscheme base16-solarized-light')
 -- local ok, _ = pcall(vim.cmd, 'colorscheme base16-tomorrow-night')
 
+-- Automatically install and set up packer.vim
+local fn = vim.fn
+local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+if fn.empty(fn.glob(install_path)) > 0 then
+  packer_bootstrap = fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+  vim.cmd [[packadd packer.nvim]]
+end
 
 -- PLUGINS
 return require('packer').startup(function()
@@ -113,9 +129,16 @@ return require('packer').startup(function()
     use 'tiagofumo/vim-nerdtree-syntax-highlight'
     use 'ryanoasis/vim-devicons'
 
+    -- Productivity --
+    use 'vimwiki/vimwiki'
+    use 'jreybert/vimagit'
+
     -- Syntax highlighting and color
     use 'kovetskiy/sxhkd-vim'
     use 'vim-python/python-syntax'
+
+    -- Configurations for nvim LSP
+    use 'neovim/nvim-lspconfig'
 
     -- Junegunn Choi Plugins --
     use 'junegunn/goyo.vim'
@@ -128,4 +151,10 @@ return require('packer').startup(function()
 
     -- Other stuff
     use 'frazrepo/vim-rainbow'
+
+  -- Automatically set up your configuration after cloning packer.nvim
+  -- Put this at the end after all plugins
+  if packer_bootstrap then
+    require('packer').sync()
+  end
 end)
