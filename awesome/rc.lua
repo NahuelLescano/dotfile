@@ -61,7 +61,7 @@ local editor = os.getenv("EDITOR") or "nvim"
 local editor_cmd = terminal .. " -e " .. editor
 local emacs = "emacsclient -c -a 'emacs'"
 local browser = "brave"
-local dmenu = "dmenu_run -i -l 20 -p 'Run: '"
+local dmenu = "dmenu_run -i -l 20 -p ' '"
 local file_manager = "pcmanfm"
 local vifm = terminal .. " -e vifm"
 local music_player = "spotify"
@@ -179,15 +179,16 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "DEV", " WWW", " SYS", " VBOX", " MUS", " BOOK", " CHAT", " ZOOM"}, s, awful.layout.layouts[1])
+    awful.tag({ "DEV", " WWW", " SYS", " VBOX", " MUS", " BOOK", " CHAT", " GAME", " ZOOM"}, s, awful.layout.layouts[1])
+  --  awful.tag({ "  ", "  ", "  ", "  ", " MUS", " BOOK", "  ", "  ", " ZOOM"}, s, awful.layout.layouts[1])
 
     -- {{{ Menu
     -- Create a launcher widget, a main mane and a bye bye menu
     local my_awesome_menu = {
-        { "Manual", terminal .. " -e man awesome" },
-        { "Key bindings", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
+        { " Manual", terminal .. " -e man awesome" },
+        { " Key bindings", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
         { " Edit config", editor_cmd .. " " .. awesome.conffile },
-        { "Restart awesome", awesome.restart },
+        { " Restart awesome", awesome.restart },
     }
 
     local bye_bye = {
@@ -643,9 +644,13 @@ awful.rules.rules = {
      { rule = { class = telegram },
        properties = { screen = 1, tag = "7" } },
 
-    -- Set zoom to always map on the tag named "8" on screen 1.
+    -- Set steam to always map on the tag named "8" on screen 1.
+     { rule = { class = steam },
+       properties = { screen = 1, tag = "8" } },
+
+    -- Set zoom to always map on the tag named "9" on screen 1.
      { rule = { class = zoom },
-       properties = { screen = 1, tag = "6" } },
+       properties = { screen = 1, tag = "9" } },
 }
 -- }}}
 
