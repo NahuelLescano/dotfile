@@ -1,20 +1,19 @@
-# Start X at login
-if status is-login
-    if test -z "$DISPLAY" -a "$XDG_VTNR" = 1
-        exec startx -- -keeptty
-    end
-end
-
 ## ADDING TO THE PATH
 # First line removes the paths; second line sets it. Without the first line,
 # the path gets massive and fish become very slow.
 set -e fish_user_paths
 set -U fish_user_paths $HOME/.local/bin $HOME/Applications $fish_user_paths
 
-set EDITOR nvim           # Set the editor
-set TERM "xterm-256color" # Sets the terminal type
-fish_vi_key_bindings      # set vi mode
-set fish_greeting         # Supresses fish's intro message
+export PATH="$HOME/.emacs.d/bin:$PATH"
+
+set TERM "xterm-256color"                   # Sets the terminal type
+fish_vi_key_bindings                        # set vi mode
+set fish_greeting                           # Supresses fish's intro message
+set EDITOR "emacsclient -c -a ''"           # Set emacs in the terminal
+set VISUAL "emacsclient -c -a 'emacs'"      # Set emacs in GUI mode
+
+### "bat" as manpager
+set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
 ## AUTOCOMPLETE AND HIGHLIGHT COLORS ##
 set fish_color_normal brcyan
@@ -135,7 +134,7 @@ end
 ## END OF FUNCTIONS ##
 
 ## ALIASES AND ABBREVIATIONS##
-# aliases
+# Aliases
 alias clear='echo -en "\x1b[2J\x1b[1;1H" ; echo; echo; seq 1 (tput cols) | sort -R | spark | lolcat; echo; echo'
 
 # Changing ls with exa
@@ -147,7 +146,10 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 
-# Abbreviations
+#emacs client
+alias emacs="emacsclient -c -a 'emacs'"
+
+#Abbreviations
 # navigation
 abbr --add .. cd ..
 abbr --add ... cd ../..
@@ -167,6 +169,16 @@ abbr --add paruin paru -S                             # install AUR package
 abbr --add parurm paru -Rns                           # remove AUR package and all dependencies
 abbr --add paruss paru -Ss                            # search for specific AUR package
 
+# snap
+abbr --add snapin doas snap install                   # install snap programs
+abbr --add snaprm doas snap remove                    # remove snap programs
+abbr --add snapup doas snap refresh                   # update snap programs
+abbr --add snapss snap find                           # find snap program
+
+# flatpak
+abbr --add flatup flatpak update
+abbr --add faltin flatpak install
+
 # git
 abbr --add addup git add -u
 abbr --add addall git add .
@@ -176,6 +188,9 @@ abbr --add clone git clone
 abbr --add commit git commit -m
 abbr --add pull git pull origin
 abbr --add push git push origin
+
+#nvim
+abbr --add v nvim
 
 # Colorscript
 colorscript -r
