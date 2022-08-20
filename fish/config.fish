@@ -4,8 +4,6 @@
 set -e fish_user_paths
 set -U fish_user_paths $HOME/.local/bin $HOME/Applications $fish_user_paths
 
-export PATH="$HOME/.emacs.d/bin:$PATH"
-
 set TERM "xterm-256color"                   # Sets the terminal type
 fish_vi_key_bindings                        # set vi mode
 set fish_greeting                           # Supresses fish's intro message
@@ -146,9 +144,6 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 
-#emacs client
-alias emacs="emacsclient -c -a 'emacs'"
-
 #Abbreviations
 # navigation
 abbr --add .. cd ..
@@ -180,6 +175,7 @@ abbr --add flatup flatpak update
 abbr --add faltin flatpak install
 
 # git
+abbr --add init git init
 abbr --add addup git add -u
 abbr --add addall git add .
 abbr --add status git status
