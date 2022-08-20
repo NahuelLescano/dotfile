@@ -59,9 +59,9 @@ awesome.set_preferred_icon_size(33)
 local terminal = "alacritty"
 local editor = os.getenv("EDITOR") or "nvim"
 local editor_cmd = terminal .. " -e " .. editor
-local emacs = "emacsclient -c -a 'emacs'"
 local browser = "brave"
 local dmenu = "dmenu_run -i -l 20 -p ' '"
+local passmenu = "passmenu -i -l 20 -p ' '"
 local file_manager = "pcmanfm"
 local vifm = terminal .. " -e vifm"
 local music_player = "spotify"
@@ -71,7 +71,6 @@ local sound_player = "ffplay -nodisp -autoexit" -- The program that will play sy
 local media_player = "mpv"
 
 local telegram = "org.telegram.desktop"
-local discord = "com.discordapp.Discord"
 local zoom = "us.zoom.Zoom"
 
 local shutdown = "systemctl poweroff"
@@ -361,7 +360,11 @@ globalkeys = gears.table.join(
     -- Costum key bindings
     -- Dmenu
     awful.key({ modkey },            "r",    function () awful.util.spawn(dmenu)  end,
-              {description = "run dmenu", group = "launcher"}),
+              {description = "run dmenu", group = "dmenu"}),
+
+    -- Passmenu
+    awful.key({ modkey, alt },            "p",    function () awful.util.spawn(passmenu)  end,
+              {description = "run passmenu", group = "dmenu"}),
 
     -- Brave
     awful.key({ modkey },             "b",     function() awful.util.spawn(browser) end,
@@ -372,7 +375,7 @@ globalkeys = gears.table.join(
                 {description = "run pcmanfm file manager", group = "applications"}),
 
     -- Vifm
-    awful.key({modkey,  alt },        "v",     function() awful.util.spawn(vifm) end,
+    awful.key({modkey, alt },        "v",     function() awful.util.spawn(vifm) end,
                 {description = "run vifm file manager", group = "applications"}),
 
     -- Spotify
@@ -390,10 +393,6 @@ globalkeys = gears.table.join(
     -- Telegram
     awful.key({ modkey },             "t",     function() awful.util.spawn(telegram) end,
                 {description = "run telegram desktop", group = "applications"}),
-
-    -- Discord
-    awful.key({ ctrlkey, modkey },             "d",     function() awful.util.spawn(discord) end,
-                {description = "run discord app", group = "applications"}),
 
     -- Zoom
     awful.key({ modkey },             "z",     function() awful.util.spawn(zoom) end,
