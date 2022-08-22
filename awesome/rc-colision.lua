@@ -57,16 +57,20 @@ end
 --beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 beautiful.init("~/.config/awesome/theme.lua")
 
+-- Use correct status icon size
+awesome.set_preferred_icon_size(33)
+
 -- This is used later as the default terminal and editor to run.
 local terminal = "st"
 local editor = os.getenv("EDITOR") or "nvim"
 local editor_cmd = terminal .. " -e " .. editor
 local browser = "brave"
-local dmenu = "dmenu_run -i -l 20 -p 'Run: '"
+local dmenu = "dmenu_run -i -l 20 -p ' '"
 local vifm = terminal .. " -e " .. "vifm"
 
-local shutdown = "shutdown now"
-local reboot = "reboot"
+local shutdown = "systemctl poweroff"
+local reboot = "systemctl reboot"
+local sleep = "systemctl sleep"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -158,29 +162,30 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ " DEV ", " WWW ", " SYS ", " DOC ", " MUS ", " VID "}, s, awful.layout.layouts[1])
+    awful.tag({ " DEV", " WWW", " DOC", " SYS", " MUS", " VID"}, s, awful.layout.layouts[1])
 
--- {{{ Menu
--- Create a launcher widget, a main menu and a bye bye menu.
-local my_awesome_menu = {
-    { "Manual", terminal .. " -e man awesome" },
-    { "Key bindings", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
-    { "Edit config", editor_cmd .. " " .. awesome.conffile },
-    { "Restart awesome", awesome.restart },
-}
+    -- {{{ Menu
+    -- Create a launcher widget, a main menu and a bye bye menu.
+    local my_awesome_menu = {
+        { " Manual", terminal .. " -e man awesome" },
+        { " Key bindings", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
+        { " Edit config", editor_cmd .. " " .. awesome.conffile },
+        { " Restart awesome", awesome.restart },
+    }
 
-local bye_bye = {
-    { "Log out", function() awesome.quit() end },
-    { "Sleep", "systemctl suspend" },
-    { "Reboot", "systemctl reboot" },
-    { "Shutdown", "systemctl poweroff" }
-}
+    local bye_bye = {
+        { " log out", function() awesome.quit() end },
+        { " sleep", sleep },
+        { " reboot", reboot },
+        { " shutdown", shutdown },
+    }
 
-local my_main_menu = awful.menu({ items = { { "awesome", my_awesome_menu, beautiful.awesome_icon },
-                                            { "bye_bye", bye_bye, beautiful.awesome_icon },
-                                            { "open terminal", terminal }
-                                 }
-                        })
+
+    local my_main_menu = awful.menu({ items = { { "awesome", my_awesome_menu },
+                                                { " ", bye_bye },
+                                                { " ", terminal }
+                                   }
+                            })
 
 local my_launcher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                             menu = my_main_menu })
@@ -347,14 +352,17 @@ globalkeys = gears.table.join(
 	awful.key({ modkey },            "v",     function () awful.util.spawn(vifm) end,
               {description = "run vifm", group = "applications"}),
 
-	-- Reboot
-	awful.key({ ctrlkey, alt },            "r",     function () awful.util.spawn(reboot) end,
-              {description = "reboot the system", group = "system"}),
+    -- Power off
+    awful.key({ ctrlkey, alt },        "p",     function() awful.util.spawn(shutdown) end,
+                {description = "power off the system", group = "system"}),
 
-	-- Reboot
-	awful.key({ ctrlkey, alt },            "p",     function () awful.util.spawn(shutdown) end,
-              {description = "power off the system", group = "system"}),
+    -- Reboot
+    awful.key({ ctrlkey, alt },        "r",     function() awful.util.spawn(reboot) end,
+                {description = "reboot the system", group = "system"}),
 
+    -- Slepp
+    awful.key({ ctrlkey, alt },        "s",     function() awful.util.spawn(sleep) end,
+                {description = "suspend the system", group = "system"}),
 
     awful.key({ modkey }, "x",
               function ()
