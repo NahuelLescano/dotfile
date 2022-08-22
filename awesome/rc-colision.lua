@@ -332,7 +332,7 @@ globalkeys = gears.table.join(
     
     -- Costum shortcuts
 	-- Dmenu
-	awful.key({ modkey, "Shift" },            "Return",     function () awful.util.spawn(dmenu) end,
+	awful.key({ modkey },            "r",     function () awful.util.spawn(dmenu) end,
               {description = "run dmenu", group = "launcher"}),
 
 	-- Brave
@@ -666,12 +666,11 @@ client.connect_signal("property::maximized", border_adjust)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
--- Adding gaps
-beautiful.useless_gap = 2
 
 -- Autostart
-awful.spawn.with_shell("lxsession")
+awful.spawn.with_shell("/usr/bin/lxpolkit")
 awful.spawn.with_shell("nitrogen --restore")
 awful.spawn.with_shell("blueman-applet")
 awful.spawn.with_shell("kmix")
 awful.spawn.with_shell("nm-applet")
+awful.spawn.with_shell("/usr/bin/emacs --daemon")
