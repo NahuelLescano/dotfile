@@ -7,8 +7,6 @@ set -U fish_user_paths $HOME/.local/bin $HOME/Applications $fish_user_paths
 set TERM "xterm-256color"                   # Sets the terminal type
 fish_vi_key_bindings                        # set vi mode
 set fish_greeting                           # Supresses fish's intro message
-set EDITOR "emacsclient -c -a ''"           # Set emacs in the terminal
-set VISUAL "emacsclient -c -a 'emacs'"      # Set emacs in GUI mode
 
 ### "bat" as manpager
 set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
