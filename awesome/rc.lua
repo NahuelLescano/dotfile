@@ -178,7 +178,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "DEV", " WWW", " PDF", " SYS", " VBOX", " ZOOM", " MUS", " CHAT", " GAME"}, s, awful.layout.layouts[1])
+    awful.tag({ "DEV", " WWW", " DOC", " SYS", " VBOX", " ZOOM", " MUS", " CHAT", " GAME"}, s, awful.layout.layouts[1])
 
     -- {{{ Menu
     -- Create a launcher widget, a main mane and a bye bye menu
