@@ -178,8 +178,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "DEV", " WWW", " SYS", " VBOX", " MUS", " BOOK", " CHAT", " GAME", " ZOOM"}, s, awful.layout.layouts[1])
-  --  awful.tag({ "  ", "  ", "  ", "  ", " MUS", " BOOK", "  ", "  ", " ZOOM"}, s, awful.layout.layouts[1])
+    awful.tag({ "DEV", " WWW", " PDF", " SYS", " VBOX", " ZOOM", " MUS", " CHAT", " GAME"}, s, awful.layout.layouts[1])
 
     -- {{{ Menu
     -- Create a launcher widget, a main mane and a bye bye menu
@@ -385,10 +384,6 @@ globalkeys = gears.table.join(
     -- Virtual manager
     awful.key({ modkey },             "v",     function() awful.util.spawn(virtual_manager) end,
                 {description = "run virt-manager", group = "applications"}),
-
-    -- Doom emacs
-    awful.key({ modkey },             "d",     function() awful.util.spawn(emacs) end,
-                {description = "run doom emacs", group = "applications"}),
 
     -- Telegram
     awful.key({ modkey },             "t",     function() awful.util.spawn(telegram) end,
@@ -615,41 +610,38 @@ awful.rules.rules = {
         }
       }, properties = { floating = true }},
 
-    -- Set Doom emacs to always map on the tag named "1" on screen 1.
-    { rule = { class = emacs },
+    -- Set eclipse to always map on the tag named "1" on screen 1.
+    { rule = { class = "eclipse" },
        properties = { screen = 1, tag = "1" } },
 
     -- Set Brave to always map on the tag named "2" on screen 1.
     { rule = { class = browser },
        properties = { screen = 1, tag = "2" } },
 
-    -- Set pcmanfm to always map on the tag named "3" on screen 1.
-     { rule = { class = file_manager },
+    -- Set zathura to always map on the tag named "3" on screen 1.
+     { rule = { class = "zathura" },
        properties = { screen = 1, tag = "3" } },
 
-    -- Set virt manager to always map on the tag named "4" on screen 1.
-     { rule = { class = virtual_manager },
+    -- Set pcmanfm to always map on the tag named "4" on screen 1.
+     { rule = { class = file_manager },
        properties = { screen = 1, tag = "4" } },
 
-    -- Set spotify to always map on the tag named "5" on screen 1.
-     { rule = { class = music_player },
+    -- Set virt manager to always map on the tag named "5" on screen 1.
+     { rule = { class = virtual_manager },
        properties = { screen = 1, tag = "5" } },
 
-    -- Set zathura to always map on the tag named "6" on screen 1.
-     { rule = { class = "zathura" },
+    -- Set zoom to always map on the tag named "6" on screen 1.
+     { rule = { class = zoom },
        properties = { screen = 1, tag = "6" } },
 
-    -- Set telegram to always map on the tag named "7" on screen 1.
-     { rule = { class = telegram },
+    -- Set spotify to always map on the tag named "7" on screen 1.
+     { rule = { class = music_player },
        properties = { screen = 1, tag = "7" } },
 
-    -- Set steam to always map on the tag named "8" on screen 1.
-     { rule = { class = steam },
+    -- Set telegram to always map on the tag named "8" on screen 1.
+     { rule = { class = telegram },
        properties = { screen = 1, tag = "8" } },
 
-    -- Set zoom to always map on the tag named "9" on screen 1.
-     { rule = { class = zoom },
-       properties = { screen = 1, tag = "9" } },
 }
 -- }}}
 
