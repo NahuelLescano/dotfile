@@ -83,6 +83,8 @@ map('n', '<leader>sp', ':SplitVifm<CR>')
 map('n', '<leader>dv', ':DiffVifm<CR>')
 map('n', '<leader>tv', ':TabVifm>CR>')
 
+-- Vertical split
+map('n', 'vs', ':vs<CR>')
 require('lualine').setup()
 
 require('lspconfig')['pyright'].setup{
