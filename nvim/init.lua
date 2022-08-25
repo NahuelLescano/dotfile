@@ -1,4 +1,4 @@
--- References:
+-- References
 -- https://github.com/numToStr/dotfiles/tree/master/neovim/.config/nvim/
 -- https://www.youtube.com/watch?v=m62UCkdQ8Ck&t=698s
 
@@ -77,34 +77,85 @@ local function map(m, k, v)
 end
 
 -- Vifm
-map('n', '<leader>vv', ':Vifm<CR>')
-map('n', '<leader>vs', ':VsplitVifm<CR>')
-map('n', '<leader>sp', ':SplitVifm<CR>')
-map('n', '<leader>dv', ':DiffVifm<CR>')
-map('n', '<leader>tv', ':TabVifm>CR>')
+map('n', '<leader>vv', '<CMD>Vifm<CR>')
+map('n', '<leader>vs', '<CMD>VsplitVifm<CR>')
+map('n', '<leader>sp', '<CMD>SplitVifm<CR>')
+map('n', '<leader>dv', '<CMD>DiffVifm<CR>')
+map('n', '<leader>tv', '<CMD>TabVifm>CR>')
 
 -- Vertical split
-map('n', 'vs', ':vs<CR>')
+map('n', 'vs', '<CMD>vs<CR>')
+
 require('lualine').setup()
 
-require('lspconfig')['pyright'].setup{
-    on_attach = on_attach,
-    flags = lsp_flags,
+-- Setup lspconfig.
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+require'lspconfig'.pyright.setup{
+    capabilities = capabilities,
+    on_attach = function() 
+        vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = 0 })
+        vim.keymap.set("n", "gd", vim.lsp.buf.definition, { buffer = 0 })
+        vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, { buffer = 0 })
+        vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { buffer = 0 })
+        vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, { buffer = 0 })
+        vim.keymap.set("n", "<leader>dj", vim.diagnostic.goto_next, { buffer = 0 })
+        vim.keymap.set("n", "<leader>dk", vim.diagnostic.goto_prev, { buffer = 0 })
+    end,
 }
 
+opt.completeopt={ "menu" ,"menuone" ,"noselect" }
+
+-- Setup nvim-cmp.
+local cmp = require'cmp'
+
+cmp.setup({
+  snippet = {
+    -- REQUIRED - you must specify a snippet engine
+    expand = function(args)
+       require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+    end,
+  },
+  window = {
+    -- completion = cmp.config.window.bordered(),
+    -- documentation = cmp.config.window.bordered(),
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+  }),
+  sources = cmp.config.sources({
+    { name = 'nvim_lsp' },
+    { name = 'luasnip' }, -- For luasnip users.
+  }, {
+    { name = 'buffer' },
+  })
+})
+
+-- Set configuration for specific filetype.
+cmp.setup.filetype('gitcommit', {
+  sources = cmp.config.sources({
+    { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+  }, {
+    { name = 'buffer' },
+  })
+})
+
+  --Debugging
+vim.keymap.set("n","<F5>", "<CMD>lua require'dap'.continue()<CR>")
+vim.keymap.set("n","<F10>", "<CMD>lua require'dap'.step_over()<CR>")
+vim.keymap.set("n","<F11>", "<CMD>lua require'dap'.step_into()<CR>")
+vim.keymap.set("n","<F12>", "<CMD>lua require'dap'.step_out()<CR>")
+vim.keymap.set("n","<leader>b", "<CMD>lua require'dap'.toggle_breakpoint()<CR>")
+vim.keymap.set("n","<leader>B", "<CMD>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>")
+vim.keymap.set("n","<leader>lp", "<CMD>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<CR>")
+
+require("dapui").setup()
+
 -- COLORSCHEMES
--- Uncomment just ONE of the following colorschemes!
--- local ok, _ = pcall(vim.cmd, 'colorscheme base16-dracula')
 local ok, _ = pcall(vim.cmd, 'colorscheme base16-ayu-dark')
--- local ok, _ = pcall(vim.cmd, 'colorscheme base16-gruvbox-dark-medium')
--- local ok, _ = pcall(vim.cmd, 'colorscheme base16-monokai')
--- local ok, _ = pcall(vim.cmd, 'colorscheme base16-nord')
--- local ok, _ = pcall(vim.cmd, 'colorscheme base16-oceanicnext')
--- local ok, _ = pcall(vim.cmd, 'colorscheme base16-onedark')
--- local ok, _ = pcall(vim.cmd, 'colorscheme palenight')
--- local ok, _ = pcall(vim.cmd, 'colorscheme base16-solarized-dark')
--- local ok, _ = pcall(vim.cmd, 'colorscheme base16-solarized-light')
--- local ok, _ = pcall(vim.cmd, 'colorscheme base16-tomorrow-night')
 
 -- Automatically install and set up packer.vim
 local fn = vim.fn
@@ -127,8 +178,6 @@ return require('packer').startup(function()
 
     -- File management
     use 'vifm/vifm.vim'
-    use 'scrooloose/nerdtree'
-    use 'tiagofumo/vim-nerdtree-syntax-highlight'
     use 'ryanoasis/vim-devicons'
 
     -- Productivity --
@@ -141,6 +190,30 @@ return require('packer').startup(function()
 
     -- Configurations for nvim LSP
     use 'neovim/nvim-lspconfig'
+    use 'hrsh7th/cmp-nvim-lsp'
+    use 'hrsh7th/cmp-buffer'
+    use 'hrsh7th/cmp-path'
+    use 'hrsh7th/nvim-cmp'
+    
+    -- For vsnip users.
+    use 'hrsh7th/cmp-vsnip'
+    use 'hrsh7th/vim-vsnip'
+    
+    -- For luasnip users.
+    use 'L3MON4D3/LuaSnip'
+    use 'saadparwaiz1/cmp_luasnip'
+    
+    -- For ultisnips users.
+    use 'SirVer/ultisnips'
+    use 'quangnguyen30192/cmp-nvim-ultisnips'
+    
+    -- For snippy users.
+    use 'dcampos/nvim-snippy'
+    use 'dcampos/cmp-snippy'
+
+    --Debugging
+    use 'mfussenegger/nvim-dap'
+    use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
 
     -- Junegunn Choi Plugins --
     use 'junegunn/goyo.vim'
