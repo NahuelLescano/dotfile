@@ -1,4 +1,4 @@
--- References
+-- References:
 -- https://github.com/numToStr/dotfiles/tree/master/neovim/.config/nvim/
 -- https://www.youtube.com/watch?v=m62UCkdQ8Ck&t=698s
 
@@ -77,14 +77,19 @@ local function map(m, k, v)
 end
 
 -- Vifm
-map('n', '<leader>vv', '<CMD>Vifm<CR>')
-map('n', '<leader>vs', '<CMD>VsplitVifm<CR>')
-map('n', '<leader>sp', '<CMD>SplitVifm<CR>')
-map('n', '<leader>dv', '<CMD>DiffVifm<CR>')
-map('n', '<leader>tv', '<CMD>TabVifm>CR>')
+map('n', '<leader>vv', '<CMD>Vifm<CR>')         --Open vifm in a new buffer.
+map('n', '<leader>vs', '<CMD>VsplitVifm<CR>')   --Open vifm in vertical split.
+map('n', '<leader>sp', '<CMD>SplitVifm<CR>')    --Open vifm in horizonal split.
+map('n', '<leader>tv', '<CMD>TabVifm>CR>')      --Open vifm in a tab.
 
 -- Vertical split
-map('n', 'vs', '<CMD>vs<CR>')
+map('n', '<leader>v', '<CMD>vs<CR>')
+
+-- Horizonal split
+map('n', '<leader>h', '<CMD>split<CR>')
+
+-- Open alacritty
+map('n', '<leader>t', '<CMD>term<CR>')
 
 require('lualine').setup()
 
@@ -194,19 +199,19 @@ return require('packer').startup(function()
     use 'hrsh7th/cmp-buffer'
     use 'hrsh7th/cmp-path'
     use 'hrsh7th/nvim-cmp'
-    
+
     -- For vsnip users.
     use 'hrsh7th/cmp-vsnip'
     use 'hrsh7th/vim-vsnip'
-    
+
     -- For luasnip users.
     use 'L3MON4D3/LuaSnip'
     use 'saadparwaiz1/cmp_luasnip'
-    
+
     -- For ultisnips users.
     use 'SirVer/ultisnips'
     use 'quangnguyen30192/cmp-nvim-ultisnips'
-    
+
     -- For snippy users.
     use 'dcampos/nvim-snippy'
     use 'dcampos/cmp-snippy'
