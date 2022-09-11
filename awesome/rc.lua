@@ -67,8 +67,6 @@ local vifm = terminal .. " -e vifm"
 local music_player = "spotify"
 local virtual_manager = "virt-manager"
 local image_browser = "nitrogen"
-local sound_player = "ffplay -nodisp -autoexit" -- The program that will play system sounds
-local media_player = "mpv"
 
 local telegram = "org.telegram.desktop"
 local zoom = "us.zoom.Zoom"
@@ -178,7 +176,9 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ "DEV", " WWW", " DOC", " SYS", " VBOX", " ZOOM", " MUS", " CHAT", " GAME"}, s, awful.layout.layouts[1])
+   -- awful.tag({ "DEV", " WWW", " DOC", " SYS", " VBOX", " ZOOM", " MUS", " CHAT", " GAME"}, s, awful.layout.layouts[1])
+
+    awful.tag({ " 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 "}, s, awful.layout.layouts[1])
 
     -- {{{ Menu
     -- Create a launcher widget, a main mane and a bye bye menu
@@ -204,13 +204,6 @@ awful.screen.connect_for_each_screen(function(s)
 
     local my_launcher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                                 menu = my_main_menu })
-
-    -- Sounds
-    local sound_dir = "/home/nahuel/Descargas/" -- The directory where the sound is located
-
-    startup_sound = sound_dir .. "startup--computer--short-musical-style-phrase--18-sound-effect-88281251.mp3"
-    shutdown_sound = sound_dir .. "shutdown--computer--short-musical-style-phrase--2-sound-effect-4574585.mp3"
-    dmenu_sound = sound_dir .. "mixkit-fast-small-sweep-transition-166.wav"
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -369,12 +362,16 @@ globalkeys = gears.table.join(
     awful.key({ modkey },             "b",     function() awful.util.spawn(browser) end,
                 {description = "run brave", group = "applications"}),
 
+    -- Qutebrowser
+    awful.key({ modkey },             "q",     function() awful.util.spawn("qutebrowser") end,
+                {description = "run qutebrowser", group = "applications"}),
+
     -- Pcmanfm
     awful.key({ modkey },             "p",     function() awful.util.spawn(file_manager) end,
                 {description = "run pcmanfm file manager", group = "applications"}),
 
     -- Vifm
-    awful.key({modkey, alt },        "v",     function() awful.util.spawn(vifm) end,
+    awful.key({ modkey },        "v",     function() awful.util.spawn(vifm) end,
                 {description = "run vifm file manager", group = "applications"}),
 
     -- Spotify
@@ -382,7 +379,7 @@ globalkeys = gears.table.join(
                 {description = "run spotify music player", group = "applications"}),
 
     -- Virtual manager
-    awful.key({ modkey },             "v",     function() awful.util.spawn(virtual_manager) end,
+    awful.key({ modkey, alt },             "v",     function() awful.util.spawn(virtual_manager) end,
                 {description = "run virt-manager", group = "applications"}),
 
     -- Telegram
@@ -731,8 +728,5 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- }}}
 
 -- Autostart Applications
-awful.spawn.with_shell(sound_player .. startup_sound)
-awful.spawn.with_shell("lxsession")
 awful.spawn.with_shell("nitrogen --restore")
 awful.spawn.with_shell("nm-applet")
-awful.spawn.with_shell("/usr/bin/emacs --daemon")
