@@ -1,7 +1,6 @@
 #
 # ~/.bashrc
 #
-
 [[ $- != *i* ]] && return
 
 colors() {
@@ -75,10 +74,6 @@ if ${use_color} ; then
 		PS1='\[\033[01;32m\][\u@\h\[\033[01;37m\] \W\[\033[01;32m\]]\$\[\033[00m\] '
 	fi
 
-	alias ls='ls --color=auto'
-	alias grep='grep --colour=auto'
-	alias egrep='egrep --colour=auto'
-	alias fgrep='fgrep --colour=auto'
 else
 	if [[ ${EUID} == 0 ]] ; then
 		# show root@ when we don't have colors
@@ -89,12 +84,6 @@ else
 fi
 
 unset use_color safe_term match_lhs sh
-
-#alias cp="cp -i"                          # confirm before overwriting something
-#alias df='df -h'                          # human-readable sizes
-#alias free='free -m'                      # show sizes in MB
-#alias np='nano -w PKGBUILD'
-#alias more=less
 
 xhost +local:root > /dev/null 2>&1
 
@@ -140,8 +129,7 @@ ex ()
 # pacman and yay
 alias pacsyu='sudo pacman -Syu'                  # update only standard pkgs
 alias pacsyyu='sudo pacman -Syyu'                # Refresh pkglist & update standard pkgs
-alias yaysua='yay -Sua --noconfirm'              # update only AUR pkgs (yay)
-alias yaysyu='yay -Syu --noconfirm'              # update standard pkgs and AUR pkgs (yay)
+alias parusua='paru -Sua --noconfirm'            # update only AUR pkgs (yay)
 alias cleanup='sudo pacman -Rns $(pacman -Qtdq)' # remove orphaned packages
 
 # ls with all flags
@@ -157,22 +145,9 @@ alias .4='cd ../../..'
 alias mv='mv -i'
 alias cp='cp -i'
 alias rm='rm -i'
-alias ln='ln -i'
 
 # Shutdown the machine
 alias shutdown='shutdown now'
-
-# vifm
-alias vf='vifm'
-
-# Dotfile directory
-alias dotfile='cd ~/Documentos/dotfile/'
-
-# Awesome directory
-alias awesome='cd ~/.config/awesome/'
-
-# Nvim directory
-alias v='cd ~/.config/nvim/'
 
 # git
 alias init='git init'
@@ -182,6 +157,10 @@ alias commit='git commit -m'
 alias pull='git pull'
 alias push='git push'
 alias clone='git clone'
+
+alias grep='grep --colour=auto'
+alias egrep='egrep --colour=auto'
+alias fgrep='fgrep --colour=auto'
 
 # Colorscript
 colorscript -r
