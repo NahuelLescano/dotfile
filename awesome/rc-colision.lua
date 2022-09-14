@@ -162,7 +162,8 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     -- Each screen has its own tag table.
-    awful.tag({ " DEV", " WWW", " DOC", " SYS", " MUS", " VID"}, s, awful.layout.layouts[1])
+    --awful.tag({ " DEV", " WWW", " DOC", " SYS", " MUS", " VID"}, s, awful.layout.layouts[1])
+    awful.tag({ " 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 "}, s, awful.layout.layouts[1])
 
     -- {{{ Menu
     -- Create a launcher widget, a main menu and a bye bye menu.
@@ -272,9 +273,6 @@ globalkeys = gears.table.join(
         {description = "focus previous by index", group = "client"}
     ),
 
-    awful.key({ modkey,           }, "w", function () mymainmenu:show() end,
-              {description = "show main menu", group = "awesome"}),
-
         -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
               {description = "swap with next client by index", group = "client"}),
@@ -343,6 +341,10 @@ globalkeys = gears.table.join(
 	-- Brave
 	awful.key({ modkey },            "b",     function () awful.util.spawn(browser) end,
               {description = "run brave browser", group = "applications"}),
+
+	-- Qutebrowser
+	awful.key({ modkey },            "q",     function () awful.util.spawn("qutebrowser") end,
+              {description = "run qutebrowser", group = "applications"}),
 
 	-- Pcmanfm
 	awful.key({ modkey },            "p",     function () awful.util.spawn("pcmanfm") end,
@@ -570,20 +572,20 @@ awful.rules.rules = {
       }, properties = { floating = true }},
 
     -- Set eclipse to always map on the tag named "1" on screen 1.
-     { rule = { class = "eclipse" },
-       properties = { screen = 1, tag = "1" } },
+    -- { rule = { class = "eclipse" },
+    --   properties = { screen = 1, tag = "1" } },
 
-    -- Set brave to always map on the tag named "2" on screen 1.
-     { rule = { class = "brave" },
-       properties = { screen = 1, tag = "2" } },
+    ---- Set brave to always map on the tag named "2" on screen 1.
+    -- { rule = { class = "brave" },
+    --   properties = { screen = 1, tag = "2" } },
 
-    -- Set pcmanfm to always map on the tag named "3" on screen 1.
-     { rule = { class = "pcmanfm" },
-       properties = { screen = 1, tag = "3" } },
+    ---- Set pcmanfm to always map on the tag named "3" on screen 1.
+    -- { rule = { class = "pcmanfm" },
+    --   properties = { screen = 1, tag = "3" } },
 
-    -- Set zathura to always map on the tag named "4" on screen 1.
-     { rule = { class = "zathura" },
-       properties = { screen = 1, tag = "4" } },
+    ---- Set zathura to always map on the tag named "4" on screen 1.
+    -- { rule = { class = "zathura" },
+    --   properties = { screen = 1, tag = "4" } },
 
 }
 -- }}}
@@ -674,11 +676,9 @@ client.connect_signal("property::maximized", border_adjust)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
-
 -- Autostart
 awful.spawn.with_shell("/usr/bin/lxpolkit")
 awful.spawn.with_shell("nitrogen --restore")
 awful.spawn.with_shell("blueman-applet")
 awful.spawn.with_shell("kmix")
 awful.spawn.with_shell("nm-applet")
-awful.spawn.with_shell("/usr/bin/emacs --daemon")
