@@ -184,6 +184,7 @@ abbr --add clone git clone
 abbr --add commit git commit -v
 abbr --add pull git pull origin
 abbr --add push git push origin
+abbr --add log git log --pretty=format:"%h - %an, %ar: %s"
 
 #nvim
 abbr --add v nvim
