@@ -4,9 +4,10 @@
 set -e fish_user_paths
 set -U fish_user_paths $HOME/.local/bin $HOME/Applications $fish_user_paths
 
-set TERM "xterm-256color"                   # Sets the terminal type
 fish_vi_key_bindings                        # set vi mode
 set fish_greeting                           # Supresses fish's intro message
+set TERM "xterm-256color"                   # Sets the terminal type
+set EDITOR "nvim"                           # Use nvim as the text editor of choice
 
 ### "bat" as manpager
 set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
@@ -177,9 +178,10 @@ abbr --add init git init
 abbr --add addup git add -u
 abbr --add addall git add .
 abbr --add status git status
+abbr --add diff git diff
 abbr --add branch git branch
 abbr --add clone git clone
-abbr --add commit git commit -m
+abbr --add commit git commit -v
 abbr --add pull git pull origin
 abbr --add push git push origin
 
