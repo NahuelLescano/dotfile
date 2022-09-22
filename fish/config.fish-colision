@@ -156,6 +156,7 @@ abbr --add pacrm doas pacman -Rns                     # remove programs and all 
 abbr --add pacss pacman -Ss                           # search for specific program
 abbr --add pacsyu doas pacman -Syu                    # update only standard packages
 abbr --add pacsyyu doas pacman -Syyu                  # refresh pkglist and update standard pkgs
+abbr --add pacsyy pacman -Syy                         # Syncronized the database from the server
 abbr --add cleanup doas pacman -Rns (pacman -Qtdq)    # remove orphaned packages
 
 abbr --add parusua paru -Sua --noconfirm              # update only AUR packages
@@ -174,11 +175,13 @@ abbr --add init git init
 abbr --add addup git add -u
 abbr --add addall git add .
 abbr --add status git status
+abbr --add diff git diff
 abbr --add branch git branch
 abbr --add clone git clone
-abbr --add commit git commit -m
+abbr --add commit git commit -v
 abbr --add pull git pull origin
 abbr --add push git push origin
+abbr --add log git log --pretty=format:'"%h - %an, %ar: %s"'
 
 # nvim
 abbr --add v nvim
