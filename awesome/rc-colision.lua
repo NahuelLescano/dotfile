@@ -68,6 +68,7 @@ local browser = "brave"
 local dmenu = "dmenu_run -i -l 20 -p ' '"
 local macho = "/home/nahuel/Documents/dotfile/macho_gui.sh"
 local vifm = terminal .. " -e " .. "vifm"
+local nvim = terminal .. " -e " .. "nvim"
 
 local shutdown = "systemctl poweroff"
 local reboot = "systemctl reboot"
@@ -333,14 +334,19 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
 
-    
+
     -- Costum shortcuts
 	-- Dmenu
 	awful.key({ modkey },            "r",     function () awful.util.spawn(dmenu) end,
               {description = "run dmenu", group = "dmenu"}),
 
+    -- Macho (gui)
 	awful.key({ modkey },            "m",     function () awful.util.spawn(macho) end,
               {description = "run macho (gui version)", group = "dmenu"}),
+
+    -- Macho (gui)
+	awful.key({ modkey, ctrlkey},            "v",     function () awful.util.spawn(nvim) end,
+              {description = "run neovim", group = "applications"}),
 
 	-- Brave
 	awful.key({ modkey },            "b",     function () awful.util.spawn(browser) end,
