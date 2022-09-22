@@ -22,4 +22,4 @@ manual=$(apropos -s ${SECTION:-''} ${@:-.} | \
     sed -E 's/^\((.+)\)/\1/')
 
 [ -z "$manual" ] && exit 0;
-man -T${FORMAT:-pdf} $manual | ${READER:-okular -}
+man -T${FORMAT:-pdf} $manual | ${READER:-zathura -}
