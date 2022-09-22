@@ -64,9 +64,11 @@ local dmenu = "dmenu_run -i -l 20 -p ' '"
 local passmenu = "passmenu -i -l 20 -p ' '"
 local file_manager = "pcmanfm"
 local vifm = terminal .. " -e vifm"
+--local nvim = terminal .. " -e nvim"
 local music_player = "spotify"
 local virtual_manager = "virt-manager"
 local image_browser = "nitrogen"
+local macho = "/home/nahuel/Documentos/dotfile/macho_gui.sh"
 
 local telegram = "org.telegram.desktop"
 local zoom = "us.zoom.Zoom"
@@ -357,6 +359,14 @@ globalkeys = gears.table.join(
     -- Passmenu
     awful.key({ modkey, alt },            "p",    function () awful.util.spawn(passmenu)  end,
               {description = "run passmenu", group = "dmenu"}),
+
+    -- Macho (gui)
+	awful.key({ modkey },            "m",     function () awful.util.spawn(macho) end,
+              {description = "run macho (gui version)", group = "dmenu"}),
+
+    ---- Neovim
+	--awful.key({ modkey, ctrlkey},            "v",     function () awful.util.spawn(nvim) end,
+    --          {description = "run neovim", group = "applications"}),
 
     -- Brave
     awful.key({ modkey },             "b",     function() awful.util.spawn(browser) end,
