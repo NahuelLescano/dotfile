@@ -66,6 +66,7 @@ local editor = os.getenv("EDITOR") or "nvim"
 local editor_cmd = terminal .. " -e " .. editor
 local browser = "brave"
 local dmenu = "dmenu_run -i -l 20 -p ' '"
+local macho = "/home/nahuel/Documents/dotfile/macho_gui.sh"
 local vifm = terminal .. " -e " .. "vifm"
 
 local shutdown = "systemctl poweroff"
@@ -336,7 +337,10 @@ globalkeys = gears.table.join(
     -- Costum shortcuts
 	-- Dmenu
 	awful.key({ modkey },            "r",     function () awful.util.spawn(dmenu) end,
-              {description = "run dmenu", group = "launcher"}),
+              {description = "run dmenu", group = "dmenu"}),
+
+	awful.key({ modkey },            "m",     function () awful.util.spawn(macho) end,
+              {description = "run macho (gui version)", group = "dmenu"}),
 
 	-- Brave
 	awful.key({ modkey },            "b",     function () awful.util.spawn(browser) end,
