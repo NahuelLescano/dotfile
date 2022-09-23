@@ -189,6 +189,9 @@ abbr --add log git log --pretty=format:'"%h - %an, %ar: %s"'
 #nvim
 abbr --add v nvim
 
+#feh
+abbr --add feh feh -Z -.
+
 # Colorscript
 colorscript -r
 
