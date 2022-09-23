@@ -1,4 +1,4 @@
--- References
+-- References:
 -- https://github.com/numToStr/dotfiles/tree/master/neovim/.config/nvim/
 -- https://www.youtube.com/watch?v=m62UCkdQ8Ck&t=698s
 
@@ -76,6 +76,10 @@ local function map(m, k, v)
     vim.keymap.set(m, k, v, { silent = true })
 end
 
+-- Buffer usage
+map('n', '<leader>bn', '<CMD>bn<CR>')           -- Go to next(th) buffer.
+map('n', '<leader>bp', '<CMD>bp<CR>')           -- Go to previous(th) buffer.
+
 -- Vifm
 map('n', '<leader>vv', '<CMD>Vifm<CR>')         --Open vifm in a new buffer.
 map('n', '<leader>vs', '<CMD>VsplitVifm<CR>')   --Open vifm in vertical split.
@@ -91,6 +95,11 @@ map('n', '<leader>h', '<CMD>split<CR>')
 -- Open alacritty
 map('n', '<leader>t', '<CMD>term<CR>')
 
+-- Back to dashboard
+map('n', '<leader>d', '<CMD>Dashboard<CR>')
+
+require('lualine').setup()
+
 -- Load recent sessions
 map('n', '<leader>sl', '<CMD>SessionLoad<CR>')
 
@@ -100,8 +109,6 @@ map('n', '<leader>ff', '<CMD>Telescope find_files<CR>')
 map('n', '<leader>fb', '<CMD>Telescope file_browser<CR>')
 map('n', '<leader>fw', '<CMD>Telescope live_grep<CR>')
 map('n', '<leader>ht', '<CMD>Telescope colorscheme<CR>')
-
-require('lualine').setup()
 
 -- Dashboard
 local db = require('dashboard')
@@ -148,11 +155,11 @@ db.custom_center = {
     action = 'Telescope colorscheme',
     shortcut = 'SPC h t'},
   }
-db.custom_footer = { '', '🎉 If I\'m using Neovim, then my Emacs config must be broken!' }
-db.session_directory = "/home/dt/.config/nvim/session"
+db.custom_footer = { '', 'btw, this is awesome!' }
+db.session_directory = "/home/nahuel/.config/nvim/session"
 
 -- COLORSCHEMES
-local ok, _ = pcall(vim.cmd, 'colorscheme base16-onedark')
+local ok, _ = pcall(vim.cmd, 'colorscheme base16-ayu-dark')
 
 -- PLUGINS
 return require('packer').startup(function()
@@ -164,6 +171,7 @@ return require('packer').startup(function()
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
     }
+    require('lualine').setup()
 
     -- Telescope and related stuff
     use {
