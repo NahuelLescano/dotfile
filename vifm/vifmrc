@@ -226,18 +226,18 @@ fileviewer {*.[1-8]},<text/troff> man ./%c | col -b
 
 " Images
 filextype {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm},<image/*>
-        \ {View in sxiv}
-        \ sxiv %f -f,
+        \ {View in feh}
+        \  feh -Z -.,
         \ {View in gpicview}
         \ gpicview %c,
         \ {View in shotwell}
         \ shotwell,
 
 fileviewer {*.bmp,*.jpg,*.jpeg,*.png,*.gif,*.xpm},<image/*>
-         \ identify %f
-         \ vifmimg draw %px %py %pw %ph %c
-         \ %pc
-         \ vifmimg clear
+         \ identify %f,
+         \ vifmimg draw %px %py %pw %ph %c,
+         \ %pc,
+         \ vifmimg clear,
 
 " OpenRaster
 filextype *.ora
