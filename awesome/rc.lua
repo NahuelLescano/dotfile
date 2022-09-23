@@ -72,6 +72,11 @@ local macho = "/home/nahuel/Documentos/dotfile/macho_gui.sh"
 
 local telegram = "org.telegram.desktop"
 local zoom = "us.zoom.Zoom"
+local discord = "com.discordapp.Discord"
+local slack = "com.slack.Slack"
+
+local screenshoot = "xfce4-screenshooter"
+local settings = "xfce4-settings-manager"
 
 local shutdown = "systemctl poweroff"
 local reboot = "systemctl reboot"
@@ -81,7 +86,7 @@ local sleep = "systemctl sleep"
 -- Usually, Mod4 is the key with a logo between Control and Alt.
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
--- However, you can use another modifier like Mod1, but it may interact with others.
+-- However, you can use another modifier like Mod1, but it may interact with others. 
 local modkey = "Mod4"
 local alt = "Mod1"
 local ctrlkey = "Control"
@@ -400,6 +405,22 @@ globalkeys = gears.table.join(
     awful.key({ modkey },             "z",     function() awful.util.spawn(zoom) end,
                 {description = "run zoom", group = "applications"}),
 
+    -- Discord
+    awful.key({ modkey },             "d",     function() awful.util.spawn(discord) end,
+                {description = "run discord", group = "applications"}),
+
+    -- Slack
+    awful.key({ modkey, alt },             "s",     function() awful.util.spawn(slack) end,
+                {description = "run slack", group = "applications"}),
+
+    -- Settings
+    awful.key({ alt },             "s",     function() awful.util.spawn(settings) end,
+                {description = "run xfce settings", group = "applications"}),
+
+    -- Screenshoot
+    awful.key({ modkey, "Space" },             "c",     function() awful.util.spawn(screenshoot) end,
+                {description = "run xfce screenshooter", group = "applications"}),
+
     -- Power off
     awful.key({ ctrlkey, alt },        "p",     function() awful.util.spawn(shutdown) end,
                 {description = "power off the system", group = "system"}),
@@ -594,6 +615,7 @@ awful.rules.rules = {
           "pinentry",
         },
         class = {
+          "zoom",
           "Arandr",
           "Blueman-manager",
           "Gpick",
@@ -617,37 +639,9 @@ awful.rules.rules = {
         }
       }, properties = { floating = true }},
 
-    -- Set eclipse to always map on the tag named "1" on screen 1.
-    { rule = { class = "eclipse" },
-       properties = { screen = 1, tag = "1" } },
-
     -- Set Brave to always map on the tag named "2" on screen 1.
-    { rule = { class = browser },
-       properties = { screen = 1, tag = "2" } },
-
-    -- Set zathura to always map on the tag named "3" on screen 1.
-     { rule = { class = "zathura" },
-       properties = { screen = 1, tag = "3" } },
-
-    -- Set pcmanfm to always map on the tag named "4" on screen 1.
-     { rule = { class = file_manager },
-       properties = { screen = 1, tag = "4" } },
-
-    -- Set virt manager to always map on the tag named "5" on screen 1.
-     { rule = { class = virtual_manager },
-       properties = { screen = 1, tag = "5" } },
-
-    -- Set zoom to always map on the tag named "6" on screen 1.
-     { rule = { class = zoom },
-       properties = { screen = 1, tag = "6" } },
-
-    -- Set spotify to always map on the tag named "7" on screen 1.
-     { rule = { class = music_player },
-       properties = { screen = 1, tag = "7" } },
-
-    -- Set telegram to always map on the tag named "8" on screen 1.
-     { rule = { class = telegram },
-       properties = { screen = 1, tag = "8" } },
+   -- { rule = { class = browser },
+   --    properties = { screen = 1, tag = "2" } },
 
 }
 -- }}}
