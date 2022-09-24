@@ -49,8 +49,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
---beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
-beautiful.init("~/.config/awesome/theme.lua")
+beautiful.init(os.getenv("HOME") .. "/.config/awesome/theme.lua")
 
 -- Use correct status icon size
 awesome.set_preferred_icon_size(33)
@@ -68,7 +67,7 @@ local vifm = terminal .. " -e vifm"
 local music_player = "spotify"
 local virtual_manager = "virt-manager"
 local image_browser = "nitrogen"
-local macho = "/home/nahuel/Documentos/dotfile/macho_gui.sh"
+local macho = os.getenv("HOME") .. "/Documentos/dotfile/macho_gui.sh"
 
 local telegram = "org.telegram.desktop"
 local zoom = "us.zoom.Zoom"
@@ -94,21 +93,13 @@ local ctrlkey = "Control"
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
     awful.layout.suit.tile,
+    awful.layout.suit.tile.left,
+    awful.layout.suit.tile.bottom,
+    awful.layout.suit.tile.top,
     awful.layout.suit.floating,
-    -- awful.layout.suit.tile.left,
-    -- awful.layout.suit.tile.bottom,
-    -- awful.layout.suit.tile.top,
-    -- awful.layout.suit.fair,
-    -- awful.layout.suit.fair.horizontal,
-    -- awful.layout.suit.spiral,
-    -- awful.layout.suit.spiral.dwindle,
-     awful.layout.suit.max,
-     awful.layout.suit.max.fullscreen,
-     awful.layout.suit.magnifier,
-    -- awful.layout.suit.corner.nw,
-    -- awful.layout.suit.corner.ne,
-    -- awful.layout.suit.corner.sw,
-    -- awful.layout.suit.corner.se,
+    awful.layout.suit.max,
+    awful.layout.suit.max.fullscreen,
+    awful.layout.suit.magnifier,
 }
 -- }}}
 
@@ -181,9 +172,6 @@ screen.connect_signal("property::geometry", set_wallpaper)
 awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
-
-    -- Each screen has its own tag table.
-   -- awful.tag({ "DEV", " WWW", " DOC", " SYS", " VBOX", " ZOOM", " MUS", " CHAT", " GAME"}, s, awful.layout.layouts[1])
 
     awful.tag({ " 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 "}, s, awful.layout.layouts[1])
 
@@ -417,8 +405,16 @@ globalkeys = gears.table.join(
     awful.key({ alt },             "s",     function() awful.util.spawn(settings) end,
                 {description = "run xfce settings", group = "applications"}),
 
+    -- Eclipse
+    awful.key({ modkey },             "e",     function() awful.util.spawn("eclipse") end,
+                {description = "run eclipse IDE", group = "applications"}),
+
+    -- Vs codium
+    awful.key({ modkey, "Shift" },             "v",     function() awful.util.spawn("codium") end,
+                {description = "run vs codium IDE", group = "applications"}),
+
     -- Screenshoot
-    awful.key({ modkey, "Space" },             "c",     function() awful.util.spawn(screenshoot) end,
+    awful.key({ modkey },             "c",     function() awful.util.spawn(screenshoot) end,
                 {description = "run xfce screenshooter", group = "applications"}),
 
     -- Power off
@@ -621,7 +617,7 @@ awful.rules.rules = {
           "Gpick",
           "Kruler",
           "MessageWin",  -- kalarm.
-          "Sxiv",
+          "feh",
           "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
           "Wpa_gui",
           "veromix",
