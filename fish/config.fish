@@ -175,6 +175,7 @@ abbr --add faltin flatpak install
 
 # git
 abbr --add init git init
+abbr --add add git add
 abbr --add addup git add -u
 abbr --add addall git add .
 abbr --add status git status
@@ -182,6 +183,7 @@ abbr --add diff git diff
 abbr --add branch git branch
 abbr --add clone git clone
 abbr --add commit git commit -v
+abbr --add show git remote show origin
 abbr --add pull git pull origin
 abbr --add push git push origin
 abbr --add log git log --pretty=format:'"%h - %an, %ar: %s"'
