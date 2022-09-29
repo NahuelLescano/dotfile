@@ -198,4 +198,5 @@ colorscript -r
 # Starship
 starship init fish | source
 
+# Fuck
 thefuck --alias | source
