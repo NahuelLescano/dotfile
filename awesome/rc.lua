@@ -77,6 +77,9 @@ local slack = "com.slack.Slack"
 local screenshoot = "xfce4-screenshooter"
 local settings = "xfce4-settings-manager"
 
+local home = os.getenv("HOME")
+local dmradio_run = terminal .. " -e " .. home .. "/dmscript/dm-radio"
+
 local shutdown = "systemctl poweroff"
 local reboot = "systemctl reboot"
 local sleep = "systemctl sleep"
@@ -348,6 +351,10 @@ globalkeys = gears.table.join(
     -- Dmenu
     awful.key({ modkey },            "r",    function () awful.util.spawn(dmenu)  end,
               {description = "run dmenu", group = "dmenu"}),
+
+    -- dm-radio
+    awful.key({ modkey, alt },            "r",    function () awful.util.spawn(dmradio_run)  end,
+              {description = "run dm-radio", group = "dmenu"}),
 
     -- Passmenu
     awful.key({ modkey, alt },            "p",    function () awful.util.spawn(passmenu)  end,
