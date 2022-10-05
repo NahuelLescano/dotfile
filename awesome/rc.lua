@@ -63,26 +63,23 @@ local dmenu = "dmenu_run -i -l 20 -p ' '"
 local passmenu = "passmenu -i -l 20 -p ' '"
 local file_manager = "pcmanfm"
 local vifm = terminal .. " -e vifm"
---local nvim = terminal .. " -e nvim"
 local music_player = "spotify"
 local virtual_manager = "virt-manager"
-local image_browser = "nitrogen"
-local macho = os.getenv("HOME") .. "/Documentos/dotfile/macho_gui.sh"
-
-local telegram = "org.telegram.desktop"
-local zoom = "us.zoom.Zoom"
-local discord = "com.discordapp.Discord"
-local slack = "com.slack.Slack"
 
 local screenshoot = "xfce4-screenshooter"
 local settings = "xfce4-settings-manager"
 
 local home = os.getenv("HOME")
-local dmradio_run = terminal .. " -e " .. home .. "/dmscript/dm-radio"
-
-local shutdown = "systemctl poweroff"
-local reboot = "systemctl reboot"
-local sleep = "systemctl sleep"
+local dmradio = home .. "/dmscript/dm-radio"
+local dmwiki = home .. "/dmscript/dm-wiki"
+local dmbookman = home .. "/dmscript/dm-bookman"
+local dmconfedit_run = terminal .. " -e " .. home .. "/dmscript/dm-confedit"
+local dmdocuments = home .. "/dmscript/dm-documents"
+local dmkill = home .. "/dmscript/dm-kill"
+local dmlogout = home .. "/dmscript/dm-logout"
+local dmman_run = terminal .. " -e " .. home .. "/dmscript/dm-man"
+local dmwebsearch = home .. "/dmscript/dm-websearch"
+local macho = home .. "/Documentos/dotfile/macho_gui.sh"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -176,32 +173,7 @@ awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
 
-    awful.tag({ " 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 "}, s, awful.layout.layouts[1])
-
-    -- {{{ Menu
-    -- Create a launcher widget, a main mane and a bye bye menu
-    local my_awesome_menu = {
-        { " Manual", terminal .. " -e man awesome" },
-        { " Key bindings", function() hotkeys_popup.show_help(nil, awful.screen.focused()) end },
-        { " Edit config", editor_cmd .. " " .. awesome.conffile },
-        { " Restart awesome", awesome.restart },
-    }
-
-    local bye_bye = {
-        { " log out", function() awesome.quit() end },
-        { " sleep", sleep },
-        { " reboot", reboot },
-        { " shutdown", shutdown },
-    }
-
-    local my_main_menu = awful.menu({ items = { { "awesome", my_awesome_menu },
-                                                { " ", bye_bye },
-                                                { " ", terminal }
-                                   }
-                            })
-
-    local my_launcher = awful.widget.launcher({ image = beautiful.awesome_icon,
-                                                menu = my_main_menu })
+    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9"}, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -239,7 +211,6 @@ awful.screen.connect_for_each_screen(function(s)
         layout = wibox.layout.align.horizontal,
         { -- Left widgets
             layout = wibox.layout.fixed.horizontal,
-            my_launcher,
             s.mytaglist,
             s.mypromptbox,
         },
@@ -349,12 +320,44 @@ globalkeys = gears.table.join(
 
     -- Costum key bindings
     -- Dmenu
-    awful.key({ modkey },            "r",    function () awful.util.spawn(dmenu)  end,
+    awful.key({ modkey, alt },            "Return",    function () awful.util.spawn(dmenu)  end,
               {description = "run dmenu", group = "dmenu"}),
 
     -- dm-radio
-    awful.key({ modkey, alt },            "r",    function () awful.util.spawn(dmradio_run)  end,
+    awful.key({ modkey, alt },            "r",    function () awful.util.spawn(dmradio)  end,
               {description = "run dm-radio", group = "dmenu"}),
+
+    -- dm-wiki
+    awful.key({ modkey, alt },            "w",    function () awful.util.spawn(dmwiki)  end,
+              {description = "run dm-wiki", group = "dmenu"}),
+
+    -- dm-bookman
+    awful.key({ modkey, alt },            "b",    function () awful.util.spawn(dmbookman)  end,
+              {description = "run dm-bookman", group = "dmenu"}),
+
+    -- dm-confedit
+    awful.key({ modkey, alt },            "c",    function () awful.util.spawn(dmconfedit_run)  end,
+              {description = "run dm-confedit", group = "dmenu"}),
+
+    -- dm-documents
+    awful.key({ modkey, alt },            "d",    function () awful.util.spawn(dmdocuments)  end,
+              {description = "run dm-documents", group = "dmenu"}),
+
+    -- dm-kill
+    awful.key({ modkey, alt },            "k",    function () awful.util.spawn(dmkill)  end,
+              {description = "run dm-kill", group = "dmenu"}),
+
+    -- dm-logout
+    awful.key({ modkey, alt },            "l",    function () awful.util.spawn(dmlogout)  end,
+              {description = "run dm-logout", group = "dmenu"}),
+
+    -- dm-man
+    awful.key({ modkey, alt },            "m",    function () awful.util.spawn(dmman_run)  end,
+              {description = "run dm-man", group = "dmenu"}),
+
+    -- dm-websearch
+    awful.key({ modkey, alt },            "s",    function () awful.util.spawn(dmwebsearch)  end,
+              {description = "run dm-websearch", group = "dmenu"}),
 
     -- Passmenu
     awful.key({ modkey, alt },            "p",    function () awful.util.spawn(passmenu)  end,
@@ -363,10 +366,6 @@ globalkeys = gears.table.join(
     -- Macho (gui)
 	awful.key({ modkey },            "m",     function () awful.util.spawn(macho) end,
               {description = "run macho (gui version)", group = "dmenu"}),
-
-    ---- Neovim
-	--awful.key({ modkey, ctrlkey},            "v",     function () awful.util.spawn(nvim) end,
-    --          {description = "run neovim", group = "applications"}),
 
     -- Brave
     awful.key({ modkey },             "b",     function() awful.util.spawn(browser) end,
@@ -392,22 +391,6 @@ globalkeys = gears.table.join(
     awful.key({ modkey, alt },             "v",     function() awful.util.spawn(virtual_manager) end,
                 {description = "run virt-manager", group = "applications"}),
 
-    -- Telegram
-    awful.key({ modkey },             "t",     function() awful.util.spawn(telegram) end,
-                {description = "run telegram desktop", group = "applications"}),
-
-    -- Zoom
-    awful.key({ modkey },             "z",     function() awful.util.spawn(zoom) end,
-                {description = "run zoom", group = "applications"}),
-
-    -- Discord
-    awful.key({ modkey },             "d",     function() awful.util.spawn(discord) end,
-                {description = "run discord", group = "applications"}),
-
-    -- Slack
-    awful.key({ modkey, alt },             "s",     function() awful.util.spawn(slack) end,
-                {description = "run slack", group = "applications"}),
-
     -- Settings
     awful.key({ alt },             "s",     function() awful.util.spawn(settings) end,
                 {description = "run xfce settings", group = "applications"}),
@@ -423,18 +406,6 @@ globalkeys = gears.table.join(
     -- Screenshoot
     awful.key({ modkey },             "c",     function() awful.util.spawn(screenshoot) end,
                 {description = "run xfce screenshooter", group = "applications"}),
-
-    -- Power off
-    awful.key({ ctrlkey, alt },        "p",     function() awful.util.spawn(shutdown) end,
-                {description = "power off the system", group = "system"}),
-
-    -- Reboot
-    awful.key({ ctrlkey, alt },        "r",     function() awful.util.spawn(reboot) end,
-                {description = "reboot the system", group = "system"}),
-
-    -- Slepp
-    awful.key({ ctrlkey, alt },        "s",     function() awful.util.spawn(sleep) end,
-                {description = "suspend the system", group = "system"}),
 
     awful.key({ modkey }, "x",
               function ()
@@ -530,6 +501,15 @@ clientkeys = gears.table.join(
 -- Be careful: we use keycodes to make it work on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, 9 do
+    -- Hack to only show tags 1 and 9 in the shortcut window (mod+s)
+    local descr_view, descr_toggle, descr_move, descr_toggle_focus
+    if i == 1 or i == 9 then
+        descr_view = {description = "view tag #", group = "tag"}
+        descr_toggle = {description = "toggle tag #", group = "tag"}
+        descr_move = {description = "move focused client to tag #", group = "tag"}
+        descr_toggle_focus = {description = "toggle focused client on tag #", group = "tag"}
+    end
+
     globalkeys = gears.table.join(globalkeys,
         -- View tag only.
         awful.key({ modkey }, "#" .. i + 9,
@@ -540,7 +520,8 @@ for i = 1, 9 do
                            tag:view_only()
                         end
                   end,
-                  {description = "view tag #"..i, group = "tag"}),
+                  descr_view),
+
         -- Toggle tag display.
         awful.key({ modkey, ctrlkey }, "#" .. i + 9,
                   function ()
@@ -550,7 +531,8 @@ for i = 1, 9 do
                          awful.tag.viewtoggle(tag)
                       end
                   end,
-                  {description = "toggle tag #" .. i, group = "tag"}),
+                  descr_toggle),
+
         -- Move client to tag.
         awful.key({ modkey, "Shift" }, "#" .. i + 9,
                   function ()
@@ -561,7 +543,7 @@ for i = 1, 9 do
                           end
                      end
                   end,
-                  {description = "move focused client to tag #"..i, group = "tag"}),
+                  descr_move),
         -- Toggle tag on focused client.
         awful.key({ modkey, ctrlkey, "Shift" }, "#" .. i + 9,
                   function ()
@@ -572,7 +554,7 @@ for i = 1, 9 do
                           end
                       end
                   end,
-                  {description = "toggle focused client on tag #" .. i, group = "tag"})
+                  descr_toggle_focus)
     )
 end
 
