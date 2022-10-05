@@ -7,6 +7,8 @@ local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
 
 local gfs = require("gears.filesystem")
+
+--local themes_path = os.getenv("HOME") .. ".config/awesome/"
 local themes_path = gfs.get_themes_dir()
 
 local theme = {}
@@ -15,20 +17,24 @@ theme.font          = "JetBrains Mono Medium 12"
 
 theme.bg_normal     = "#1d1f21"
 theme.bg_focus      = "#333333"
-theme.bg_urgent     = "#ff0000"
+theme.bg_urgent     = "#3F3F3F"
 theme.bg_minimize   = "#444444"
 theme.bg_systray    = theme.bg_normal
 
 theme.fg_normal     = "#aaaaaa"
 theme.fg_focus      = "#ffffff"
-theme.fg_urgent     = "#ffffff"
+theme.fg_urgent     = "#800000"
 theme.fg_minimize   = "#ffffff"
 
-theme.useless_gap   = dpi(0)
+theme.useless_gap   = dpi(4)
+
 theme.border_width  = dpi(2)
-theme.border_normal = "#000000"
-theme.border_focus  = "#327bd1"
+theme.border_normal = "#282A36"
+theme.border_focus  = "#2c5b4b"
 theme.border_marked = "#91231c"
+
+theme.titlebar_bg_focus  = "#3F3F3F"
+theme.titlebar_bg_normal = "#3F3F3F"
 
 -- There are other variable sets
 -- overriding the default one when
@@ -96,9 +102,6 @@ theme.titlebar_maximized_button_normal_inactive = themes_path.."default/titlebar
 theme.titlebar_maximized_button_focus_inactive  = themes_path.."default/titlebar/maximized_focus_inactive.png"
 theme.titlebar_maximized_button_normal_active = themes_path.."default/titlebar/maximized_normal_active.png"
 theme.titlebar_maximized_button_focus_active  = themes_path.."default/titlebar/maximized_focus_active.png"
-
---theme wallpaper
-theme.wallpaper ="~/Documentos/wallpapers/0290.jpg"
 
 -- You can use your own layout icons like this:
 theme.layout_fairh = themes_path.."default/layouts/fairhw.png"
