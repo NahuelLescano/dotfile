@@ -55,7 +55,7 @@ end
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
 --beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
-beautiful.init("~/.config/awesome/theme.lua")
+beautiful.init(os.getenv("HOME") .. "/.config/awesome/theme.lua")
 
 -- Use correct status icon size
 awesome.set_preferred_icon_size(33)
@@ -66,13 +66,17 @@ local editor = os.getenv("EDITOR") or "nvim"
 local editor_cmd = terminal .. " -e " .. editor
 local browser = "brave"
 local dmenu = "dmenu_run -i -l 20 -p ' '"
-local macho = "/home/nahuel/Documents/dotfile/macho_gui.sh"
 local vifm = terminal .. " -e " .. "vifm"
 local nvim = terminal .. " -e " .. "nvim"
 
 local shutdown = "systemctl poweroff"
 local reboot = "systemctl reboot"
 local sleep = "systemctl sleep"
+
+local home = os.getenv("HOME")
+local macho = home .. "Documents/dotfile/macho_gui.sh"
+local dmwiki_run = terminal .. " -e " .. home .. "dmscript/dm-wiki"
+local dmradio_run = terminal .. " -e " .. home .. "/dmscript/dm-radio"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -165,7 +169,7 @@ awful.screen.connect_for_each_screen(function(s)
 
     -- Each screen has its own tag table.
     --awful.tag({ " DEV", " WWW", " DOC", " SYS", " MUS", " VID"}, s, awful.layout.layouts[1])
-    awful.tag({ " 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 ", " 9 "}, s, awful.layout.layouts[1])
+    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9"}, s, awful.layout.layouts[1])
 
     -- {{{ Menu
     -- Create a launcher widget, a main menu and a bye bye menu.
@@ -340,12 +344,20 @@ globalkeys = gears.table.join(
 	awful.key({ modkey },            "r",     function () awful.util.spawn(dmenu) end,
               {description = "run dmenu", group = "dmenu"}),
 
+	-- Dm-radio
+	awful.key({ modkey, alt },            "r",     function () awful.util.spawn(dmradio_run) end,
+              {description = "run dm-radio", group = "dmenu"}),
+
+	-- Dm-wiki
+	awful.key({ modkey. alt },            "w",     function () awful.util.spawn(dmwiki_run) end,
+              {description = "run dm-wiki", group = "dmenu"}),
+
     -- Macho (gui)
 	awful.key({ modkey },            "m",     function () awful.util.spawn(macho) end,
               {description = "run macho (gui version)", group = "dmenu"}),
 
     -- Macho (gui)
-	awful.key({ modkey, ctrlkey},            "v",     function () awful.util.spawn(nvim) end,
+	awful.key({ modkey, ctrlkey },            "v",     function () awful.util.spawn(nvim) end,
               {description = "run neovim", group = "applications"}),
 
 	-- Brave
