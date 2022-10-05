@@ -143,6 +143,10 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 
+# mkdir with arguments (-p only make a directory if it does not exist before)
+# (-v print a message for each created directory)
+abbr --add mkdir mkdir -pv
+
 # Abbreviations
 # Navigation
 abbr --add .. cd ..
@@ -191,3 +195,6 @@ colorscript -r
 
 # Starship
 starship init fish | source
+
+# Fuck program
+thefuck --alias | source

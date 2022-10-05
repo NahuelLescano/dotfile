@@ -1,4 +1,4 @@
--- References:
+-- References
 -- https://github.com/numToStr/dotfiles/tree/master/neovim/.config/nvim/
 -- https://www.youtube.com/watch?v=m62UCkdQ8Ck&t=698s
 
@@ -95,11 +95,6 @@ map('n', '<leader>h', '<CMD>split<CR>')
 -- Open alacritty
 map('n', '<leader>t', '<CMD>term<CR>')
 
--- Back to dashboard
-map('n', '<leader>d', '<CMD>Dashboard<CR>')
-
-require('lualine').setup()
-
 -- Load recent sessions
 map('n', '<leader>sl', '<CMD>SessionLoad<CR>')
 
@@ -109,6 +104,11 @@ map('n', '<leader>ff', '<CMD>Telescope find_files<CR>')
 map('n', '<leader>fb', '<CMD>Telescope file_browser<CR>')
 map('n', '<leader>fw', '<CMD>Telescope live_grep<CR>')
 map('n', '<leader>ht', '<CMD>Telescope colorscheme<CR>')
+
+-- Back to dashboard
+map('n', '<leader>d', '<CMD>Dashboard<CR>')
+
+require('lualine').setup()
 
 -- Dashboard
 local db = require('dashboard')
@@ -130,11 +130,11 @@ db.default_banner = {
 db.preview_file_height = 11
 db.preview_file_width = 70
 db.custom_center = {
-    {icon = '  ',
+    {icon = '  ',
     desc = 'Recent sessions                         ',
     shortcut = 'SPC s l',
     action ='SessionLoad'},
-    {icon = '  ',
+    {icon = '  ',
     desc = 'Find recent files                       ',
     action = 'Telescope oldfiles',
     shortcut = 'SPC f r'},
@@ -142,7 +142,7 @@ db.custom_center = {
     desc = 'Find files                              ',
     action = 'Telescope find_files find_command=rg,--hidden,--files',
     shortcut = 'SPC f f'},
-    {icon = '  ',
+    {icon = '  ',
     desc ='File browser                            ',
     action =  'Telescope file_browser',
     shortcut = 'SPC f b'},
@@ -150,16 +150,16 @@ db.custom_center = {
     desc = 'Find word                               ',
     action = 'Telescope live_grep',
     shortcut = 'SPC f w'},
-    {icon = '  ',
+    {icon = '  ',
     desc = 'Load new theme                          ',
     action = 'Telescope colorscheme',
     shortcut = 'SPC h t'},
   }
-db.custom_footer = { '', 'btw, this is awesome!' }
+db.custom_footer = { '', '🎉 If I\'m using Neovim, then my Emacs config must be broken!' }
 db.session_directory = "/home/nahuel/.config/nvim/session"
 
 -- COLORSCHEMES
-local ok, _ = pcall(vim.cmd, 'colorscheme base16-ayu-dark')
+local ok, _ = pcall(vim.cmd, 'colorscheme base16-onedark')
 
 -- PLUGINS
 return require('packer').startup(function()
@@ -171,7 +171,6 @@ return require('packer').startup(function()
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true }
     }
-    require('lualine').setup()
 
     -- Telescope and related stuff
     use {
