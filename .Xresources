@@ -13,19 +13,24 @@ XTerm*faceName:
 		xft: JoyPixels:size=12, \
 		xft: Monospace:style=Medium:size=12
 
-XTerm*faceSize: 11
+XTerm*faceSize: 14
 
 ## Allow xterm to report the TERM variable correctly
 xTerm.termName: xterm-256color
-## UTF-8
-XTerm,vt100.locate: true
+
+XTerm*faceSize: 11
+XTerm*utf8: 2
+XTerm*locale: true
 
 ## Keybindings
 XTerm.vt100.translations: #override \n\
- 	Ctrl <Keu> j: smaller-vt-font() \n\
-	Ctrl <Key> k: larger-vt-font() \n\
+	Ctrl <Keu>j: smaller-vt-font() \n\
+	Ctrl <Key>k: larger-vt-font() \n\
 	Ctrl Shitf <Key>C:copy-selection(CLIPBOARD) \n\
-	Ctrl Shitf <Key>V:insert-selection(CLIPBOARD) 
+	Ctrl Shitf <Key>V:insert-selection(CLIPBOARD) \n\
+    <Btn1up>: select-end(PRIMARY, CLIPBOARD, CUT_BUFFER0) \n\
+    <Btn2up>: insert-selection(PRIMARY)
+    
 ## Every shell is a login shell by default (for inclusion of all necessary variables)
 XTerm*loginshell: true
 
@@ -35,6 +40,56 @@ XTerm*savelines: 4096
 ## Double-click to select whole URLs
 XTerm.charClass: 33:48, 36-47:48, 58-59:48, 61:48, 63-64:48, 95:48, 95:48, 126:48
 
-## Themes
- *foreground: rgb: b2/b2/b2
- *background: rgb: 08/08/08
+## Only select text
+XTerm*highlightSelection: true
+
+## Removing trailing space
+XTerm*trimSelection: true
+
+## Enable copy/paste highlighting with the mouse
+XTerm*selectToClipboard: true
+
+## Disable fullscreen hotkey alt/enter
+XTerm*fullscreen: false
+
+## Fixing the backspace key
+XTerm.vt100.backarrowKey: false
+XTerm.ttyModes: erase^?
+
+! FOR ALL OTHER PROGRAMS USE XRESOURCES
+*.foreground:   #bbc2cf
+*.background:   #282c34
+*.cursorColor:  #bbc2cf
+
+! black
+*.color0:       #1c1f24
+*.color8:       #5b6268
+
+! red
+*.color1:       #ff6c6b
+*.color9:       #da8548
+
+! green
+*.color2:       #98be65
+*.color10:      #4db5bd
+
+! yellow
+*.color3:       #da8548
+*.color11:      #ecbe7b
+
+! blue
+*.color4:       #51afef
+*.color12:      #3071db
+
+! magenta
+*.color5:       #c678dd
+*.color13:      #a9a1e1
+
+! cyan
+*.color6:       #5699af
+*.color14:      #46d9ff
+
+! white
+*.color7:       #202328
+*.color15:      #dfdfdf
+
