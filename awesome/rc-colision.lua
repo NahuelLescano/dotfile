@@ -80,6 +80,7 @@ local dmlogout = home .. "/dmscript/dm-logout"
 local dmman_run = terminal .. " -e " .. home .. "/dmscript/dm-man"
 local dmwebsearch = home .. "/dmscript/dm-websearch"
 local macho = home .. "Documents/dotfile/macho_gui.sh"
+local emacs = "/usr/bin/emacsclient -c -a 'emacs'"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -360,14 +361,17 @@ globalkeys = gears.table.join(
     awful.key({ modkey, alt },            "s",    function () awful.util.spawn(dmwebsearch)  end,
               {description = "run dm-websearch", group = "dmenu"}),
 
-
     -- Macho (gui)
 	awful.key({ modkey },            "m",     function () awful.util.spawn(macho) end,
               {description = "run macho (gui version)", group = "dmenu"}),
 
-    -- Macho (gui)
+    -- neovim
 	awful.key({ modkey, ctrlkey },            "v",     function () awful.util.spawn(nvim) end,
               {description = "run neovim", group = "applications"}),
+
+    -- Doom emacs
+	awful.key({ modkey },            "d",     function () awful.util.spawn(emacs) end,
+              {description = "run doom emacs", group = "applications"}),
 
 	-- Brave
 	awful.key({ modkey },            "b",     function () awful.util.spawn(browser) end,
@@ -698,3 +702,4 @@ awful.spawn.with_shell("nitrogen --restore")
 awful.spawn.with_shell("blueman-applet")
 awful.spawn.with_shell("kmix")
 awful.spawn.with_shell("nm-applet")
+awful.spawn.with_shell("/usr/bin/emacs --daemon")
