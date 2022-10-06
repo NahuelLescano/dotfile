@@ -4,6 +4,8 @@
 set -e fish_user_paths
 set -U fish_user_paths $HOME/.local/bin $HOME/Applications $fish_user_paths
 
+export PATH="$HOME/.emacs.d/bin:$PATH"
+
 fish_vi_key_bindings        # set vi mode
 set TERM "xterm-256color"   # Sets the terminal type
 set fish_greeting           # Supresses fish's intro message
@@ -142,6 +144,9 @@ alias lt='exa -aT --color=always --color-scale --group-directories-first' # List
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
+
+# Launch emacsclient
+alias emacs='emacsclient -c -a 'emacs''
 
 # mkdir with arguments (-p only make a directory if it does not exist before)
 # (-v print a message for each created directory)
