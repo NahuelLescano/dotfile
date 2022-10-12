@@ -75,9 +75,7 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-;; Reference: https://distro.tube/
-
-;; Never lose the cursor.
+;; Never loose the cursor.
 (beacon-mode 1)
 
 ;; Bookmarks are somewhat like registers in Vim, in that they record positions you can jump. Unlike registers, they can have
@@ -100,6 +98,35 @@
       (:prefix ("c h". "Help info from Clipy")
        :desc "Clippy describes function under the point" "f" #'clippy-describe-function
        :desc "Clipyy describes variable under the point" "v" #'clippy-describe-variable))
+
+;; Emacs Dashboard is an extensible startup screen showing you recent files, bookmarks, agenda items and an Emacs banner.
+;;(use-package dashboard
+;;  :init      ;; tweak dashboard config before loading it
+;;  (setq dashboard-set-heading-icons t)
+;;  (setq dashboard-set-file-icons t)
+;;  (setq dashboard-banner-logo-title "\nKEYBINDINGS:\
+;;        \nFind file               (SPC .)  \
+;;        Open buffer list          (SPC b i)\
+;;        \nFind recent files       (SPC f r)\
+;;        Open the eshell           (SPC e s)\
+;;        \nOpen dired file manager (SPC d d)\
+;;List of keybindings (SPC h b b)")
+;;  ;;(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+;;  (setq dashboard-startup-banner "~/.doom.d/doom-emacs-dash.png")  ;; use custom image as banner
+;;  (setq dashboard-center-content nil) ;; set to 't' for centered content
+;;  (setq dashboard-items '((recents . 5)
+;;                          (agenda . 5 )
+;;                          (bookmarks . 5)
+;;                          (projects . 5)
+;;                          (registers . 5)))
+;;  :config
+;;  (dashboard-setup-startup-hook)
+;;  (dashboard-modify-heading-icons '((recents . "file-text")
+;;                                    (bookmarks . "book"))))
+
+;; This setting ensures that emacsclient always opens on dashboard rather than scratch.
+(setq doom-fallback-buffer-name "*dashboard*")
+
 
 ;; Dired is the file manager within Emacs.  Below, I setup keybindings for image previews (peep-dired).
 ;; Doom Emacs does not use ‘SPC d’ for any of its keybindings, so I’ve chosen the format of ‘SPC d’ plus ‘key’.
@@ -140,7 +167,7 @@
   (kbd "; d") 'epa-dired-do-decrypt
   (kbd "; e") 'epa-dired-do-encrypt)
 ;; Get file icons in dired
-;; (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+ (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
 ;; With dired-open plugin, you can launch external programs for certain extensions
 (setq dired-open-extensions '(("gif" . "feh -Z -.")
                               ("jpg" . "feh -Z -.")
@@ -194,6 +221,31 @@
         :desc "Insert any date" "a" #'insert-any-date
         :desc "Insert todays date" "t" #'insert-todays-date))
 
+;; Ivy is a generic completion mechanism for Emacs.
+;; Ivy-posframe is an ivy extension, which lets ivy use posframe to show its candidate menu.
+;; (setq ivy-posframe-display-functions-alist
+;;       '((swiper                     . ivy-posframe-display-at-point)
+;;         (complete-symbol            . ivy-posframe-display-at-point)
+;;         (counsel-M-x                . ivy-display-function-fallback)
+;;         (counsel-esh-history        . ivy-posframe-display-at-window-center)
+;;         (counsel-describe-function  . ivy-display-function-fallback)
+;;         (counsel-describe-variable  . ivy-display-function-fallback)
+;;         (counsel-find-file          . ivy-display-function-fallback)
+;;         (counsel-recentf            . ivy-display-function-fallback)
+;;         (counsel-register           . ivy-posframe-display-at-frame-bottom-window-center)
+;;         (dmenu                      . ivy-posframe-display-at-frame-top-center)
+;;         (nil                        . ivy-posframe-display))
+;;       ivy-posframe-height-alist
+;;       '((swiper . 20)
+;;         (dmenu . 20)
+;;         (t . 10)))
+;; (ivy-posframe-mode 1) ; 1 enables posframe-mode, 0 disables it.
+
+(map! :leader
+      (:prefix ("v" . "Ivy")
+       :desc "Ivy push view" "v p" #'ivy-push-view
+       :desc "Ivy switch view" "v s" #'ivy-switch-view))
+
 ;; Markdown
 (custom-set-faces
  '(markdown-header-face ((t (:inherit font-lock-function-name-face :weight bold :family "variable-pitch"))))
@@ -233,6 +285,20 @@
 (map! :leader
       :desc "Toggle neotree file viewer" "t n" #'neotree-toggle
       :desc "Open directory in neotree" "d n" #'neotree-dir)
+
+;; Org mode
+(after! org
+  (setq org-ellipsis " ▼ "
+        org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
+        org-superstar-itembullet-alist '((?+ . ?➤) (?- . ?✦)) ; changes +/- symbols in item lists
+        ;; ex. of org-link-abbrev-alist in action
+        ;; [[arch-wiki:Name_of_Page][Description]]
+        org-link-abbrev-alist    ; This overwrites the default Doom org-link-abbrev-list
+          '(("google" . "http://www.google.com/search?q=")
+            ("arch-wiki" . "https://wiki.archlinux.org/index.php/")
+            ("ddg" . "https://duckduckgo.com/?q=")
+            ("wiki" . "https://en.wikipedia.org/wiki/"))
+             ))
 
 ;; Rainbox mode displays the actual color for any hex value color.  It’s such a nice feature that
 ;; I wanted it turned on all the time, regardless of what mode I am in.
