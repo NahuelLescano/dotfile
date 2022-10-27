@@ -56,15 +56,16 @@ awesome.set_preferred_icon_size(33)
 
 -- This is used later as the default terminal and editor to run.
 local terminal = "alacritty"
-local editor = os.getenv("EDITOR") or "nvim"
+local editor = os.getenv("EDITOR") or "/usr/bin/emacsclient -c -a 'emacs'"
 local editor_cmd = terminal .. " -e " .. editor
 local browser = "brave"
-local dmenu = "dmenu_run -i -l 20 -p ' '"
-local passmenu = "passmenu -i -l 20 -p ' '"
+local dmenu = "dmenu_run -i -l 10 -g 10 -p 'Run:'"
+local passmenu = "passmenu -i -l 20 -p 'Pass:'"
 local file_manager = "pcmanfm"
 local vifm = terminal .. " -e vifm"
 local music_player = "spotify"
 local virtual_manager = "virt-manager"
+local emacs = "/usr/bin/emacsclient -c -a 'emacs'"
 
 local screenshoot = "xfce4-screenshooter"
 local settings = "xfce4-settings-manager"
@@ -73,7 +74,7 @@ local home = os.getenv("HOME")
 local dmradio = home .. "/dmscript/dm-radio"
 local dmwiki = home .. "/dmscript/dm-wiki"
 local dmbookman = home .. "/dmscript/dm-bookman"
-local dmconfedit_run = terminal .. " -e " .. home .. "/dmscript/dm-confedit"
+local dmconfedit = home .. "/dmscript/dm-confedit"
 local dmdocuments = home .. "/dmscript/dm-documents"
 local dmkill = home .. "/dmscript/dm-kill"
 local dmlogout = home .. "/dmscript/dm-logout"
@@ -336,7 +337,7 @@ globalkeys = gears.table.join(
               {description = "run dm-bookman", group = "dmenu"}),
 
     -- dm-confedit
-    awful.key({ modkey, alt },            "c",    function () awful.util.spawn(dmconfedit_run)  end,
+    awful.key({ modkey, alt },            "c",    function () awful.util.spawn(dmconfedit)  end,
               {description = "run dm-confedit", group = "dmenu"}),
 
     -- dm-documents
@@ -394,6 +395,10 @@ globalkeys = gears.table.join(
     -- Settings
     awful.key({ alt },             "s",     function() awful.util.spawn(settings) end,
                 {description = "run xfce settings", group = "applications"}),
+
+    -- Doom emacs
+    awful.key({ modkey },             "d",     function() awful.util.spawn(emacs) end,
+                {description = "run doom emacs", group = "applications"}),
 
     -- Eclipse
     awful.key({ modkey },             "e",     function() awful.util.spawn("eclipse") end,
@@ -711,7 +716,7 @@ function border_adjust(c)
     end
 end
 
-client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+client.connect_signal("focus", border_adjust)
 client.connect_signal("property::maximized", border_adjust)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
@@ -719,3 +724,4 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- Autostart Applications
 awful.spawn.with_shell("nitrogen --restore")
 awful.spawn.with_shell("nm-applet")
+awful.spawn.with_shell("/usr/bin/emacs --daemon")
