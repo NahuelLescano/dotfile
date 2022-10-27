@@ -100,29 +100,17 @@
        :desc "Clipyy describes variable under the point" "v" #'clippy-describe-variable))
 
 ;; Emacs Dashboard is an extensible startup screen showing you recent files, bookmarks, agenda items and an Emacs banner.
-;;(use-package dashboard
-;;  :init      ;; tweak dashboard config before loading it
-;;  (setq dashboard-set-heading-icons t)
-;;  (setq dashboard-set-file-icons t)
-;;  (setq dashboard-banner-logo-title "\nKEYBINDINGS:\
-;;        \nFind file               (SPC .)  \
-;;        Open buffer list          (SPC b i)\
-;;        \nFind recent files       (SPC f r)\
-;;        Open the eshell           (SPC e s)\
-;;        \nOpen dired file manager (SPC d d)\
-;;List of keybindings (SPC h b b)")
-;;  ;;(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
-;;  (setq dashboard-startup-banner "~/.doom.d/doom-emacs-dash.png")  ;; use custom image as banner
-;;  (setq dashboard-center-content nil) ;; set to 't' for centered content
-;;  (setq dashboard-items '((recents . 5)
-;;                          (agenda . 5 )
-;;                          (bookmarks . 5)
-;;                          (projects . 5)
-;;                          (registers . 5)))
-;;  :config
-;;  (dashboard-setup-startup-hook)
-;;  (dashboard-modify-heading-icons '((recents . "file-text")
-;;                                    (bookmarks . "book"))))
+(use-package dashboard
+  :init      ;; tweak dashboard config before loading it
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  ;;(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+  (setq dashboard-startup-banner "~/.doom.d/doom-emacs-dash.png")  ;; use custom image as banner
+  (setq dashboard-center-content nil) ;; set to 't' for centered content
+  :config
+  (dashboard-setup-startup-hook)
+  (dashboard-modify-heading-icons '((recents . "file-text")
+                                    (bookmarks . "book"))))
 
 ;; This setting ensures that emacsclient always opens on dashboard rather than scratch.
 (setq doom-fallback-buffer-name "*dashboard*")
@@ -223,23 +211,23 @@
 
 ;; Ivy is a generic completion mechanism for Emacs.
 ;; Ivy-posframe is an ivy extension, which lets ivy use posframe to show its candidate menu.
-;; (setq ivy-posframe-display-functions-alist
-;;       '((swiper                     . ivy-posframe-display-at-point)
-;;         (complete-symbol            . ivy-posframe-display-at-point)
-;;         (counsel-M-x                . ivy-display-function-fallback)
-;;         (counsel-esh-history        . ivy-posframe-display-at-window-center)
-;;         (counsel-describe-function  . ivy-display-function-fallback)
-;;         (counsel-describe-variable  . ivy-display-function-fallback)
-;;         (counsel-find-file          . ivy-display-function-fallback)
-;;         (counsel-recentf            . ivy-display-function-fallback)
-;;         (counsel-register           . ivy-posframe-display-at-frame-bottom-window-center)
-;;         (dmenu                      . ivy-posframe-display-at-frame-top-center)
-;;         (nil                        . ivy-posframe-display))
-;;       ivy-posframe-height-alist
-;;       '((swiper . 20)
-;;         (dmenu . 20)
-;;         (t . 10)))
-;; (ivy-posframe-mode 1) ; 1 enables posframe-mode, 0 disables it.
+(setq ivy-posframe-display-functions-alist
+      '((swiper                     . ivy-posframe-display-at-point)
+        (complete-symbol            . ivy-posframe-display-at-point)
+        (counsel-M-x                . ivy-display-function-fallback)
+        (counsel-esh-history        . ivy-posframe-display-at-window-center)
+        (counsel-describe-function  . ivy-display-function-fallback)
+        (counsel-describe-variable  . ivy-display-function-fallback)
+        (counsel-find-file          . ivy-display-function-fallback)
+        (counsel-recentf            . ivy-display-function-fallback)
+        (counsel-register           . ivy-posframe-display-at-frame-bottom-window-center)
+        (dmenu                      . ivy-posframe-display-at-frame-top-center)
+        (nil                        . ivy-posframe-display))
+      ivy-posframe-height-alist
+      '((swiper . 20)
+        (dmenu . 20)
+        (t . 10)))
+(ivy-posframe-mode 1) ; 1 enables posframe-mode, 0 disables it.
 
 (map! :leader
       (:prefix ("v" . "Ivy")
