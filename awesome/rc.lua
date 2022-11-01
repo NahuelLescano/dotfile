@@ -3,9 +3,9 @@
 pcall(require, "luarocks.loader")
 
 -- Standard awesome library
-local gears = require("gears")
-local awful = require("awful")
-require("awful.autofocus")
+local gears = require("gears")  -- Utilities such as color parsing and objects.
+local awful = require("awful")  -- Everything related with window managment.
+              require("awful.autofocus")
 
 -- Widget and layout library
 local wibox = require("wibox")
@@ -15,12 +15,21 @@ local beautiful = require("beautiful")
 
 -- Notification library
 local naughty = require("naughty")
+naughty.config.defaults['icon_size'] = 100
+
 local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
 
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
-require("awful.hotkeys_popup.keys")
+local hotkeys_popup = require("awful.hotkeys_popup").widget
+                      require("awful.hotkeys_popup.keys")
+
+-- load the widget code
+local calendar = require("calendar")
+
+
+local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -49,26 +58,21 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
+--beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 beautiful.init(os.getenv("HOME") .. "/.config/awesome/theme.lua")
 
 -- Use correct status icon size
 awesome.set_preferred_icon_size(33)
 
 -- This is used later as the default terminal and editor to run.
-local terminal = "alacritty"
+local terminal = "st"
+--local editor = os.getenv("EDITOR") or "nvim"
 local editor = os.getenv("EDITOR") or "/usr/bin/emacsclient -c -a 'emacs'"
 local editor_cmd = terminal .. " -e " .. editor
 local browser = "brave"
-local dmenu = "dmenu_run -i -l 10 -g 10 -p 'Run:'"
-local passmenu = "passmenu -i -l 20 -p 'Pass:'"
-local file_manager = "pcmanfm"
+local dmenu = "dmenu_run -i -l 20 -g 2 -p 'Run:'"
 local vifm = terminal .. " -e vifm"
-local music_player = "spotify"
-local virtual_manager = "virt-manager"
-local emacs = "/usr/bin/emacsclient -c -a 'emacs'"
-
-local screenshoot = "xfce4-screenshooter"
-local settings = "xfce4-settings-manager"
+local nvim = terminal .. " -e nvim"
 
 local home = os.getenv("HOME")
 local dmradio = home .. "/dmscript/dm-radio"
@@ -78,15 +82,17 @@ local dmconfedit = home .. "/dmscript/dm-confedit"
 local dmdocuments = home .. "/dmscript/dm-documents"
 local dmkill = home .. "/dmscript/dm-kill"
 local dmlogout = home .. "/dmscript/dm-logout"
-local dmman_run = terminal .. " -e " .. home .. "/dmscript/dm-man"
+local dmman = home .. "/dmscript/dm-man"
 local dmwebsearch = home .. "/dmscript/dm-websearch"
-local macho = home .. "/Documentos/dotfile/macho_gui.sh"
+local macho = home .. "Documents/dotfile/macho_gui.sh"
+
+local emacs = "/usr/bin/emacsclient -c -a 'emacs'"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
--- However, you can use another modifier like Mod1, but it may interact with others. 
+-- However, you can use another modifier like Mod1, but it may interact with others.
 local modkey = "Mod4"
 local alt = "Mod1"
 local ctrlkey = "Control"
@@ -94,9 +100,6 @@ local ctrlkey = "Control"
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
     awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
-    awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
     awful.layout.suit.floating,
     awful.layout.suit.max,
     awful.layout.suit.max.fullscreen,
@@ -114,6 +117,9 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- {{{ Wibar
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock()
+
+-- attach it as popup to your text clock widget:
+calendar({}):attach(mytextclock)
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -174,10 +180,13 @@ awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
 
+    -- Each screen has its own tag table.
+    --awful.tag({ " DEV", " WWW", " DOC", " SYS", " MUS", " VID"}, s, awful.layout.layouts[1])
     awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9"}, s, awful.layout.layouts[1])
 
-    -- Create a promptbox for each screen
+   -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
+
     -- Create an imagebox widget which will contain an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     s.mylayoutbox = awful.widget.layoutbox(s)
@@ -204,9 +213,6 @@ awful.screen.connect_for_each_screen(function(s)
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s })
 
-    -- Create systray
-    s.systray = wibox.widget.systray()
-
     -- Add widgets to the wibox
     s.mywibox:setup {
         layout = wibox.layout.align.horizontal,
@@ -215,11 +221,13 @@ awful.screen.connect_for_each_screen(function(s)
             s.mytaglist,
             s.mypromptbox,
         },
+
         s.mytasklist, -- Middle widget
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             mykeyboardlayout,
-            s.systray, mytextclock,
+            wibox.widget.systray(),
+            mytextclock,
             s.mylayoutbox,
         },
     }
@@ -253,6 +261,7 @@ globalkeys = gears.table.join(
         end,
         {description = "focus next by index", group = "client"}
     ),
+
     awful.key({ modkey,           }, "k",
         function ()
             awful.client.focus.byidx(-1)
@@ -260,7 +269,7 @@ globalkeys = gears.table.join(
         {description = "focus previous by index", group = "client"}
     ),
 
-    -- Layout manipulation
+        -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
               {description = "swap with next client by index", group = "client"}),
 
@@ -319,8 +328,9 @@ globalkeys = gears.table.join(
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(-1)                end,
               {description = "select previous", group = "layout"}),
 
+
     -- Costum key bindings
-    -- Dmenu
+	-- Dmenu
     awful.key({ modkey, alt },            "Return",    function () awful.util.spawn(dmenu)  end,
               {description = "run dmenu", group = "dmenu"}),
 
@@ -353,64 +363,40 @@ globalkeys = gears.table.join(
               {description = "run dm-logout", group = "dmenu"}),
 
     -- dm-man
-    awful.key({ modkey, alt },            "m",    function () awful.util.spawn(dmman_run)  end,
+    awful.key({ modkey, alt },            "m",    function () awful.util.spawn(dmman)  end,
               {description = "run dm-man", group = "dmenu"}),
 
     -- dm-websearch
     awful.key({ modkey, alt },            "s",    function () awful.util.spawn(dmwebsearch)  end,
               {description = "run dm-websearch", group = "dmenu"}),
 
-    -- Passmenu
-    awful.key({ modkey, alt },            "p",    function () awful.util.spawn(passmenu)  end,
-              {description = "run passmenu", group = "dmenu"}),
-
     -- Macho (gui)
 	awful.key({ modkey },            "m",     function () awful.util.spawn(macho) end,
               {description = "run macho (gui version)", group = "dmenu"}),
 
-    -- Brave
-    awful.key({ modkey },             "b",     function() awful.util.spawn(browser) end,
-                {description = "run brave", group = "applications"}),
-
-    -- Qutebrowser
-    awful.key({ modkey },             "q",     function() awful.util.spawn("qutebrowser") end,
-                {description = "run qutebrowser", group = "applications"}),
-
-    -- Pcmanfm
-    awful.key({ modkey },             "p",     function() awful.util.spawn(file_manager) end,
-                {description = "run pcmanfm file manager", group = "applications"}),
-
-    -- Vifm
-    awful.key({ modkey },        "v",     function() awful.util.spawn(vifm) end,
-                {description = "run vifm file manager", group = "applications"}),
-
-    -- Spotify
-    awful.key({ ctrlkey, modkey },        "s",     function() awful.util.spawn(music_player) end,
-                {description = "run spotify music player", group = "applications"}),
-
-    -- Virtual manager
-    awful.key({ modkey, alt },             "v",     function() awful.util.spawn(virtual_manager) end,
-                {description = "run virt-manager", group = "applications"}),
-
-    -- Settings
-    awful.key({ alt },             "s",     function() awful.util.spawn(settings) end,
-                {description = "run xfce settings", group = "applications"}),
+    -- neovim
+	awful.key({ modkey, ctrlkey },            "v",     function () awful.util.spawn(nvim) end,
+              {description = "run neovim", group = "applications"}),
 
     -- Doom emacs
-    awful.key({ modkey },             "d",     function() awful.util.spawn(emacs) end,
-                {description = "run doom emacs", group = "applications"}),
+	awful.key({ modkey },            "d",     function () awful.util.spawn(emacs) end,
+              {description = "run doom emacs", group = "applications"}),
 
-    -- Eclipse
-    awful.key({ modkey },             "e",     function() awful.util.spawn("eclipse") end,
-                {description = "run eclipse IDE", group = "applications"}),
+	-- Brave
+	awful.key({ modkey },            "b",     function () awful.util.spawn(browser) end,
+              {description = "run brave browser", group = "applications"}),
 
-    -- Vs codium
-    awful.key({ modkey, "Shift" },             "v",     function() awful.util.spawn("codium") end,
-                {description = "run vs codium IDE", group = "applications"}),
+	-- Qutebrowser
+	awful.key({ modkey },            "q",     function () awful.util.spawn("qutebrowser") end,
+              {description = "run qutebrowser", group = "applications"}),
 
-    -- Screenshoot
-    awful.key({ modkey },             "c",     function() awful.util.spawn(screenshoot) end,
-                {description = "run xfce screenshooter", group = "applications"}),
+	-- Pcmanfm
+	awful.key({ modkey },            "p",     function () awful.util.spawn("pcmanfm") end,
+              {description = "run pcmanfm", group = "applications"}),
+
+	-- Vifm
+	awful.key({ modkey },            "v",     function () awful.util.spawn(vifm) end,
+              {description = "run vifm", group = "applications"}),
 
     awful.key({ modkey }, "x",
               function ()
@@ -447,7 +433,7 @@ clientkeys = gears.table.join(
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end,
               {description = "toggle keep on top", group = "client"}),
 
-       -- Resize windows
+    -- Resize windows
     awful.key({ modkey, ctrlkey }, "Up", function (c)
       if c.floating then
         c:relative_move( 0, 0, 0, -10)
@@ -456,7 +442,6 @@ clientkeys = gears.table.join(
       end
     end,
     {description = "Floating Resize Vertical -", group = "client"}),
-
     awful.key({ modkey, ctrlkey }, "Down", function (c)
       if c.floating then
         c:relative_move( 0, 0, 0,  10)
@@ -465,7 +450,6 @@ clientkeys = gears.table.join(
       end
     end,
     {description = "Floating Resize Vertical +", group = "client"}),
-
     awful.key({ modkey, ctrlkey }, "Left", function (c)
       if c.floating then
         c:relative_move( 0, 0, -10, 0)
@@ -474,7 +458,6 @@ clientkeys = gears.table.join(
       end
     end,
     {description = "Floating Resize Horizontal -", group = "client"}),
-
     awful.key({ modkey, ctrlkey }, "Right", function (c)
       if c.floating then
         c:relative_move( 0, 0,  10, 0)
@@ -506,7 +489,6 @@ clientkeys = gears.table.join(
 -- Be careful: we use keycodes to make it work on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, 9 do
-    -- Hack to only show tags 1 and 9 in the shortcut window (mod+s)
     local descr_view, descr_toggle, descr_move, descr_toggle_focus
     if i == 1 or i == 9 then
         descr_view = {description = "view tag #", group = "tag"}
@@ -549,6 +531,7 @@ for i = 1, 9 do
                      end
                   end,
                   descr_move),
+
         -- Toggle tag on focused client.
         awful.key({ modkey, ctrlkey, "Shift" }, "#" .. i + 9,
                   function ()
@@ -629,9 +612,9 @@ awful.rules.rules = {
         }
       }, properties = { floating = true }},
 
-    -- Set Brave to always map on the tag named "2" on screen 1.
-   -- { rule = { class = browser },
-   --    properties = { screen = 1, tag = "2" } },
+       ---- Set brave to always map on the tag named "2" on screen 1.
+    -- { rule = { class = "brave" },
+    --   properties = { screen = 1, tag = "2" } },
 
 }
 -- }}}
@@ -701,6 +684,7 @@ client.connect_signal("request::titlebars", function(c)
     }
 end)
 
+
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)
     c:emit_signal("request::activate", "mouse_enter", {raise = false})
@@ -716,12 +700,15 @@ function border_adjust(c)
     end
 end
 
-client.connect_signal("focus", border_adjust)
+client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("property::maximized", border_adjust)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
--- Autostart Applications
+-- Autostart
+awful.spawn.with_shell("/usr/bin/lxpolkit")
 awful.spawn.with_shell("nitrogen --restore")
+awful.spawn.with_shell("blueman-applet")
+awful.spawn.with_shell("kmix")
 awful.spawn.with_shell("nm-applet")
 awful.spawn.with_shell("/usr/bin/emacs --daemon")
