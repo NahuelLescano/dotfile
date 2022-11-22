@@ -74,16 +74,17 @@ local screenshoot = "xfce4-screenshooter"
 local settings = "xfce4-settings-manager"
 
 local home = os.getenv("HOME")
-local dmradio = home .. "/dmscript/dm-radio"
-local dmwiki = home .. "/dmscript/dm-wiki"
-local dmbookman = home .. "/dmscript/dm-bookman"
-local dmconfedit = home .. "/dmscript/dm-confedit"
-local dmdocuments = home .. "/dmscript/dm-documents"
-local dmkill = home .. "/dmscript/dm-kill"
-local dmlogout = home .. "/dmscript/dm-logout"
-local dmman_run = terminal .. " -e " .. home .. "/dmscript/dm-man"
-local dmwebsearch = home .. "/dmscript/dm-websearch"
-local macho = home .. "/Documentos/dotfile/macho_gui.sh"
+local dmradio = home .. "/Documentos/repos/dmscript/dm-radio"
+local dmwiki = home .. "/Documentos/repos/dmscript/dm-wiki"
+local dmbookman = home .. "/Documentos/repos/dmscript/dm-bookman"
+local dmconfedit = home .. "/Documentos/repos/dmscript/dm-confedit"
+local dmdocuments = home .. "/Documentos/repos/dmscript/dm-documents"
+local dmkill = home .. "/Documentos/repos/dmscript/dm-kill"
+local dmlogout = home .. "/Documentos/repos/dmscript/dm-logout"
+local dmman_run = terminal .. " -e " .. home .. "/Documentos/repos/dmscript/dm-man"
+local dmwebsearch = home .. "/Documentos/repos/dmscript/dm-websearch"
+local macho = home .. "/Documentos/repos/dotfile/macho_gui.sh"
+
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
