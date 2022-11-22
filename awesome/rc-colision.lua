@@ -25,6 +25,10 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
                       require("awful.hotkeys_popup.keys")
 
+-- load the widget code
+local calendar = require("calendar")
+
+
 local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 -- {{{ Error handling
@@ -62,10 +66,11 @@ awesome.set_preferred_icon_size(33)
 
 -- This is used later as the default terminal and editor to run.
 local terminal = "st"
-local editor = os.getenv("EDITOR") or "nvim"
+--local editor = os.getenv("EDITOR") or "nvim"
+local editor = os.getenv("EDITOR") or "/usr/bin/emacsclient -c -a 'emacs'"
 local editor_cmd = terminal .. " -e " .. editor
 local browser = "brave"
-local dmenu = "dmenu_run -i -l 20 -p ' '"
+local dmenu = "dmenu_run -i -l 20 -g 2 -p 'Run:'"
 local vifm = terminal .. " -e vifm"
 local nvim = terminal .. " -e nvim"
 
@@ -73,13 +78,14 @@ local home = os.getenv("HOME")
 local dmradio = home .. "/dmscript/dm-radio"
 local dmwiki = home .. "/dmscript/dm-wiki"
 local dmbookman = home .. "/dmscript/dm-bookman"
-local dmconfedit_run = terminal .. " -e " .. home .. "/dmscript/dm-confedit"
+local dmconfedit = home .. "/dmscript/dm-confedit"
 local dmdocuments = home .. "/dmscript/dm-documents"
 local dmkill = home .. "/dmscript/dm-kill"
 local dmlogout = home .. "/dmscript/dm-logout"
-local dmman_run = terminal .. " -e " .. home .. "/dmscript/dm-man"
+local dmman = home .. "/dmscript/dm-man"
 local dmwebsearch = home .. "/dmscript/dm-websearch"
 local macho = home .. "Documents/dotfile/macho_gui.sh"
+
 local emacs = "/usr/bin/emacsclient -c -a 'emacs'"
 
 -- Default modkey.
@@ -111,6 +117,9 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- {{{ Wibar
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock()
+
+-- attach it as popup to your text clock widget:
+calendar({}):attach(mytextclock)
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -338,7 +347,7 @@ globalkeys = gears.table.join(
               {description = "run dm-bookman", group = "dmenu"}),
 
     -- dm-confedit
-    awful.key({ modkey, alt },            "c",    function () awful.util.spawn(dmconfedit_run)  end,
+    awful.key({ modkey, alt },            "c",    function () awful.util.spawn(dmconfedit)  end,
               {description = "run dm-confedit", group = "dmenu"}),
 
     -- dm-documents
@@ -354,7 +363,7 @@ globalkeys = gears.table.join(
               {description = "run dm-logout", group = "dmenu"}),
 
     -- dm-man
-    awful.key({ modkey, alt },            "m",    function () awful.util.spawn(dmman_run)  end,
+    awful.key({ modkey, alt },            "m",    function () awful.util.spawn(dmman)  end,
               {description = "run dm-man", group = "dmenu"}),
 
     -- dm-websearch
