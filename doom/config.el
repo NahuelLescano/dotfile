@@ -99,22 +99,8 @@
        :desc "Clippy describes function under the point" "f" #'clippy-describe-function
        :desc "Clipyy describes variable under the point" "v" #'clippy-describe-variable))
 
-;; Emacs Dashboard is an extensible startup screen showing you recent files, bookmarks, agenda items and an Emacs banner.
-(use-package dashboard
-  :init      ;; tweak dashboard config before loading it
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  ;;(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
-  (setq dashboard-startup-banner "~/.doom.d/doom-emacs-dash.png")  ;; use custom image as banner
-  (setq dashboard-center-content nil) ;; set to 't' for centered content
-  :config
-  (dashboard-setup-startup-hook)
-  (dashboard-modify-heading-icons '((recents . "file-text")
-                                    (bookmarks . "book"))))
-
 ;; This setting ensures that emacsclient always opens on dashboard rather than scratch.
 (setq doom-fallback-buffer-name "*dashboard*")
-
 
 ;; Dired is the file manager within Emacs.  Below, I setup keybindings for image previews (peep-dired).
 ;; Doom Emacs does not use ‘SPC d’ for any of its keybindings, so I’ve chosen the format of ‘SPC d’ plus ‘key’.
@@ -309,3 +295,19 @@
 (add-hook 'markdown-mode-hook 'prefer-horizontal-split)
 (map! :leader
       :desc "Clone indirect buffer other window" "b c" #'clone-indirect-buffer-other-window)
+
+(setq initial-buffer-choice "~/.doom.d/start.org")
+
+(define-minor-mode start-mode
+  "Provide functions for custom start page."
+  :lighter " start"
+  :keymap (let ((map (make-sparse-keymap)))
+          ;;(define-key map (kbd "M-z") 'eshell)
+            (evil-define-key 'normal start-mode-map
+              (kbd "1") '(lambda () (interactive) (find-file "~/.doom.d/config.org"))
+              (kbd "2") '(lambda () (interactive) (find-file "~/.doom.d/init.el"))
+              (kbd "3") '(lambda () (interactive) (find-file "~/.doomrd/packages.el")))
+          map))
+
+(add-hook 'start-mode-hook 'read-only-mode) ;; make start.org read-only; use 'SPC t r' to toggle off read-only.
+(provide 'start-mode)
