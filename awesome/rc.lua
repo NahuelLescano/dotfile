@@ -23,7 +23,7 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 require("awful.hotkeys_popup.keys")
 
 -- load the widget code
-local calendar = require("calendar")
+--local calendar = require("calendar")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -67,11 +67,8 @@ local passmenu = "passmenu -i -l 20 -p 'Pass:'"
 local file_manager = "pcmanfm"
 local vifm = terminal .. " -e vifm"
 local music_player = "spotify"
-local virtual_manager = "virt-manager"
 local emacs = "/usr/bin/emacsclient -c -a 'emacs'"
 
-local screenshoot = "xfce4-screenshooter"
-local settings = "xfce4-settings-manager"
 
 local home = os.getenv("HOME")
 local dmradio = home .. "/Documentos/repos/dmscript/dm-radio"
@@ -120,7 +117,7 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 mytextclock = wibox.widget.textclock()
 
 -- attach it as popup to your text clock widget:
-calendar({}):attach(mytextclock)
+--calendar({}):attach(mytextclock)
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
