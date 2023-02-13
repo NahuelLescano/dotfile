@@ -62,25 +62,23 @@ local terminal = "alacritty"
 local editor = os.getenv("EDITOR") or "/usr/bin/emacsclient -c -a 'emacs'"
 local editor_cmd = terminal .. " -e " .. editor
 local browser = "brave"
-local dmenu = "dmenu_run -i -l 10 -g 10 -p 'Run:'"
-local passmenu = "passmenu -i -l 20 -p 'Pass:'"
+local dmenu = "dmenu_run -i -l 10 -g 3 -p 'Run:'"
 local file_manager = "pcmanfm"
 local vifm = terminal .. " -e vifm"
-local music_player = "spotify"
 local emacs = "/usr/bin/emacsclient -c -a 'emacs'"
 
 
 local home = os.getenv("HOME")
-local dmradio = home .. "/Documentos/repos/dmscript/dm-radio"
-local dmwiki = home .. "/Documentos/repos/dmscript/dm-wiki"
-local dmbookman = home .. "/Documentos/repos/dmscript/dm-bookman"
-local dmconfedit = home .. "/Documentos/repos/dmscript/dm-confedit"
-local dmdocuments = home .. "/Documentos/repos/dmscript/dm-documents"
-local dmkill = home .. "/Documentos/repos/dmscript/dm-kill"
-local dmlogout = home .. "/Documentos/repos/dmscript/dm-logout"
-local dmman_run = terminal .. " -e " .. home .. "/Documentos/repos/dmscript/dm-man"
-local dmwebsearch = home .. "/Documentos/repos/dmscript/dm-websearch"
-local macho = home .. "/Documentos/repos/dotfile/macho_gui.sh"
+local dmradio = home .. "/Documentos/Repos/dmscript/dm-radio"
+local dmwiki = home .. "/Documentos/Repos/dmscript/dm-wiki"
+local dmbookman = home .. "/Documentos/Repos/dmscript/dm-bookman"
+local dmconfedit = home .. "/Documentos/Repos/dmscript/dm-confedit"
+local dmdocuments = home .. "/Documentos/Repos/dmscript/dm-documents"
+local dmkill = home .. "/Documentos/Repos/dmscript/dm-kill"
+local dmlogout = home .. "/Documentos/Repos/dmscript/dm-logout"
+local dmman = "/Documentos/Repos/dmscript/dm-man"
+local dmwebsearch = home .. "/Documentos/Repos/dmscript/dm-websearch"
+local macho = home .. "/Documentos/Repos/dotfile/macho_gui.sh"
 
 
 -- Default modkey.
@@ -325,48 +323,44 @@ globalkeys = gears.table.join(
 
     -- Costum key bindings
     -- Dmenu
-    awful.key({ modkey, alt },            "Return",    function () awful.util.spawn(dmenu)  end,
+    awful.key({ modkey, "Shift" },            "Return",    function () awful.util.spawn(dmenu)  end,
               {description = "run dmenu", group = "dmenu"}),
 
     -- dm-radio
-    awful.key({ modkey, alt },            "r",    function () awful.util.spawn(dmradio)  end,
+    awful.key({ modkey, "Shift" },            "r",    function () awful.util.spawn(dmradio)  end,
               {description = "run dm-radio", group = "dmenu"}),
 
     -- dm-wiki
-    awful.key({ modkey, alt },            "w",    function () awful.util.spawn(dmwiki)  end,
+    awful.key({ modkey, "Shift" },            "w",    function () awful.util.spawn(dmwiki)  end,
               {description = "run dm-wiki", group = "dmenu"}),
 
     -- dm-bookman
-    awful.key({ modkey, alt },            "b",    function () awful.util.spawn(dmbookman)  end,
+    awful.key({ modkey, "Shift" },            "b",    function () awful.util.spawn(dmbookman)  end,
               {description = "run dm-bookman", group = "dmenu"}),
 
     -- dm-confedit
-    awful.key({ modkey, alt },            "c",    function () awful.util.spawn(dmconfedit)  end,
+    awful.key({ modkey, "Shift" },            "o",    function () awful.util.spawn(dmconfedit)  end,
               {description = "run dm-confedit", group = "dmenu"}),
 
     -- dm-documents
-    awful.key({ modkey, alt },            "d",    function () awful.util.spawn(dmdocuments)  end,
+    awful.key({ modkey, "Shift" },            "d",    function () awful.util.spawn(dmdocuments)  end,
               {description = "run dm-documents", group = "dmenu"}),
 
     -- dm-kill
-    awful.key({ modkey, alt },            "k",    function () awful.util.spawn(dmkill)  end,
+    awful.key({ modkey, ctrlkey },            "k",    function () awful.util.spawn(dmkill)  end,
               {description = "run dm-kill", group = "dmenu"}),
 
     -- dm-logout
-    awful.key({ modkey, alt },            "l",    function () awful.util.spawn(dmlogout)  end,
+    awful.key({ modkey, "Shift" },            "l",    function () awful.util.spawn(dmlogout)  end,
               {description = "run dm-logout", group = "dmenu"}),
 
     -- dm-man
-    awful.key({ modkey, alt },            "m",    function () awful.util.spawn(dmman_run)  end,
+    awful.key({ modkey, "Shift" },            "m",    function () awful.util.spawn(dmman)  end,
               {description = "run dm-man", group = "dmenu"}),
 
     -- dm-websearch
-    awful.key({ modkey, alt },            "s",    function () awful.util.spawn(dmwebsearch)  end,
+    awful.key({ modkey, "Shift" },            "s",    function () awful.util.spawn(dmwebsearch)  end,
               {description = "run dm-websearch", group = "dmenu"}),
-
-    -- Passmenu
-    awful.key({ modkey, alt },            "p",    function () awful.util.spawn(passmenu)  end,
-              {description = "run passmenu", group = "dmenu"}),
 
     -- Macho (gui)
 	awful.key({ modkey },            "m",     function () awful.util.spawn(macho) end,
@@ -376,10 +370,6 @@ globalkeys = gears.table.join(
     awful.key({ modkey },             "b",     function() awful.util.spawn(browser) end,
                 {description = "run brave", group = "applications"}),
 
-    -- Qutebrowser
-    awful.key({ modkey },             "q",     function() awful.util.spawn("qutebrowser") end,
-                {description = "run qutebrowser", group = "applications"}),
-
     -- Pcmanfm
     awful.key({ modkey },             "p",     function() awful.util.spawn(file_manager) end,
                 {description = "run pcmanfm file manager", group = "applications"}),
@@ -388,33 +378,9 @@ globalkeys = gears.table.join(
     awful.key({ modkey },        "v",     function() awful.util.spawn(vifm) end,
                 {description = "run vifm file manager", group = "applications"}),
 
-    -- Spotify
-    awful.key({ ctrlkey, modkey },        "s",     function() awful.util.spawn(music_player) end,
-                {description = "run spotify music player", group = "applications"}),
-
-    -- Virtual manager
-    awful.key({ modkey, alt },             "v",     function() awful.util.spawn(virtual_manager) end,
-                {description = "run virt-manager", group = "applications"}),
-
-    -- Settings
-    awful.key({ alt },             "s",     function() awful.util.spawn(settings) end,
-                {description = "run xfce settings", group = "applications"}),
-
     -- Doom emacs
     awful.key({ modkey },             "d",     function() awful.util.spawn(emacs) end,
                 {description = "run doom emacs", group = "applications"}),
-
-    -- Eclipse
-    awful.key({ modkey },             "e",     function() awful.util.spawn("eclipse") end,
-                {description = "run eclipse IDE", group = "applications"}),
-
-    -- Vs codium
-    awful.key({ modkey, "Shift" },             "v",     function() awful.util.spawn("codium") end,
-                {description = "run vs codium IDE", group = "applications"}),
-
-    -- Screenshoot
-    awful.key({ modkey },             "c",     function() awful.util.spawn(screenshoot) end,
-                {description = "run xfce screenshooter", group = "applications"}),
 
     awful.key({ modkey }, "x",
               function ()
@@ -728,4 +694,6 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- Autostart Applications
 awful.spawn.with_shell("nitrogen --restore")
 awful.spawn.with_shell("nm-applet")
+awful.spawn.with_shell("kmix")
 awful.spawn.with_shell("/usr/bin/emacs --daemon")
+awful.spawn.with_shell("/usr/bin/lxpolkit")
