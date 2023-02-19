@@ -7,7 +7,7 @@ set -U fish_user_paths $HOME/.local/bin $HOME/Applications $fish_user_paths
 fish_vi_key_bindings                        # set vi mode
 set fish_greeting                           # Supresses fish's intro message
 set TERM "xterm-256color"                   # Sets the terminal type
-set EDITOR "nvim"                           # Use nvim as the text editor of choice
+set EDITOR "emacsclient -c -a 'emacs'"      # Set doom emacs to be my editor
 
 ### "bat" as manpager
 set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
@@ -144,13 +144,13 @@ alias mv='mv -i'
 alias rm='rm -i'
 
 # get fastest mirrors
-alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
-alias mirrord="sudo reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist"
-alias mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
-alias mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist"
+alias mirror="doas reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
+alias mirrord="doas reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist"
+alias mirrors="doas reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
+alias mirrora="doas reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist"
 
 
-#Abbreviations
+## Abbreviations
 # navigation
 abbr --add .. cd ..
 abbr --add ... cd ../..
@@ -158,12 +158,12 @@ abbr --add .3 cd ../../..
 abbr --add .4 cd ../../../..
 
 # pacman
-abbr --add pacin sudo pacman -S                       # install programs
-abbr --add pacrm sudo pacman -Rns                     # remove programs and all dependencies
+abbr --add pacin doas pacman -S                       # install programs
+abbr --add pacrm doas pacman -Rns                     # remove programs and all dependencies
 abbr --add pacss pacman -Ss                           # search for specific program
-abbr --add pacsyu sudo pacman -Syu                    # update only standard packages
-abbr --add pacsyyu sudo pacman -Syyu                  # refresh pkglist and update standard pkgs
-abbr --add cleanup sudo pacman -Rns (pacman -Qtdq)    # remove orphaned packages
+abbr --add pacsyu doas pacman -Syu                    # update only standard packages
+abbr --add pacsyyu doas pacman -Syyu                  # refresh pkglist and update standard pkgs
+abbr --add cleanup doas pacman -Rns (pacman -Qtdq)    # remove orphaned packages
 
 # paru
 abbr --add parsua paru -Sua --noconfirm              # update only AUR packages
@@ -173,9 +173,9 @@ abbr --add parss paru -Ss                            # search for specific AUR p
 abbr --add parqua paru -Qua                         # show if a pkg has an update
 
 # snap
-abbr --add snapin sudo snap install                 # install snap pkg
-abbr --add snaprm sudo snap remove                  # remove snap pkg
-abbr --add snapser sudo snap find                   # find some snap pkg
+abbr --add snapin doas snap install                 # install snap pkg
+abbr --add snaprm doas snap remove                  # remove snap pkg
+abbr --add snapser doas snap find                   # find some snap pkg
 
 # git
 abbr --add init git init
