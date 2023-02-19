@@ -1,4 +1,4 @@
-## ADDING TO THE PATH
+### ADDING TO THE PATH ###
 # First line removes the paths; second line sets it. Without the first line,
 # the path gets massive and fish become very slow.
 set -e fish_user_paths
@@ -12,7 +12,7 @@ set EDITOR "emacsclient -c -a 'emacs'"      # Set doom emacs to be my editor
 ### "bat" as manpager
 set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
-## AUTOCOMPLETE AND HIGHLIGHT COLORS ##
+### AUTOCOMPLETE AND HIGHLIGHT COLORS ###
 set fish_color_normal brcyan
 set fish_color_autosuggestion '#7d7d7d'
 set fish_color_command brcyan
@@ -128,10 +128,10 @@ else
 
 end
 
-## END OF FUNCTIONS ##
+### END OF FUNCTIONS ###
 
-## ALIASES AND ABBREVIATIONS##
-# Aliases
+### ALIASES AND ABBREVIATIONS ###
+## Aliases
 alias clear='echo -en "\x1b[2J\x1b[1;1H" ; echo; echo; seq 1 (tput cols) | sort -R | spark | lolcat; echo; echo'
 
 # Changing ls with exa
@@ -192,10 +192,13 @@ abbr --add pull git pull origin
 abbr --add push git push origin
 abbr --add log git log --pretty=format:'"%h - %an, %ar: %s"'
 
-#nvim
+# nvim
 abbr --add v nvim
 
-#feh
+# emacs
+abbr --add emacs emacsclient -c -a 'emacs'
+
+# feh
 abbr --add feh feh -Z -.
 
 # Colorscript
