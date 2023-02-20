@@ -8,6 +8,28 @@ add_newline = false
 [line_break]
 disabled = true
 
+# Make a different user prompt
+[username]
+style_user = "green bold"
+style_root = "red bold"
+format = "[$user]($style) "
+disabled = false
+show_always = true
+
+# Make a different hostname for the user
+[hostname]
+ssh_only = false
+format = 'on [$hostname](bold purple) '
+trim_at = "."
+disabled = false
+
+# configure directory
+[directory]
+read_only = " "
+truncation_length = 10
+truncate_to_repo = true # truncates directory to root folder if in github repo
+style = "bold italic blue"
+
 # Replace the "❯" symbol in the prompt with "➜ "
 [character]                                 # The name of the module we are configuring is "character"
 error_symbol = "[✗](bold red) "             # The "error_symbol" segment is being set to "x" with the color "bold red"
@@ -18,8 +40,15 @@ vimcmd_visual_symbol = "[V](bold yellow)"   # The "vimcmd_visual_symbol" segment
 [package]
 disabled = true
 
+# Language view config
 [python]
 symbol = " "
+format = 'via [${symbol}python (${version} )(\($virtualenv\) )]($style)'
+style = "bold yellow"
+pyenv_prefix = "venv "
+python_binary = ["./venv/bin/python", "python", "python3", "python2"]
+detect_extensions = ["py"]
+version_format = "v${raw}"
 
 [c]
 symbol = " "
@@ -32,7 +61,32 @@ format = "via [⎈ $version](bold white) "
 [lua]
 format = "via [ $version](bold white) "
 
+[nodejs]
+format = "via [ $version](bold green) "
+detect_files = ["package.json", ".node-version"]
+detect_folders = ["node_modules"]
+
 [git_branch]
-symbol = " "
-truncation_length = 4
-truncation_symbol = ""
+symbol = " "
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+stashed = "[${count}*](green)"
+modified = "[${count}+](yellow)"
+deleted =  "[${count}-](red)"
+conflicted =  "[${count}~](red)"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+untracked = "[${count}?](blue)"
+staged = "[${count}+](green)"
+
+[git_state]
+style ="bold red"
+format = "[$state( $progress_current/$progress_total) ]($style)"
+rebase = "rebase"
+merge = "merge"
+revert = "revert"
+cherry_pick = "cherry"
+bisect = "bisect"
+am = "am"
+am_or_rebase = "am/rebase"
