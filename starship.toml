@@ -5,8 +5,8 @@
 add_newline = false
 
 # Make prompt single line instead of two lines
-[line_break]
-disabled = true
+#[line_break]
+#disabled = true
 
 # Make a different user prompt
 [username]
