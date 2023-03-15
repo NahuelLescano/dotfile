@@ -1,13 +1,15 @@
+# This is using DT's configs: https://gitlab.com/dwt1/dotfiles/-/blob/master/.config/fish/config.fish
 ### ADDING TO THE PATH ###
 # First line removes the paths; second line sets it. Without the first line,
 # the path gets massive and fish become very slow.
 set -e fish_user_paths
-set -U fish_user_paths $HOME/.local/bin $HOME/Applications $fish_user_paths
+set -U fish_user_paths $HOME/.bin  $HOME/.local/bin $HOME/.emacs.d/bin $HOME/Applications /var/lib/flatpak/exports/bin/ $fish_user_paths
 
 fish_vi_key_bindings                        # set vi mode
 set fish_greeting                           # Supresses fish's intro message
 set TERM "xterm-256color"                   # Sets the terminal type
-set EDITOR "emacsclient -c -a 'emacs'"      # Set doom emacs to be my editor
+set EDITOR "emacsclient -t -a ''"           # $EDITOR use Emacs in terminal
+set VISUAL "emacsclient -c -a emacs"        # $VISUAL use Emacs in GUI mode
 
 ### "bat" as manpager
 set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
@@ -92,40 +94,42 @@ end
 ## END OF SPARK ##
 
 ## FUNCTIONS ##
+# Functions needed for !! and !$
 function __history_previous_command
-    switch (commandline -t)
-        case "|"
-            commandline -t $history[1]; commandline -f repaint
+  switch (commandline -t)
+  case "!"
+    commandline -t $history[1]; commandline -f repaint
 
-        case "*"
-            commandline -i !
-
-    end
-
+  case "*"
+    commandline -i !
+  end
 end
 
 function __history_previous_command_arguments
-    switch (commandline -t)
-        case "!"
-            commandline -t ""
-            commandline -f history-token-search-backward
+  switch (commandline -t)
+  case "!"
+    commandline -t ""
+    commandline -f history-token-search-backward
 
-        case "*"
-            commandline -i '$'
-
-    end
-
+  case "*"
+    commandline -i '$'
+  end
 end
 
 # The bindings for !! and !$
-if [ "$fish_key_binding" = "fish_vi_bindings" ]
-    bind -Minsert ! __history_previous_command
-    bind -Minsert '$' __history_previous_command_arguments
-
+if [ "$fish_key_bindings" = "fish_vi_key_bindings" ];
+  bind -Minsert ! __history_previous_command
+  bind -Minsert '$' __history_previous_command_arguments
 else
-    bind ! __history_previous_command
-    bind '$' __history_previous_command_arguments
+  bind ! __history_previous_command
+  bind '$' __history_previous_command_arguments
+end
 
+# Function for creating a backup file
+# ex: backup file.txt
+# result: copies file as file.txt.bak
+function backup --argument filename
+    cp $filename $filename.bak
 end
 
 ### END OF FUNCTIONS ###
@@ -135,8 +139,11 @@ end
 alias clear='echo -en "\x1b[2J\x1b[1;1H" ; echo; echo; seq 1 (tput cols) | sort -R | spark | lolcat; echo; echo'
 
 # Changing ls with exa
-alias ls='exa -al --color=always --color-scale --group-directories-first' # Listing the files.
-alias lt='exa -aT --color=always --color-scale --group-directories-first' # Listing the files with tree view.
+alias ls='exa -al --color=always --group-directories-first' # my preferred listing
+alias la='exa -a --color=always --group-directories-first'  # all files and dirs
+alias ll='exa -l --color=always --group-directories-first'  # long format
+alias lt='exa -aT --color=always --group-directories-first' # tree listing
+alias l.='exa -a | egrep "^\."'
 
 # confirm before overwriting something
 alias cp='cp -i'
@@ -149,6 +156,8 @@ alias mirrord="doas reflector --latest 50 --number 20 --sort delay --save /etc/p
 alias mirrors="doas reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
 alias mirrora="doas reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist"
 
+# Merge Xresources
+alias merge='xrdb -merge ~/.Xresources'
 
 ## Abbreviations
 # navigation
@@ -172,11 +181,6 @@ abbr --add parm paru -Rns                           # remove AUR package and all
 abbr --add parss paru -Ss                            # search for specific AUR package
 abbr --add parqua paru -Qua                         # show if a pkg has an update
 
-# snap
-abbr --add snapin doas snap install                 # install snap pkg
-abbr --add snaprm doas snap remove                  # remove snap pkg
-abbr --add snapser doas snap find                   # find some snap pkg
-
 # git
 abbr --add init git init
 abbr --add add git add
@@ -191,6 +195,15 @@ abbr --add show git remote show origin
 abbr --add pull git pull origin
 abbr --add push git push origin
 abbr --add log git log --pretty=format:'"%h - %an, %ar: %s"'
+
+# get error messages from journalctl
+abbr --add jctl journalctl -p 3 -xb
+
+# npm
+abbr --add npmi npm install
+abbr --add npmt npm test
+abbr --add npms npm start
+abbr --add npmr npm run
 
 # nvim
 abbr --add v nvim
