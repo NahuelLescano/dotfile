@@ -2,6 +2,9 @@
 -- Default awesome theme --
 ---------------------------
 
+-- local lain = require("lain")
+-- local wibox = require ("wibox")
+
 local theme_assets = require("beautiful.theme_assets")
 local xresources = require("beautiful.xresources")
 local dpi = xresources.apply_dpi
@@ -26,12 +29,12 @@ theme.fg_minimize   = "#ffffff"
 
 theme.useless_gap   = dpi(4)
 
-theme.border_width  = dpi(2)
+theme.border_width  = dpi(3)
 theme.border_normal = "#282A36"
 theme.border_focus  = "#2c5b4b"
 theme.border_marked = "#91231c"
 
-theme.titlebar_bg_focus  = "#3F3F3F"
+theme.titlebar_bg_focus  = "#18263D"
 theme.titlebar_bg_normal = "#3F3F3F"
 
 
@@ -47,6 +50,16 @@ theme.titlebar_bg_normal = "#3F3F3F"
 -- hotkeys_[bg|fg|border_width|border_color|shape|opacity|modifiers_fg|label_bg|label_fg|group_margin|font|description_font]
 -- Example:
 -- theme.taglist_bg_focus = "#ff0000"
+
+-- Textclock
+--local clockicon = wibox.widget.imagebox(theme.widget_clock)
+--local clock = awful.widget.watch(
+--    "date +'%a %d %b %R'", 60,
+--    function(widget, stdout)
+--        widget:set_markup(" " .. markup.font(theme.font, stdout))
+--    end
+--)
+
 
 -- Generate taglist squares:
 local taglist_square_size = dpi(4)
