@@ -22,9 +22,6 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
 
--- load the widget code
---local calendar = require("calendar")
-
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -59,27 +56,30 @@ awesome.set_preferred_icon_size(33)
 
 -- This is used later as the default terminal and editor to run.
 local terminal = "alacritty"
-local editor = os.getenv("EDITOR") or "/usr/bin/emacsclient -c -a 'emacs'"
+local emacs = "/usr/bin/emacsclient -c -a 'emacs'"
+local editor = os.getenv("EDITOR") or emacs
 local editor_cmd = terminal .. " -e " .. editor
 local browser = "brave"
 local dmenu = "dmenu_run -i -l 10 -g 3 -p 'Run:'"
 local file_manager = "pcmanfm"
 local vifm = terminal .. " -e vifm"
-local emacs = "/usr/bin/emacsclient -c -a 'emacs'"
-
 
 local home = os.getenv("HOME")
-local dmradio = home .. "/Documentos/Repos/dmscript/dm-radio"
-local dmwiki = home .. "/Documentos/Repos/dmscript/dm-wiki"
+
+-- dmscripts location.
 local dmbookman = home .. "/Documentos/Repos/dmscript/dm-bookman"
 local dmconfedit = home .. "/Documentos/Repos/dmscript/dm-confedit"
 local dmdocuments = home .. "/Documentos/Repos/dmscript/dm-documents"
 local dmkill = home .. "/Documentos/Repos/dmscript/dm-kill"
 local dmlogout = home .. "/Documentos/Repos/dmscript/dm-logout"
-local dmman = "/Documentos/Repos/dmscript/dm-man"
+local dmmaim = home .. "/Documentos/Repos/dmscript/dm-maim"
+local dmman = home .. "/Documentos/Repos/dmscript/dm-man"
+local dmradio = home .. "/Documentos/Repos/dmscript/dm-radio"
 local dmwebsearch = home .. "/Documentos/Repos/dmscript/dm-websearch"
-local macho = home .. "/Documentos/Repos/dotfile/macho_gui.sh"
+local dmwiki = home .. "/Documentos/Repos/dmscript/dm-wiki"
+local dmyoutube = home .. "/Documentos/Repos/dmscript/dm-youtube"
 
+local macho = home .. "/Documentos/Repos/dotfile/macho_gui.sh"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -176,7 +176,8 @@ awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
 
-    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9"}, s, awful.layout.layouts[1])
+    --awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9"}, s, awful.layout.layouts[1])
+    awful.tag({ "WWW", "DEV", "SYS", "DOC", "VID", "MUS", "CHAT", "SLACK", "ZOOM"}, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -322,50 +323,6 @@ globalkeys = gears.table.join(
               {description = "select previous", group = "layout"}),
 
     -- Costum key bindings
-    -- Dmenu
-    awful.key({ modkey, "Shift" },            "Return",    function () awful.util.spawn(dmenu)  end,
-              {description = "run dmenu", group = "dmenu"}),
-
-    -- dm-radio
-    awful.key({ modkey, "Shift" },            "r",    function () awful.util.spawn(dmradio)  end,
-              {description = "run dm-radio", group = "dmenu"}),
-
-    -- dm-wiki
-    awful.key({ modkey, "Shift" },            "w",    function () awful.util.spawn(dmwiki)  end,
-              {description = "run dm-wiki", group = "dmenu"}),
-
-    -- dm-bookman
-    awful.key({ modkey, "Shift" },            "b",    function () awful.util.spawn(dmbookman)  end,
-              {description = "run dm-bookman", group = "dmenu"}),
-
-    -- dm-confedit
-    awful.key({ modkey, "Shift" },            "o",    function () awful.util.spawn(dmconfedit)  end,
-              {description = "run dm-confedit", group = "dmenu"}),
-
-    -- dm-documents
-    awful.key({ modkey, "Shift" },            "d",    function () awful.util.spawn(dmdocuments)  end,
-              {description = "run dm-documents", group = "dmenu"}),
-
-    -- dm-kill
-    awful.key({ modkey, ctrlkey },            "k",    function () awful.util.spawn(dmkill)  end,
-              {description = "run dm-kill", group = "dmenu"}),
-
-    -- dm-logout
-    awful.key({ modkey, "Shift" },            "l",    function () awful.util.spawn(dmlogout)  end,
-              {description = "run dm-logout", group = "dmenu"}),
-
-    -- dm-man
-    awful.key({ modkey, "Shift" },            "m",    function () awful.util.spawn(dmman)  end,
-              {description = "run dm-man", group = "dmenu"}),
-
-    -- dm-websearch
-    awful.key({ modkey, "Shift" },            "s",    function () awful.util.spawn(dmwebsearch)  end,
-              {description = "run dm-websearch", group = "dmenu"}),
-
-    -- Macho (gui)
-	awful.key({ modkey },            "m",     function () awful.util.spawn(macho) end,
-              {description = "run macho (gui version)", group = "dmenu"}),
-
     -- Brave
     awful.key({ modkey },             "b",     function() awful.util.spawn(browser) end,
                 {description = "run brave", group = "applications"}),
@@ -382,16 +339,70 @@ globalkeys = gears.table.join(
     awful.key({ modkey },             "d",     function() awful.util.spawn(emacs) end,
                 {description = "run doom emacs", group = "applications"}),
 
-    awful.key({ modkey }, "x",
-              function ()
-                  awful.prompt.run {
-                    prompt       = "Run Lua code: ",
-                    textbox      = awful.screen.focused().mypromptbox.widget,
-                    exe_callback = awful.util.eval,
-                    history_path = awful.util.get_cache_dir() .. "/history_eval"
-                  }
-              end,
-              {description = "lua execute prompt", group = "awesome"})
+    -- Qutebrowser
+    awful.key({ modkey, alt },             "b",     function() awful.util.spawn("qutebrowser") end,
+                {description = "run qutebrowser", group = "applications"}),
+
+    -- Discord
+    awful.key({ modkey, alt },             "d",     function() awful.util.spawn("discord") end,
+                {description = "run discord", group = "applications"}),
+
+    -- Zoom
+    awful.key({ modkey },             "z",     function() awful.util.spawn("zoom") end,
+                {description = "run zoom", group = "applications"}),
+
+    -- Dmenu
+    awful.key({ modkey, "Shift" },            "Return",    function () awful.util.spawn(dmenu)  end,
+              {description = "run dmenu", group = "dmenu"}),
+
+    -- Macho (gui)
+	awful.key({ modkey },            "m",     function () awful.util.spawn(macho) end,
+              {description = "run macho (gui version)", group = "dmenu"}),
+
+    -- dmscripts
+    -- dm-radio
+    awful.key({ modkey, "Shift" },            "r",    function () awful.util.spawn(dmradio)  end,
+              {description = "run dm-radio", group = "dmscripts"}),
+
+    -- dm-wiki
+    awful.key({ modkey, "Shift" },            "w",    function () awful.util.spawn(dmwiki)  end,
+              {description = "run dm-wiki", group = "dmscripts"}),
+
+    -- dm-bookman
+    awful.key({ modkey, "Shift" },            "b",    function () awful.util.spawn(dmbookman)  end,
+              {description = "run dm-bookman", group = "dmscripts"}),
+
+    -- dm-confedit
+    awful.key({ modkey, "Shift" },            "o",    function () awful.util.spawn(dmconfedit)  end,
+              {description = "run dm-confedit", group = "dmscripts"}),
+
+    -- dm-documents
+    awful.key({ modkey, "Shift" },            "d",    function () awful.util.spawn(dmdocuments)  end,
+              {description = "run dm-documents", group = "dmscripts"}),
+
+    -- dm-kill
+    awful.key({ modkey, ctrlkey },            "k",    function () awful.util.spawn(dmkill)  end,
+              {description = "run dm-kill", group = "dmscripts"}),
+
+    -- dm-logout
+    awful.key({ modkey, "Shift" },            "l",    function () awful.util.spawn(dmlogout)  end,
+              {description = "run dm-logout", group = "dmscripts"}),
+
+    -- dm-man
+    awful.key({ modkey, "Shift" },            "m",    function () awful.util.spawn(dmman)  end,
+              {description = "run dm-man", group = "dmscripts"}),
+
+    -- dm-websearch
+    awful.key({ modkey, "Shift" },            "s",    function () awful.util.spawn(dmwebsearch)  end,
+              {description = "run dm-websearch", group = "dmscripts"}),
+
+    -- dm-maim
+    awful.key({ modkey, "Shift" },            "n",    function () awful.util.spawn(dmmaim)  end,
+              {description = "run dm-maim", group = "dmscripts"}),
+
+    -- dm-youtube
+    awful.key({ modkey, "Shift" },            "y",    function () awful.util.spawn(dmyoutube)  end,
+              {description = "run dm-youtube", group = "dmscripts"})
 )
 
 clientkeys = gears.table.join(
@@ -599,9 +610,25 @@ awful.rules.rules = {
         }
       }, properties = { floating = true }},
 
-    -- Set Brave to always map on the tag named "2" on screen 1.
-   -- { rule = { class = browser },
-   --    properties = { screen = 1, tag = "2" } },
+    -- Set applications to be maximized at startup.
+    -- find class or role via xprop command
+    { rule = { class = "qutebrowser" },
+      properties = { screen = 1, tag = "WWW" } },
+
+    { rule = { class = "Emacs" },
+      properties = { screen = 1, tag = "DEV" } },
+
+    { rule = { class = "Pcmanfm" },
+      properties = { screen = 1, tag = "SYS" } },
+
+    { rule = { class = "Zathura" },
+      properties = { screen = 1, tag = "DOC" } },
+
+    { rule = { class = "discord" },
+      properties = { screen = 1, tag = "CHAT" } },
+
+    { rule = { class = "zoom" },
+      properties = { screen = 1, tag = "ZOOM", maximized = true } },
 
 }
 -- }}}
@@ -692,7 +719,8 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 -- }}}
 
 -- Autostart Applications
-awful.spawn.with_shell("nitrogen --restore")
+--awful.spawn.with_shell("nitrogen --restore")
+awful.spawn.with_shell("feh --randomize --bg-fill ~/Pictures/wallpapers/*") -- Set a random wallpaper.
 awful.spawn.with_shell("nm-applet")
 awful.spawn.with_shell("kmix")
 awful.spawn.with_shell("/usr/bin/emacs --daemon")
