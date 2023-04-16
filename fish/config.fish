@@ -191,22 +191,24 @@ abbr --add diff git diff
 abbr --add branch git branch
 abbr --add clone git clone
 abbr --add commit git commit -v
+abbr --add commitMes git commit -m
 abbr --add show git remote show origin
 abbr --add pull git pull origin
 abbr --add push git push origin
+abbr --add checkout git checkout
 abbr --add log git log --pretty=format:'"%h - %an, %ar: %s"'
 
 # get error messages from journalctl
 abbr --add jctl journalctl -p 3 -xb
 
 # npm
-abbr --add npmi npm install
-abbr --add npmt npm test
-abbr --add npms npm start
-abbr --add npmr npm run
+abbr --add npi npm install
+abbr --add npt npm test
+abbr --add nps npm start
+abbr --add npr npm run
 
 # nvim
-abbr --add v nvim
+abbr --add nv nvim
 
 # emacs
 abbr --add emacs emacsclient -c -a 'emacs'
