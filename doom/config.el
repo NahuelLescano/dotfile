@@ -190,6 +190,20 @@
   (interactive (list (calendar-read-date)))
   (insert (calendar-date-string date)))
 
+;; Emacs Dashboard is an extensible startup screen showing you recent files, bookmarks, agenda items and an Emacs banner.
+(use-package dashboard
+  :init      ;; tweak dashboard config before loading it
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  ;;(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+  (setq dashboard-startup-banner "~/.doom.d/doom-emacs-dash.png")  ;; use custom image as banner
+  (setq dashboard-center-content nil) ;; set to 't' for centered content
+  :config
+  (dashboard-setup-startup-hook)
+  (dashboard-modify-heading-icons '((recents . "file-text")
+                                    (bookmarks . "book")
+                                    (Agenda . "org"))))
+
 (map! :leader
       (:prefix ("i d" . "Insert date")
         :desc "Insert any date" "a" #'insert-any-date
@@ -265,14 +279,45 @@
   (setq org-ellipsis " ▼ "
         org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
         org-superstar-itembullet-alist '((?+ . ?➤) (?- . ?✦)) ; changes +/- symbols in item lists
+        org-log-done 'time
+        org-hide-emphasis-markers t
         ;; ex. of org-link-abbrev-alist in action
         ;; [[arch-wiki:Name_of_Page][Description]]
         org-link-abbrev-alist    ; This overwrites the default Doom org-link-abbrev-list
           '(("google" . "http://www.google.com/search?q=")
             ("arch-wiki" . "https://wiki.archlinux.org/index.php/")
-            ("ddg" . "https://duckduckgo.com/?q=")
-            ("wiki" . "https://en.wikipedia.org/wiki/"))
+            ("wiki" . "https://en.wikipedia.org/wiki/")
+            ("brave . https://search.brave.com/?q="))
              ))
+
+;; Org agenda
+(after! org
+  (setq org-agenda-files '("~/Documentos/Org-agenda/agenda.org")))
+
+(setq
+   ;; org-fancy-priorities-list '("[A]" "[B]" "[C]")
+   ;; org-fancy-priorities-list '("❗" "[B]" "[C]")
+   ;; org-fancy-priorities-list '("🟥" "🟧" "🟨")
+   org-priority-faces
+   '((?A :foreground "#ff6c6b" :weight bold)
+     (?B :foreground "#98be65" :weight bold)
+     (?C :foreground "#c678dd" :weight bold))
+   org-agenda-block-separator 8411)
+
+(setq org-agenda-custom-commands
+      '(("v" "A better agenda view"
+         ((tags "PRIORITY=\"A\""
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                 (org-agenda-overriding-header "High-priority unfinished tasks:")))
+          (tags "PRIORITY=\"B\""
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                 (org-agenda-overriding-header "Medium-priority unfinished tasks:")))
+          (tags "PRIORITY=\"C\""
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                 (org-agenda-overriding-header "Low-priority unfinished tasks:")))
+
+          (agenda "")
+          (alltodo "")))))
 
 ;; Rainbox mode displays the actual color for any hex value color.  It’s such a nice feature that
 ;; I wanted it turned on all the time, regardless of what mode I am in.
@@ -296,18 +341,18 @@
 (map! :leader
       :desc "Clone indirect buffer other window" "b c" #'clone-indirect-buffer-other-window)
 
-(setq initial-buffer-choice "~/.doom.d/start.org")
-
-(define-minor-mode start-mode
-  "Provide functions for custom start page."
-  :lighter " start"
-  :keymap (let ((map (make-sparse-keymap)))
-          ;;(define-key map (kbd "M-z") 'eshell)
-            (evil-define-key 'normal start-mode-map
-              (kbd "1") '(lambda () (interactive) (find-file "~/.doom.d/config.org"))
-              (kbd "2") '(lambda () (interactive) (find-file "~/.doom.d/init.el"))
-              (kbd "3") '(lambda () (interactive) (find-file "~/.doomrd/packages.el")))
-          map))
-
-(add-hook 'start-mode-hook 'read-only-mode) ;; make start.org read-only; use 'SPC t r' to toggle off read-only.
-(provide 'start-mode)
+;;(setq initial-buffer-choice "~/.doom.d/start.org")
+;;
+;;(define-minor-mode start-mode
+;;  "Provide functions for custom start page."
+;;  :lighter " start"
+;;  :keymap (let ((map (make-sparse-keymap)))
+;;          ;;(define-key map (kbd "M-z") 'eshell)
+;;            (evil-define-key 'normal start-mode-map
+;;              (kbd "1") '(lambda () (interactive) (find-file "~/.doom.d/config.el"))
+;;              (kbd "2") '(lambda () (interactive) (find-file "~/.doom.d/init.el"))
+;;              (kbd "3") '(lambda () (interactive) (find-file "~/.doom.d/packages.el")))
+;;          map))
+;;
+;;(add-hook 'start-mode-hook 'read-only-mode) ;; make start.org read-only; use 'SPC t r' to toggle off read-only.
+;;(provide 'start-mode)
