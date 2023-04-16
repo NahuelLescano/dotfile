@@ -176,8 +176,8 @@ awful.screen.connect_for_each_screen(function(s)
     -- Wallpaper
     set_wallpaper(s)
 
-    --awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9"}, s, awful.layout.layouts[1])
-    awful.tag({ "WWW", "DEV", "SYS", "DOC", "VID", "MUS", "CHAT", "SLACK", "ZOOM"}, s, awful.layout.layouts[1])
+    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9"}, s, awful.layout.layouts[1])
+    --awful.tag({ "WWW", "DEV", "SYS", "DOC", "VID", "MUS", "CHAT", "SLACK", "ZOOM"}, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -612,23 +612,20 @@ awful.rules.rules = {
 
     -- Set applications to be maximized at startup.
     -- find class or role via xprop command
-    { rule = { class = "qutebrowser" },
-      properties = { screen = 1, tag = "WWW" } },
-
     { rule = { class = "Emacs" },
-      properties = { screen = 1, tag = "DEV" } },
+      properties = { screen = 1, tag = "2" } },
 
     { rule = { class = "Pcmanfm" },
-      properties = { screen = 1, tag = "SYS" } },
+      properties = { screen = 1, tag = "3" } },
 
     { rule = { class = "Zathura" },
-      properties = { screen = 1, tag = "DOC" } },
+      properties = { screen = 1, tag = "4" } },
 
     { rule = { class = "discord" },
-      properties = { screen = 1, tag = "CHAT" } },
+      properties = { screen = 1, tag = "7" } },
 
     { rule = { class = "zoom" },
-      properties = { screen = 1, tag = "ZOOM", maximized = true } },
+      properties = { screen = 1, tag = "9" } },
 
 }
 -- }}}
