@@ -56,9 +56,7 @@ awesome.set_preferred_icon_size(33)
 
 -- This is used later as the default terminal and editor to run.
 local terminal = "alacritty"
-local emacs = "/usr/bin/emacsclient -c -a 'emacs'"
-local editor = os.getenv("EDITOR") or emacs
-local editor_cmd = terminal .. " -e " .. editor
+local editor = os.getenv("EDITOR") or "code"
 local browser = "brave"
 local dmenu = "dmenu_run -i -l 10 -g 3 -p 'Run:'"
 local file_manager = "pcmanfm"
@@ -67,19 +65,19 @@ local vifm = terminal .. " -e vifm"
 local home = os.getenv("HOME")
 
 -- dmscripts location.
-local dmbookman = home .. "/Documentos/Repos/dmscript/dm-bookman"
-local dmconfedit = home .. "/Documentos/Repos/dmscript/dm-confedit"
-local dmdocuments = home .. "/Documentos/Repos/dmscript/dm-documents"
-local dmkill = home .. "/Documentos/Repos/dmscript/dm-kill"
-local dmlogout = home .. "/Documentos/Repos/dmscript/dm-logout"
-local dmmaim = home .. "/Documentos/Repos/dmscript/dm-maim"
-local dmman = home .. "/Documentos/Repos/dmscript/dm-man"
-local dmradio = home .. "/Documentos/Repos/dmscript/dm-radio"
-local dmwebsearch = home .. "/Documentos/Repos/dmscript/dm-websearch"
-local dmwiki = home .. "/Documentos/Repos/dmscript/dm-wiki"
-local dmyoutube = home .. "/Documentos/Repos/dmscript/dm-youtube"
+local dmbookman = home .. "/Documentos/repos/dmscript/dm-bookman"
+local dmconfedit = home .. "/Documentos/repos/dmscript/dm-confedit"
+local dmdocuments = home .. "/Documentos/repos/dmscript/dm-documents"
+local dmkill = home .. "/Documentos/repos/dmscript/dm-kill"
+local dmlogout = home .. "/Documentos/repos/dmscript/dm-logout"
+local dmmaim = home .. "/Documentos/repos/dmscript/dm-maim"
+local dmman = home .. "/Documentos/repos/dmscript/dm-man"
+local dmradio = home .. "/Documentos/repos/dmscript/dm-radio"
+local dmwebsearch = home .. "/Documentos/repos/dmscript/dm-websearch"
+local dmwiki = home .. "/Documentos/repos/dmscript/dm-wiki"
+local dmyoutube = home .. "/Documentos/repos/dmscript/dm-youtube"
 
-local macho = home .. "/Documentos/Repos/dotfile/macho_gui.sh"
+local macho = home .. "/Documentos/repos/dotfile/macho_gui.sh"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -108,11 +106,11 @@ menubar.utils.terminal = terminal -- Set the terminal for applications that requ
 -- }}}
 
 -- Keyboard map indicator and switcher
-mykeyboardlayout = awful.widget.keyboardlayout()
+local mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- {{{ Wibar
 -- Create a textclock widget
-mytextclock = wibox.widget.textclock()
+local mytextclock = wibox.widget.textclock()
 
 -- attach it as popup to your text clock widget:
 --calendar({}):attach(mytextclock)
@@ -177,7 +175,6 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9"}, s, awful.layout.layouts[1])
-    --awful.tag({ "WWW", "DEV", "SYS", "DOC", "VID", "MUS", "CHAT", "SLACK", "ZOOM"}, s, awful.layout.layouts[1])
 
     -- Create a promptbox for each screen
     s.mypromptbox = awful.widget.prompt()
@@ -237,7 +234,7 @@ root.buttons(gears.table.join(
 -- }}}
 
 -- {{{ Key bindings
-globalkeys = gears.table.join(
+local globalkeys = gears.table.join(
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
 
@@ -335,17 +332,25 @@ globalkeys = gears.table.join(
     awful.key({ modkey },        "v",     function() awful.util.spawn(vifm) end,
                 {description = "run vifm file manager", group = "applications"}),
 
-    -- Doom emacs
-    awful.key({ modkey },             "d",     function() awful.util.spawn(emacs) end,
-                {description = "run doom emacs", group = "applications"}),
+    -- VS code
+    awful.key({ modkey },        "d",     function() awful.util.spawn("code") end,
+                {description = "open up vs code", group = "applications"}),
 
     -- Qutebrowser
-    awful.key({ modkey, alt },             "b",     function() awful.util.spawn("qutebrowser") end,
-                {description = "run qutebrowser", group = "applications"}),
+    -- awful.key({ modkey, alt },             "b",     function() awful.util.spawn("qutebrowser") end,
+    --             {description = "run qutebrowser", group = "applications"}),
 
     -- Discord
     awful.key({ modkey, alt },             "d",     function() awful.util.spawn("discord") end,
                 {description = "run discord", group = "applications"}),
+
+    -- Slack
+    awful.key({ modkey, alt },             "s",     function() awful.util.spawn("com.slack.Slack") end,
+                {description = "run slack", group = "applications"}),
+
+    -- Spotify
+    awful.key({ modkey, alt },             "p",     function() awful.util.spawn("com.spotify.Client") end,
+                {description = "run spotify", group = "applications"}),
 
     -- Zoom
     awful.key({ modkey },             "z",     function() awful.util.spawn("zoom") end,
@@ -405,7 +410,7 @@ globalkeys = gears.table.join(
               {description = "run dm-youtube", group = "dmscripts"})
 )
 
-clientkeys = gears.table.join(
+local clientkeys = gears.table.join(
     awful.key({ modkey,           }, "f",
         function (c)
             c.fullscreen = not c.fullscreen
@@ -612,7 +617,10 @@ awful.rules.rules = {
 
     -- Set applications to be maximized at startup.
     -- find class or role via xprop command
-    { rule = { class = "Emacs" },
+    { rule = { class = "Brave-browser" },
+      properties = { screen = 1, tag = "1" } },
+
+    { rule = { class = "Code" },
       properties = { screen = 1, tag = "2" } },
 
     { rule = { class = "Pcmanfm" },
@@ -620,6 +628,12 @@ awful.rules.rules = {
 
     { rule = { class = "Zathura" },
       properties = { screen = 1, tag = "4" } },
+
+    { rule = { class = "Spotify" },
+      properties = { screen = 1, tag = "5" } },
+
+    { rule = { class = "Slack" },
+      properties = { screen = 1, tag = "6" } },
 
     { rule = { class = "discord" },
       properties = { screen = 1, tag = "7" } },
@@ -645,80 +659,14 @@ client.connect_signal("manage", function (c)
     end
 end)
 
--- Add a titlebar if titlebars_enabled is set to true in the rules.
-client.connect_signal("request::titlebars", function(c)
-    -- Custom
-    if beautiful.titlebar_fun then
-        beautiful.titlebar_fun(c)
-        return
-    end
-
-    -- Default
-    -- buttons for the titlebar
-    local buttons = my_table.join(
-        awful.button({ }, 1, function()
-            c:emit_signal("request::activate", "titlebar", {raise = true})
-            awful.mouse.client.move(c)
-        end),
-
-        awful.button({ }, 3, function()
-            c:emit_signal("request::activate", "titlebar", {raise = true})
-            awful.mouse.client.resize(c)
-        end)
-    )
-
-    awful.titlebar(c, {size = 21}) : setup {
-        { -- Left
-            awful.titlebar.widget.iconwidget(c),
-            buttons = buttons,
-            layout  = wibox.layout.fixed.horizontal
-        },
-
-        { -- Middle
-            { -- Title
-                align  = "center",
-                widget = awful.titlebar.widget.titlewidget(c)
-            },
-            buttons = buttons,
-            layout  = wibox.layout.flex.horizontal
-        },
-
-        { -- Right
-            awful.titlebar.widget.floatingbutton (c),
-            awful.titlebar.widget.maximizedbutton(c),
-            awful.titlebar.widget.stickybutton   (c),
-            awful.titlebar.widget.ontopbutton    (c),
-            awful.titlebar.widget.closebutton    (c),
-            layout = wibox.layout.fixed.horizontal()
-        },
-        layout = wibox.layout.align.horizontal
-    }
-end)
-
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)
     c:emit_signal("request::activate", "mouse_enter", {raise = false})
 end)
 
--- No border for maximized clients
-function border_adjust(c)
-    if c.maximized then -- no borders if only 1 client visible
-        c.border_width = 0
-    elseif #awful.screen.focused().clients > 1 then
-        c.border_width = beautiful.border_width
-        c.border_color = beautiful.border_focus
-    end
-end
-
-client.connect_signal("focus", border_adjust)
-client.connect_signal("property::maximized", border_adjust)
-client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
--- }}}
-
 -- Autostart Applications
---awful.spawn.with_shell("nitrogen --restore")
-awful.spawn.with_shell("feh --randomize --bg-fill ~/Pictures/wallpapers/*") -- Set a random wallpaper.
+-- awful.spawn.with_shell("feh --randomize --bg-fill ~/Pictures/wallpapers/*") -- Set a random wallpaper.
+awful.spawn.with_shell("nitrogen --restore")
 awful.spawn.with_shell("nm-applet")
-awful.spawn.with_shell("kmix")
-awful.spawn.with_shell("/usr/bin/emacs --daemon")
-awful.spawn.with_shell("/usr/bin/lxpolkit")
+awful.spawn.with_shell("killall volumeicon && volumeicon")
+awful.spawn.with_shell("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
