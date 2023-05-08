@@ -3,7 +3,8 @@
 # First line removes the paths; second line sets it. Without the first line,
 # the path gets massive and fish become very slow.
 set -e fish_user_paths
-set -U fish_user_paths $HOME/.bin  $HOME/.local/bin $HOME/.emacs.d/bin $HOME/Applications /var/lib/flatpak/exports/bin/ $fish_user_paths
+set -U fish_user_paths $HOME/.bin  $HOME/.local/bin $HOME/.config/emacs/bin $HOME/Applications /var/lib/flatpak/exports/bin/ $fish_user_paths
+set set VIRTUAL_ENV "/home/arcolinux/pgadmin4"
 
 fish_vi_key_bindings                        # set vi mode
 set fish_greeting                           # Supresses fish's intro message
@@ -151,13 +152,16 @@ alias mv='mv -i'
 alias rm='rm -i'
 
 # get fastest mirrors
-alias mirror="doas reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
-alias mirrord="doas reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist"
-alias mirrors="doas reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
-alias mirrora="doas reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist"
+alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
+alias mirrord="sudo reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist"
+alias mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
+alias mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist"
 
 # Merge Xresources
 alias merge='xrdb -merge ~/.Xresources'
+
+# Always use nvim instead of vim.
+alias suvi='sudo -E env "PATH=$PATH" nvim'
 
 ## Abbreviations
 # navigation
@@ -167,19 +171,19 @@ abbr --add .3 cd ../../..
 abbr --add .4 cd ../../../..
 
 # pacman
-abbr --add pacin doas pacman -S                       # install programs
-abbr --add pacrm doas pacman -Rns                     # remove programs and all dependencies
+abbr --add pacin sudo pacman -S                       # install programs
+abbr --add pacrm sudo pacman -Rns                     # remove programs and all dependencies
 abbr --add pacss pacman -Ss                           # search for specific program
-abbr --add pacsyu doas pacman -Syu                    # update only standard packages
-abbr --add pacsyyu doas pacman -Syyu                  # refresh pkglist and update standard pkgs
-abbr --add cleanup doas pacman -Rns (pacman -Qtdq)    # remove orphaned packages
+abbr --add pacsyu sudo pacman -Syu                    # update only standard packages
+abbr --add pacsyyu sudo pacman -Syyu                  # refresh pkglist and update standard pkgs
+abbr --add cleanup sudo pacman -Rns (pacman -Qtdq)    # remove orphaned packages
 
 # paru
 abbr --add parsua paru -Sua --noconfirm              # update only AUR packages
 abbr --add parin paru -S                             # install AUR package
-abbr --add parm paru -Rns                           # remove AUR package and all dependencies
+abbr --add parm paru -Rns                            # remove AUR package and all dependencies
 abbr --add parss paru -Ss                            # search for specific AUR package
-abbr --add parqua paru -Qua                         # show if a pkg has an update
+abbr --add parqua paru -Qua                          # show if a pkg has an update
 
 # git
 abbr --add init git init
@@ -210,9 +214,6 @@ abbr --add npr npm run
 # nvim
 abbr --add nv nvim
 
-# emacs
-abbr --add emacs emacsclient -c -a 'emacs'
-
 # feh
 abbr --add feh feh -Z -.
 
@@ -221,6 +222,3 @@ colorscript -r
 
 # Starship
 starship init fish | source
-
-# Fuck
-thefuck --alias | source
