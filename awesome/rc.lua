@@ -56,7 +56,7 @@ awesome.set_preferred_icon_size(33)
 
 -- This is used later as the default terminal and editor to run.
 local terminal = "alacritty"
-local editor = os.getenv("EDITOR") or "code"
+local editor = "emacsclient -c -a emacs"
 local browser = "brave"
 local dmenu = "dmenu_run -i -l 10 -g 3 -p 'Run:'"
 local file_manager = "pcmanfm"
@@ -332,29 +332,9 @@ local globalkeys = gears.table.join(
     awful.key({ modkey },        "v",     function() awful.util.spawn(vifm) end,
                 {description = "run vifm file manager", group = "applications"}),
 
-    -- VS code
-    awful.key({ modkey },        "d",     function() awful.util.spawn("code") end,
-                {description = "open up vs code", group = "applications"}),
-
-    -- Qutebrowser
-    -- awful.key({ modkey, alt },             "b",     function() awful.util.spawn("qutebrowser") end,
-    --             {description = "run qutebrowser", group = "applications"}),
-
-    -- Discord
-    awful.key({ modkey, alt },             "d",     function() awful.util.spawn("discord") end,
-                {description = "run discord", group = "applications"}),
-
-    -- Slack
-    awful.key({ modkey, alt },             "s",     function() awful.util.spawn("com.slack.Slack") end,
-                {description = "run slack", group = "applications"}),
-
-    -- Spotify
-    awful.key({ modkey, alt },             "p",     function() awful.util.spawn("com.spotify.Client") end,
-                {description = "run spotify", group = "applications"}),
-
-    -- Zoom
-    awful.key({ modkey },             "z",     function() awful.util.spawn("zoom") end,
-                {description = "run zoom", group = "applications"}),
+    -- Doom emacs
+    awful.key({ modkey },        "e",     function() awful.util.spawn(editor) end,
+                {description = "run doom emacs", group = "applications"}),
 
     -- Dmenu
     awful.key({ modkey, "Shift" },            "Return",    function () awful.util.spawn(dmenu)  end,
@@ -433,7 +413,7 @@ local clientkeys = gears.table.join(
     awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end,
               {description = "toggle keep on top", group = "client"}),
 
-       -- Resize windows
+    -- Resize windows
     awful.key({ modkey, ctrlkey }, "Up", function (c)
       if c.floating then
         c:relative_move( 0, 0, 0, -10)
@@ -629,9 +609,6 @@ awful.rules.rules = {
     { rule = { class = "Zathura" },
       properties = { screen = 1, tag = "4" } },
 
-    { rule = { class = "Spotify" },
-      properties = { screen = 1, tag = "5" } },
-
     { rule = { class = "Slack" },
       properties = { screen = 1, tag = "6" } },
 
@@ -666,7 +643,9 @@ end)
 
 -- Autostart Applications
 -- awful.spawn.with_shell("feh --randomize --bg-fill ~/Pictures/wallpapers/*") -- Set a random wallpaper.
-awful.spawn.with_shell("nitrogen --restore")
+awful.spawn.with_shell("nitrogen --restore &")
 awful.spawn.with_shell("nm-applet")
 awful.spawn.with_shell("killall volumeicon && volumeicon")
 awful.spawn.with_shell("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+awful.spawn.with_shell("/usr/bin/emacs --daemon")
+-- awful.spawn.with_shell("picom -b --experimental-backends")

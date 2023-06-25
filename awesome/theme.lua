@@ -1,9 +1,4 @@
----------------------------
--- Default awesome theme --
----------------------------
-
--- local lain = require("lain")
--- local wibox = require ("wibox")
+-- Theme config file
 
 local theme_assets = require("beautiful.theme_assets")
 local xresources = require("beautiful.xresources")
@@ -24,7 +19,7 @@ theme.bg_systray    = theme.bg_normal
 
 theme.fg_normal     = "#aaaaaa"
 theme.fg_focus      = "#ffffff"
-theme.fg_urgent     = "#800000"
+theme.fg_urgent     = "#CC0000"
 theme.fg_minimize   = "#ffffff"
 
 theme.useless_gap   = dpi(4)
