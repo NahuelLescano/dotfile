@@ -7,7 +7,7 @@
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
 (setq user-full-name "Nahuel Lescano"
-      user-mail-address "lescanoagustin10nahuel@gmail.com")
+      user-mail-address "john@doe.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -75,33 +75,6 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-;; Never loose the cursor.
-(beacon-mode 1)
-
-;; Bookmarks are somewhat like registers in Vim, in that they record positions you can jump. Unlike registers, they can have
-;; long names and they persist from one Emacs session to another.
-(map! :leader
-      (:prefix ("b". "buffer")
-       :desc "Save the current bookmark to bookmark file." "w" #'bookmark-save))
-
-;; A buffer can get out of sync with respect to its visited file on disk if that file is changed by another program.
-;; To keep it up to date, you can enable Auto Revert mode by typing M-x auto-revert-mode, or you can set it to be turned on
-;; globally with ‘global-auto-revert-mode’.
-;; I have also turned on Global Auto Revert on non-file buffers, which is especially useful for ‘dired’ buffers.
-(global-auto-revert-mode 1)
-(setq global-auto-revert-non-file-buffers t)
-
-;; Gives us a popup box with “Clippy, the paper clip”. The more useful functions of clippy are the two describe functions provided:
-;; ‘clippy-describe-function’ and ‘clippy-describe-variable’. Hit the appropriate keybinding while the point is over a function/variable to call it.
-;; A popup with helpful clippy will appear, telling you about the function/variable (using describe-function and describe-variable respectively).
-(map! :leader
-      (:prefix ("c h". "Help info from Clipy")
-       :desc "Clippy describes function under the point" "f" #'clippy-describe-function
-       :desc "Clipyy describes variable under the point" "v" #'clippy-describe-variable))
-
-;; This setting ensures that emacsclient always opens on dashboard rather than scratch.
-(setq doom-fallback-buffer-name "*dashboard*")
-
 ;; Dired is the file manager within Emacs.  Below, I setup keybindings for image previews (peep-dired).
 ;; Doom Emacs does not use ‘SPC d’ for any of its keybindings, so I’ve chosen the format of ‘SPC d’ plus ‘key’.
 (map! :leader
@@ -141,7 +114,8 @@
   (kbd "; d") 'epa-dired-do-decrypt
   (kbd "; e") 'epa-dired-do-encrypt)
 ;; Get file icons in dired
- (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+(add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+
 ;; With dired-open plugin, you can launch external programs for certain extensions
 (setq dired-open-extensions '(("gif" . "feh -Z -.")
                               ("jpg" . "feh -Z -.")
@@ -172,42 +146,19 @@
        :desc "Eww web browser" "w" #'eww
        :desc "Eww reload page" "R" #'eww-reload))
 
-;; Emacs window manager
-(autoload 'exwm-enable "exwm-config.el")
-
-;; Some custom functions to insert the date.
-(defun insert-todays-date (prefix)
-  (interactive "P")
-  (let ((format (cond
-                 ((not prefix) "%A, %B %d, %Y")
-                 ((equal prefix '(4)) "%m-%d-%Y")
-                 ((equal prefix '(16)) "%Y-%m-%d"))))
-    (insert (format-time-string format))))
-
-(require 'calendar)
-(defun insert-any-date (date)
-  "Insert DATE using the current locale."
-  (interactive (list (calendar-read-date)))
-  (insert (calendar-date-string date)))
-
 ;; Emacs Dashboard is an extensible startup screen showing you recent files, bookmarks, agenda items and an Emacs banner.
 (use-package dashboard
   :init      ;; tweak dashboard config before loading it
   (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t)
   ;;(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
-  (setq dashboard-startup-banner "~/.doom.d/doom-emacs-dash.png")  ;; use custom image as banner
+  (setq dashboard-startup-banner "~/.config/doom/doom-emacs-dash.png")  ;; use custom image as banner
   (setq dashboard-center-content nil) ;; set to 't' for centered content
   :config
   (dashboard-setup-startup-hook)
   (dashboard-modify-heading-icons '((recents . "file-text")
                                     (bookmarks . "book")
                                     (Agenda . "org"))))
-
-(map! :leader
-      (:prefix ("i d" . "Insert date")
-        :desc "Insert any date" "a" #'insert-any-date
-        :desc "Insert todays date" "t" #'insert-todays-date))
 
 ;; Ivy is a generic completion mechanism for Emacs.
 ;; Ivy-posframe is an ivy extension, which lets ivy use posframe to show its candidate menu.
@@ -290,46 +241,6 @@
             ("brave . https://search.brave.com/?q="))
              ))
 
-;; Org agenda
-(after! org
-  (setq org-agenda-files '("~/Documentos/Org-agenda/agenda.org")))
-
-(setq
-   ;; org-fancy-priorities-list '("[A]" "[B]" "[C]")
-   ;; org-fancy-priorities-list '("❗" "[B]" "[C]")
-   ;; org-fancy-priorities-list '("🟥" "🟧" "🟨")
-   org-priority-faces
-   '((?A :foreground "#ff6c6b" :weight bold)
-     (?B :foreground "#98be65" :weight bold)
-     (?C :foreground "#c678dd" :weight bold))
-   org-agenda-block-separator 8411)
-
-(setq org-agenda-custom-commands
-      '(("v" "A better agenda view"
-         ((tags "PRIORITY=\"A\""
-                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                 (org-agenda-overriding-header "High-priority unfinished tasks:")))
-          (tags "PRIORITY=\"B\""
-                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                 (org-agenda-overriding-header "Medium-priority unfinished tasks:")))
-          (tags "PRIORITY=\"C\""
-                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                 (org-agenda-overriding-header "Low-priority unfinished tasks:")))
-
-          (agenda "")
-          (alltodo "")))))
-
-;; Rainbox mode displays the actual color for any hex value color.  It’s such a nice feature that
-;; I wanted it turned on all the time, regardless of what mode I am in.
-;; The following creates a global minor mode for rainbow-mode and enables it
-;; (exception: org-agenda-mode since rainbow-mode destroys all highlighting in org-agenda).
-(define-globalized-minor-mode global-rainbow-mode rainbow-mode
-  (lambda ()
-    (when (not (memq major-mode
-                (list 'org-agenda-mode)))
-     (rainbow-mode 1))))
-(global-rainbow-mode 1 )
-
 ;; I set splits to default to opening on the right using ‘prefer-horizontal-split’.
 ;; I set a keybinding for ‘clone-indirect-buffer-other-window’ for when I want to have the same document in two splits.
 ;; The text of the indirect buffer is always identical to the text of its base buffer; changes made by editing either one
@@ -340,19 +251,3 @@
 (add-hook 'markdown-mode-hook 'prefer-horizontal-split)
 (map! :leader
       :desc "Clone indirect buffer other window" "b c" #'clone-indirect-buffer-other-window)
-
-;;(setq initial-buffer-choice "~/.doom.d/start.org")
-;;
-;;(define-minor-mode start-mode
-;;  "Provide functions for custom start page."
-;;  :lighter " start"
-;;  :keymap (let ((map (make-sparse-keymap)))
-;;          ;;(define-key map (kbd "M-z") 'eshell)
-;;            (evil-define-key 'normal start-mode-map
-;;              (kbd "1") '(lambda () (interactive) (find-file "~/.doom.d/config.el"))
-;;              (kbd "2") '(lambda () (interactive) (find-file "~/.doom.d/init.el"))
-;;              (kbd "3") '(lambda () (interactive) (find-file "~/.doom.d/packages.el")))
-;;          map))
-;;
-;;(add-hook 'start-mode-hook 'read-only-mode) ;; make start.org read-only; use 'SPC t r' to toggle off read-only.
-;;(provide 'start-mode)
