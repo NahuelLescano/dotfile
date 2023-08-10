@@ -251,3 +251,17 @@
 (add-hook 'markdown-mode-hook 'prefer-horizontal-split)
 (map! :leader
       :desc "Clone indirect buffer other window" "b c" #'clone-indirect-buffer-other-window)
+
+;; Format css, html, css and javascript/typescript files.
+(use-package! web-mode
+  :mode ("\\.html\\'" "\\.css\\' \\.js\\' \\.jsx\\' \\.ts\\' \\.tsx\\'")
+  :init
+  (add-hook 'web-mode-hook #'format-with-prettier)
+  :config
+  (defun format-with-prettier ()
+    (interactive)
+    (if (executable-find "prettier")
+        (progn
+          (call-process-region (point-min) (point-max) "prettier" t t)
+          (message "Prettier successfully formatted the buffer."))
+      (message "Prettier is not installed. Please make sure it's globally installed."))))
