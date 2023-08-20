@@ -1,0 +1,645 @@
+#+TITLE: Nahuel's GNU Emacs config
+#+AUTHOR: Nahuel
+#+DESCRIPTION: Personal emacs config.
+#+STARTUP: showeverything
+#+OPTIONS: toc:2
+
+* TABLE OF CONTENT :toc:
+- [[#important-programs-to-load-at-first][Important programs to load at first.]]
+  - [[#adding-the-scripts-directory-to-path][Adding the scripts directory to path]]
+  - [[#sourcing-the-scripts][Sourcing the scripts]]
+  - [[#load-evil-mode][Load evil mode]]
+  - [[#general-keybindings][General keybindings]]
+- [[#fonts][Fonts]]
+  - [[#setting-fonts-face][Setting fonts face]]
+  - [[#zoom-inout][Zoom in/out]]
+- [[#graphical-user-interface-tweaks][Graphical user interface tweaks]]
+  - [[#disable-menubar-toolbar-and-scrollbar][Disable menubar, toolbar and scrollbar]]
+  - [[#enable-line-numbers-and-truncated-lines][Enable line numbers and truncated lines.]]
+- [[#which-key][Which key]]
+- [[#org-mode][Org mode]]
+  - [[#enable-table-of-content-toc][Enable table of content (toc)]]
+  - [[#enable-org-bullets][Enable Org bullets]]
+  - [[#disable-electric-indent][Disable Electric indent]]
+  - [[#diminish-org-indent-mode][Diminish Org indent mode]]
+  - [[#source-code-block-tag-expansion][Source code block tag expansion]]
+- [[#reload-emacs][Reload emacs]]
+- [[#sudo-edit-file][Sudo edit file]]
+- [[#ivy][IVY]]
+- [[#all-icons][All icons]]
+- [[#shells-and-terminals][Shells and terminals]]
+  - [[#eshell][Eshell]]
+  - [[#vterm][Vterm]]
+  - [[#vterm-toggle][Vterm-toggle]]
+- [[#rainbow-mode][Rainbow mode]]
+- [[#themes][Themes]]
+- [[#projectile][Projectile]]
+- [[#dashboard][Dashboard]]
+- [[#language-support][Language support]]
+- [[#transparency][Transparency]]
+- [[#dired][Dired]]
+- [[#diminish][Diminish]]
+- [[#neotree][Neotree]]
+- [[#flycheck][Flycheck]]
+- [[#company][Company]]
+- [[#backup-files][Backup files]]
+- [[#mode-line][Mode line]]
+
+* Important programs to load at first.
+To keep this config reasonable, I'll refactor it and put some important code in a separate file.
+** Adding the scripts directory to path
+#+begin_src emacs-lisp
+(add-to-list 'load-path "~/.config/emacs/scripts/")
+#+end_src
+
+** Sourcing the scripts
+#+begin_src emacs-lisp
+(require 'elpaca-setup) ;; The Elpaca Package Manager
+(require 'buffer-move)  ;; Buffer-move for better window management
+(require 'run-launcher) ;; Use emacs as a run launcher like dmenu (You can comment this out and miss a incredible feature)
+#+end_src
+
+** Load evil mode
+Evil github: https://github.com/Somelauw/evil-org-mode
+Load evil mode at startup
+  #+begin_src emacs-lisp
+    ;; Expands to: (elpaca evil (use-package evil :demand t))
+    (use-package evil
+    :init      ;; tweak evil's configuration before loading it
+    (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+    (setq evil-want-keybinding nil)
+    (setq evil-vsplit-window-right t)
+    (setq evil-split-window-below t)
+    (evil-mode))
+  (use-package evil-collection
+    :after evil
+    :config
+    (setq evil-collection-mode-list '(dashboard dired ibuffer))
+    (evil-collection-init))
+  (use-package evil-tutor)
+
+    ;;Turns off elpaca-use-package-mode current declartion
+    ;;Note this will cause the declaration to be interpreted immediately (not deferred).
+    ;;Useful for configuring built-in emacs features.
+    (use-package emacs :elpaca nil :config (setq ring-bell-function #'ignore))
+
+    ;; Don't install anything. Defer execution of BODY
+    (elpaca nil (message "deferred"))
+#+end_src
+
+** General keybindings
+General program github: https://github.com/noctuid/general.el
+#+begin_src emacs-lisp
+(use-package general
+  :config
+  (general-evil-setup)
+  ;; set up 'SPC' as the global leader key
+  (general-create-definer nahuel/leader-keys
+    :states '(normal insert visual emacs)
+    :keymaps 'override
+    :prefix "SPC" ;; set leader
+    :global-prefix "M-SPC") ;; access leader in insert mode
+
+  (nahuel/leader-keys
+    "SPC" '(counsel-M-x :wk "Counsel M-x")
+    "." '(find-file :wk "Find file")
+    "f c" '((lambda () (interactive) (find-file "~/.config/emacs/config.org")) :wk "Edit emacs config")
+    "f r" '(counsel-recentf :wk "Find recent files")
+    "TAB TAB" '(comment-line :wk "Comment/uncomment lines")
+    )
+
+  (nahuel/leader-keys
+    "b" '(:ignore t :wk "buffer")
+    "b b" '(switch-to-buffer :wk "Switch buffer")
+    "b i" '(ibuffer :wk "Show ibuffer")
+    "b k" '(kill-this-buffer :wk "Kill this buffer")
+    "b n" '(next-buffer :wk "Next buffer")
+    "b p" '(previous-buffer :wk "Previous buffer")
+    "b r" '(revert-buffer :wk "Reload buffer")
+    )
+
+  (nahuel/leader-keys
+    "d" '(:ignore t :wk "Dired")
+    "d d" '(dired :wk "Open dired")
+    "d j" '(dired-jump :wk "Dired jump to current")
+    "d n" '(neotree-dir :wk "Open directory in neotree")
+    "d p" '(peep-dired :wk "Peep-dired")
+    )
+
+  (nahuel/leader-keys
+    "e" '(:ignore t :wk "Eshell/Evaluate")    
+    "e b" '(eval-buffer :wk "Evaluate elisp in buffer")
+    "e d" '(eval-defun :wk "Evaluate defun containing or after point")
+    "e e" '(eval-expression :wk "Evaluate and elisp expression")
+    "e l" '(eval-last-sexp :wk "Evaluate elisp expression before point")
+    "e r" '(eval-region :wk "Evaluate elisp in region")
+    "e s" '(eshell :which-key "Eshell")
+    "e h" '(counsel-esh-history :which-key "Eshell history")
+    ) 
+
+  (nahuel/leader-keys
+    "t" '(:ignore t :wk "Toggle")
+    "t l" '(display-line-numbers-mode :wk "Toggle line numbers")
+    "t t" '(visual-line-mode :wk "Toggle truncated lines")
+    "t v" '(vterm-toggle :wk "Toggle vterm")
+    )
+
+  (nahuel/leader-keys
+    "h" '(:ignore t :wk "Help")
+    "h f" '(describe-function :wk "Describe function")
+    "h v" '(describe-variable :wk "Describe variable")
+    "h t" '(load-theme :wk "Load a theme")
+    "h r r" '((lambda () (interactive)
+                (load-file "~/.config/emacs/init.el")
+                (ignore (elpaca-process-queues)))
+              :wk "Reload emacs config")
+    )
+
+  (nahuel/leader-keys
+    "w" '(:ignore t :wk "Windows")
+    ;; Window splits
+    "w c" '(evil-window-delete :wk "Close window")
+    "w n" '(evil-window-new :wk "New window")
+    "w s" '(evil-window-split :wk "Horizontal split window")
+    "w v" '(evil-window-vsplit :wk "Vertical split window")
+    ;; Window motions
+    "w h" '(evil-window-left :wk "Window left")
+    "w j" '(evil-window-down :wk "Window down")
+    "w k" '(evil-window-up :wk "Window up")
+    "w l" '(evil-window-right :wk "Window right")
+    "w w" '(evil-window-next :wk "Goto next window")
+    ;; Move Windows
+    "w H" '(buf-move-left :wk "Buffer move left")
+    "w J" '(buf-move-down :wk "Buffer move down")
+    "w K" '(buf-move-up :wk "Buffer move up")
+    "w L" '(buf-move-right :wk "Buffer move right")
+    )
+
+  (nahuel/leader-keys
+    "m" '(:ignore t :wk "Org")
+    "m a" '(org-agenda :wk "Org agenda")
+    "m e" '(org-export-dispatch :wk "Org export dispatch")
+    "m i" '(org-toggle-item :wk "Org toggle item")
+    "m t" '(org-todo :wk "Org todo")
+    "m B" '(org-babel-tangle :wk "Org babel tangle")
+    "m T" '(org-todo-list :wk "Org todo list")
+    )
+
+  (nahuel/leader-keys
+    "m b" '(:ignore t :wk "Tables")
+    "m b -" '(org-table-insert-hline :wk "Insert hline in table")
+    )
+  )
+#+end_src
+
+* Fonts
+Adding some cool fonts
+
+** Setting fonts face
+#+begin_src emacs-lisp
+(set-face-attribute 'default nil
+  :font "JetBrains Mono"
+  :height 110
+  :weight 'medium)
+(set-face-attribute 'variable-pitch nil
+  :font "Ubuntu"
+  :height 120
+  :weight 'medium)
+(set-face-attribute 'fixed-pitch nil
+  :font "JetBrains Mono"
+  :height 110
+  :weight 'medium)
+;; Makes commented text and keywords italics.
+;; This is working in emacsclient but not emacs.
+;; Your font must have an italic face available.
+(set-face-attribute 'font-lock-comment-face nil
+  :slant 'italic)
+(set-face-attribute 'font-lock-keyword-face nil
+  :slant 'italic)
+
+;; This sets the default font on all graphical frames created after restarting Emacs.
+;; Does the same thing as 'set-face-attribute default' above, but emacsclient fonts
+;; are not right unless I also add this method of setting the default font.
+(add-to-list 'default-frame-alist '(font . "JetBrains Mono-11"))
+
+;; Uncomment the following line if line spacing needs adjusting.
+(setq-default line-spacing 0.12)
+#+end_src
+
+** Zoom in/out
+Better zooming
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-=") 'text-scale-increase)
+(global-set-key (kbd "C--") 'text-scale-decrease)
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
+(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
+#+end_src
+
+* Graphical user interface tweaks
+Some tweaks for GNU Emacs GUI.
+** Disable menubar, toolbar and scrollbar
+#+begin_src emacs-lisp
+(menu-bar-mode -1)
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+#+end_src
+** Enable line numbers and truncated lines.
+#+begin_src emacs-lisp
+(global-display-line-numbers-mode 1)
+(global-visual-line-mode t)
+#+end_src
+
+* Which key
+Which key github: https://github.com/justbur/emacs-which-key
+#+begin_src emacs-lisp
+(use-package which-key
+  :init
+  (which-key-mode 1)
+  :diminish
+  :config
+  (setq which-key-side-window-location 'bottom
+        which-key-sort-order #'which-key-key-order-alpha
+        which-key-sort-uppercase-first nil
+        which-key-add-column-padding 1
+        which-key-max-display-columns nil
+        which-key-min-display-lines 6
+        which-key-side-window-slot -10
+        which-key-side-window-max-height 0.25
+        which-key-idle-delay 0.8
+        which-key-max-description-length 25
+        which-key-allow-imprecise-window-fit nil
+        which-key-separator " → " ))
+#+end_src
+
+* Org mode
+Some tweaks to Org mode to look niccier
+** Enable table of content (toc)
+#+begin_src emacs-lisp
+(use-package toc-org
+    :commands toc-org-enable
+    :init (add-hook 'org-mode-hook 'toc-org-enable))
+#+end_src
+
+** Enable Org bullets
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook 'org-indent-mode)
+(use-package org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+#+end_src
+
+** Disable Electric indent
+Turning off a weird indentation behavior
+#+begin_src emacs-lisp
+(electric-indent-mode -1)
+(setq org-edit-src-content-indentation 0)
+#+end_src
+
+** Diminish Org indent mode
+Removes “Ind” from showing in the modeline.
+#+begin_src emacs-lisp
+(eval-after-load 'org-indent '(diminish 'org-indent-mode))
+#+end_src
+
+** Source code block tag expansion
+Instead of writting "#+begin_src" and "#+end_src", you can use org-tempo. Just require it.
+#+begin_src emacs-lisp
+(require 'org-tempo)
+#+end_src
+Some are
+| Typing the below + TAB | Expans to                               |
+| <a                     | ’#+BEGIN_EXPORT ascii’ … ‘#+END_EXPORT  |
+| <c                     | ’#+BEGIN_CENTER’ … ‘#+END_CENTER’       |
+| <C                     | ’#+BEGIN_COMMENT’ … ‘#+END_COMMENT’     |
+| <e                     | ’#+BEGIN_EXAMPLE’ … ‘#+END_EXAMPLE’     |
+| <E                     | '#+BEGIN_EXPORT’ … ‘#+END_EXPORT’       |
+| <h                     | ’#+BEGIN_EXPORT html’ … ‘#+END_EXPORT’  |
+| <l                     | ’#+BEGIN_EXPORT latex’ … ‘#+END_EXPORT’ |
+| <q                     | ’#+BEGIN_QUOTE’ … ‘#+END_QUOTE’         |
+| <s                     | ’#+BEGIN_SRC’ … ‘#+END_SRC’             |
+| <v                     | ’#+BEGIN_VERSE’ … ‘#+END_VERSE’         |
+
+
+* Reload emacs
+For some reason, emacs has to reload twice.
+#+begin_src emacs-lisp
+  (defun reload-init-file ()
+    (interactive)
+    (load-file user-init-file)
+    (load-file user-init-file))
+#+end_src
+
+* Sudo edit file
+Adding the ability to give sudo privilegies to edit a file
+sudo edit github: https://github.com/nflath/sudo-edit
+#+begin_src emacs-lisp
+(use-package sudo-edit
+  :config
+    (nahuel/leader-keys
+      "fu" '(sudo-edit-find-file :wk "Sudo find file")
+      "fU" '(sudo-edit :wk "Sudo edit file")))
+#+end_src
+
+* IVY
++ [[Ivy][https://github.com/abo-abo/swiper]], a generic completion mechanism for Emacs.
++ Counsel, a collection of Ivy-enhanced versions of common Emacs commands.
++ [[Ivy-rich][https://github.com/Yevgnen/ivy-rich]] allows us to add descriptions alongside the commands in M-x.
+
+#+begin_src emacs-lisp
+(use-package ivy
+  :bind
+  ;; ivy-resume resumes the last Ivy-based completion.
+  (("C-c C-r" . ivy-resume)
+   ("C-x B" . ivy-switch-buffer-other-window))
+  :diminish
+  :custom
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-count-format "(%d/%d) ")
+  (setq enable-recursive-minibuffers t)
+  :config
+  (ivy-mode))
+
+(use-package counsel
+  :after ivy
+  :diminish
+  :config (counsel-mode))
+
+(use-package all-the-icons-ivy-rich
+  :ensure t
+  :init (all-the-icons-ivy-rich-mode 1))
+
+(use-package ivy-rich
+  :after ivy
+  :ensure t
+  :init (ivy-rich-mode 1) ;; this gets us descriptions in M-x.
+  :custom
+  (ivy-virtual-abbreviate 'full
+                          ivy-rich-switch-buffer-align-virtual-buffer t
+                          ivy-rich-path-style 'abbrev)
+  :config
+  (ivy-set-display-transformer 'ivy-switch-buffer
+                               'ivy-rich-switch-buffer-transformer))
+#+end_src
+
+* All icons
+Icons for dashboard, dired and ibuffer. https://www.emacswiki.org/emacs/buffer-move.el
+#+begin_src emacs-lisp
+(use-package all-the-icons
+  :ensure t
+  :if (display-graphic-p))
+
+(use-package all-the-icons-dired
+  :hook (dired-mode . (lambda () (all-the-icons-dired-mode t))))
+#+end_src
+
+* Shells and terminals
+** Eshell
+Eshell is like bash, zsh or fish but written entirely in emacs-lisps.
+#+begin_src emacs-lisp
+(use-package eshell-syntax-highlighting
+  :after esh-mode
+  :config
+  (eshell-syntax-highlighting-global-mode +1))
+
+;; eshell-syntax-highlighting -- adds fish/zsh-like syntax highlighting.
+;; eshell-rc-script -- your profile for eshell; like a bashrc for eshell.
+;; eshell-aliases-file -- sets an aliases file for the eshell.
+  
+(setq eshell-rc-script (concat user-emacs-directory "eshell/profile")
+      eshell-aliases-file (concat user-emacs-directory "eshell/aliases")
+      eshell-history-size 5000
+      eshell-buffer-maximum-lines 5000
+      eshell-hist-ignoredups t
+      eshell-scroll-to-bottom-on-input t
+      eshell-destroy-buffer-when-process-dies t
+      eshell-visual-commands'("bash" "fish" "htop" "bashtop" "ssh" "top" "zsh"))
+#+end_src
+
+** Vterm
+Vterm is just a terminal emulator like alacritty, nonetheless it is used within emacs.
+By default, I prefer use fish shell, but you can change it whatever you want.
+vterm github: https://github.com/akermu/emacs-libvterm
+#+begin_src emacs-lisp
+(use-package vterm
+:config
+(setq shell-file-name "/bin/sh"
+      vterm-max-scrollback 5000))
+#+end_src
+
+** Vterm-toggle
+[[vterm-toggle][https://github.com/jixiuf/vterm-toggle]] toggles between the vterm buffer and whatever buffer you are editing.
+
+#+begin_src emacs-lisp
+(use-package vterm-toggle
+  :after vterm
+  :config
+  (setq vterm-toggle-fullscreen-p nil)
+  (setq vterm-toggle-scope 'project)
+  (add-to-list 'display-buffer-alist
+               '((lambda (buffer-or-name _)
+                     (let ((buffer (get-buffer buffer-or-name)))
+                       (with-current-buffer buffer
+                         (or (equal major-mode 'vterm-mode)
+                             (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+                  (display-buffer-reuse-window display-buffer-at-bottom)
+                  ;;(display-buffer-reuse-window display-buffer-in-direction)
+                  ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+                  ;;(direction . bottom)
+                  ;;(dedicated . t) ;dedicated is supported in emacs27
+                  (reusable-frames . visible)
+                  (window-height . 0.3))))
+#+end_src
+
+* Rainbow mode
+It displays the actual color for any hex color.
+#+begin_src emacs-lisp
+(use-package rainbow-mode
+  :diminish
+  :hook org-mode prog-mode)
+#+end_src
+
+* Themes
+#+begin_src emacs-lisp
+(add-to-list 'custom-theme-load-path "~/.config/emacs/themes/")
+(use-package doom-themes
+  :config
+  (setq doom-themes-enable-bold t     ;; if nil, bold is universally disabled
+	doom-themes-enable-italic t)) ;; if nil, italics is universally disabled
+
+;; (load-theme 'dtmacs t)
+(load-theme 'doom-one)
+(doom-themes-neotree-config)
+(doom-themes-org-config)
+#+end_src
+
++end_src
+
+* Projectile
+[[Projectile][https://github.com/bbatsov/projectile]] is a project interaction library for Emacs. For some reason, it does not work when Vterm default shell is set to fish but, for some weird reason, it works when is set to "/bin/sh".
+#+begin_src emacs-lisp
+(use-package projectile
+  :config
+  (projectile-mode 1))
+#+end_src
+
+* Dashboard
+Emacs Dashboard is an extensible startup screen showing you recent files, bookmarks, agenda items and an Emacs banner.
+#+begin_src emacs-lisp
+(use-package dashboard
+  :ensure t 
+  :init
+  (setq initial-buffer-choice 'dashboard-open)
+  (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-banner-logo-title "Emacs Is More Than A Text Editor!")
+  ;;(setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+  (setq dashboard-startup-banner (concat user-emacs-directory "/image/doom-emacs-dash.png"))  ;; use custom image as banner
+  (setq dashboard-center-content nil) ;; set to 't' for centered content
+  (setq dashboard-items '((recents . 5)
+                          (agenda . 5 )
+                          (bookmarks . 3)
+                          (projects . 3)
+                          (registers . 3)))
+  ;; (dashboard-modify-heading-icons '((recents . "file-text")
+  ;;                             (bookmarks . "book")))
+  :config
+  (dashboard-setup-startup-hook))
+#+end_src
+
+* Language support
+Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM, AWK, C, C++, Fortran, Icon, IDL (CORBA), IDLWAVE, Java, Javascript, M4, Makefiles, Metafont, Modula2, Object Pascal, Objective-C, Octave, Pascal, Perl, Pike, PostScript, Prolog, Python, Ruby, Simula, SQL, Tcl, Verilog, and VHDL.  Other languages will require you to install additional modes.
+
+#+begin_src emacs-lisp
+;; lua support
+(use-package lua-mode)
+(use-package elpy
+  :ensure t
+  :init
+  (elpy-enable))
+;; JavaScript support
+(use-package js2-mode
+  :mode "\\.js\\ \\.jsx\\'"
+  :config
+  (setq js2-mode-show-parse-errors nil
+	js2-mode-show-strict-warnings nil
+	js2-basic-offset 2
+	js-indent-level 2)
+  (electric-pair-mode 1))
+;; Java Support
+;; (use-package 'lsp-java)
+;; (add-hook 'java-mode-hook #'lsp)
+#+end_src
+
+* Transparency
+With GNU Emacs version 29, true transparency has been added.
+#+begin_src emacs-lisp
+(add-to-list 'default-frame-alist '(alpha-background . 90)) ; For all new frames henceforth
+#+end_src
+
+* Dired
+A built-in file manager config.
+#+begin_src emacs-lisp
+(use-package dired-open
+  :config
+  (setq dired-open-extensions '(("gif" . "feh -Z -.")
+                                ("jpg" . "feh -Z -.")
+                                ("png" . "feh -Z -.")
+                                ("mkv" . "mpv")
+                                ("mp4" . "mpv"))))
+
+(use-package peep-dired
+  :after dired
+  :hook (evil-normalize-keymaps . peep-dired-hook)
+  :config
+    (evil-define-key 'normal dired-mode-map (kbd "h") 'dired-up-directory)
+    (evil-define-key 'normal dired-mode-map (kbd "l") 'dired-open-file) ; use dired-find-file instead if not using dired-open package
+    (evil-define-key 'normal peep-dired-mode-map (kbd "j") 'peep-dired-next-file)
+    (evil-define-key 'normal peep-dired-mode-map (kbd "k") 'peep-dired-prev-file)
+)
+#+end_src
+
+* Diminish
+This package implements hiding or abbreviation of the modeline displays (lighters) of minor-modes. With this package installed, you can add ‘:diminish’ to any use-package block to hide that particular mode in the modeline.
+#+begin_src emacs-lisp
+(use-package diminish)
+#+end_src
+
+* Neotree
+Neotree is file tree viewer
+#+begin_src emacs-lisp
+(use-package neotree
+  :config
+  (setq neo-smart-open t
+        neo-show-hidden-files t
+        neo-window-width 55
+        neo-window-fixed-size nil
+        inhibit-compacting-font-caches t
+        projectile-switch-project-action 'neotree-projectile-action) 
+        ;; truncate long file names in neotree
+        (add-hook 'neo-after-create-hook
+           #'(lambda (_)
+               (with-current-buffer (get-buffer neo-buffer-name)
+                 (setq truncate-lines t)
+                 (setq word-wrap nil)
+                 (make-local-variable 'auto-hscroll-mode)
+                 (setq auto-hscroll-mode nil)))))
+#+end_src
+
+* Flycheck
+Supported languages: https://www.flycheck.org/en/latest/languages.html
+For JavaScript: https://eslint.org/
+#+begin_src emacs-lisp
+(use-package flycheck
+  :ensure t
+  :defer t
+  :diminish
+  :init (global-flycheck-mode))
+#+end_src
+
+* Company
+Company is a completion framework for GNU Emacs. Web page: https://company-mode.github.io/
+#+begin_src emacs-lisp
+(use-package company
+  :defer 2
+  :diminish
+  :custom
+  (company-begin-commands '(self-insert-command))
+  (company-idle-delay .1)
+  (company-minimum-prefix-length 2)
+  (company-show-numbers t)
+  (company-tooltip-align-annotations 't)
+  (global-company-mode t))
+
+(use-package company-box
+  :after company
+  :diminish
+  :hook (company-mode . company-box-mode))
+#+end_src
+
+* Backup files
+It is annoying have all backup files in the same directory, why don't just put it on another directory?
+#+begin_src emacs-lisp
+;; Store backup files in a specific directory
+(setq backup-directory-alist '(("." . "~/.emacs-backups")))
+
+;; Enable versioned backups
+(setq version-control t)
+
+;; Keep multiple numbered backup versions
+(setq kept-old-versions 5)
+(setq kept-new-versions 10)
+(setq delete-old-versions t)
+#+end_src
+
+* Mode line
+A fancy and fast mode-line inspired by minimalism design.
+Github: https://github.com/seagle0128/doom-modeline#customize
+#+begin_src emacs-lisp
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1)
+  :config
+  (setq doom-modeline-height 35      ;; sets modeline height
+        doom-modeline-bar-width 5    ;; sets right bar width
+        doom-modeline-persp-name t   ;; adds perspective name to modeline
+        doom-modeline-persp-icon t)) ;; adds folder icon next to persp name)
+#+end_src
