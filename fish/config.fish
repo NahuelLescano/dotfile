@@ -4,7 +4,6 @@
 # the path gets massive and fish become very slow.
 set -e fish_user_paths
 set -U fish_user_paths $HOME/.bin  $HOME/.local/bin $HOME/.config/emacs/bin $HOME/Applications /var/lib/flatpak/exports/bin/ $fish_user_paths
-set set VIRTUAL_ENV "/home/arcolinux/pgadmin4"
 
 fish_vi_key_bindings                        # set vi mode
 set fish_greeting                           # Supresses fish's intro message
@@ -222,3 +221,9 @@ colorscript -r
 
 # Starship
 starship init fish | source
+
+# flatpak
+abbr --add flatin flatpak install
+abbr --add flatup flatpak update
+abbr --add flats flatpak search
+abbr --add flatrm flatpak remove
