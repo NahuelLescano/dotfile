@@ -23,7 +23,6 @@
   - [[#disable-electric-indent][Disable Electric indent]]
   - [[#diminish-org-indent-mode][Diminish Org indent mode]]
   - [[#source-code-block-tag-expansion][Source code block tag expansion]]
-- [[#reload-emacs][Reload emacs]]
 - [[#sudo-edit-file][Sudo edit file]]
 - [[#ivy][IVY]]
 - [[#all-icons][All icons]]
@@ -44,6 +43,8 @@
 - [[#company][Company]]
 - [[#backup-files][Backup files]]
 - [[#mode-line][Mode line]]
+- [[#beacon][Beacon]]
+- [[#clippy][Clippy]]
 
 * Important programs to load at first.
 To keep this config reasonable, I'll refactor it and put some important code in a separate file.
@@ -146,8 +147,8 @@ General program github: https://github.com/noctuid/general.el
 
   (nahuel/leader-keys
     "h" '(:ignore t :wk "Help")
-    "h f" '(describe-function :wk "Describe function")
-    "h v" '(describe-variable :wk "Describe variable")
+    "h f" '(clippy-describe-function :wk "Describe function")
+    "h v" '(clippy-describe-variable :wk "Describe variable")
     "h t" '(load-theme :wk "Load a theme")
     "h r r" '((lambda () (interactive)
                 (load-file "~/.config/emacs/init.el")
@@ -317,16 +318,6 @@ Some are
 | <q                     | ’#+BEGIN_QUOTE’ … ‘#+END_QUOTE’         |
 | <s                     | ’#+BEGIN_SRC’ … ‘#+END_SRC’             |
 | <v                     | ’#+BEGIN_VERSE’ … ‘#+END_VERSE’         |
-
-
-* Reload emacs
-For some reason, emacs has to reload twice.
-#+begin_src emacs-lisp
-  (defun reload-init-file ()
-    (interactive)
-    (load-file user-init-file)
-    (load-file user-init-file))
-#+end_src
 
 * Sudo edit file
 Adding the ability to give sudo privilegies to edit a file
@@ -509,25 +500,77 @@ Emacs Dashboard is an extensible startup screen showing you recent files, bookma
 Emacs has built-in programming language modes for Lisp, Scheme, DSSSL, Ada, ASM, AWK, C, C++, Fortran, Icon, IDL (CORBA), IDLWAVE, Java, Javascript, M4, Makefiles, Metafont, Modula2, Object Pascal, Objective-C, Octave, Pascal, Perl, Pike, PostScript, Prolog, Python, Ruby, Simula, SQL, Tcl, Verilog, and VHDL.  Other languages will require you to install additional modes.
 
 #+begin_src emacs-lisp
+;; lsp support enabled
+(use-package lsp-mode
+  :ensure t
+  :commands lsp
+  :config
+  (setq lsp-prefer-flymake nil) ; Use lsp-ui and flycheck
+)
+
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
+
+;; Tree sitter support
+(use-package tree-sitter
+  :ensure t
+  :config
+  (require 'tree-sitter-langs)
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+)
+
 ;; lua support
 (use-package lua-mode)
 (use-package elpy
   :ensure t
   :init
   (elpy-enable))
+
 ;; JavaScript support
-(use-package js2-mode
-  :mode "\\.js\\ \\.jsx\\'"
+(use-package lsp-javascript-typescript
+  :ensure t
   :config
-  (setq js2-mode-show-parse-errors nil
-	js2-mode-show-strict-warnings nil
-	js2-basic-offset 2
-	js-indent-level 2)
-  (electric-pair-mode 1))
+  (setq lsp-javascript-server 'tree-sitter-languageserver
+        lsp-javascript-typescript-server 'tree-sitter-languageserver
+        lsp-enable-indentation nil ;; Use prettier for formatting
+        lsp-prefer-flymake nil ;; Use lsp-ui and flycheck
+        lsp-enable-snippet nil ;; Use company for completions
+        lsp-auto-configure t
+        lsp-response-timeout 10))
+
+
+(add-hook 'js-mode-hook #'lsp-deferred)
+(add-hook 'js-mode-hook #'lsp-ui-mode)
+
+(use-package tree-sitter-lsp
+  :ensure t
+  :config
+  (setq tree-sitter-lsp-command '("tree-sitter-lsp"))
+  (add-hook 'js-mode-hook #'lsp))
+
 ;; Java Support
-;; (use-package 'lsp-java)
-;; (add-hook 'java-mode-hook #'lsp)
-#+end_src
+;; Github: https://github.com/emacs-lsp/lsp-java
+(use-package lsp-java
+  :ensure t
+  :config
+  ;; Set the path to the java-lsp executable
+  (setq lsp-java-server-install-dir "~/.config/emacs/java")
+  ;; Optional: Add keybindings to LSP Java commands
+  (use-package yasnippet :config (yas-global-mode))
+  (use-package lsp-mode :hook ((lsp-mode . lsp-enable-which-key-integration)))
+  (use-package hydra)
+  (use-package which-key :config (which-key-mode))
+  (use-package lsp-java :config (add-hook 'java-mode-hook 'lsp))
+  (use-package dap-mode :after lsp-mode :config (dap-auto-configure-mode))
+  (use-package dap-java :ensure nil)
+  (use-package helm-lsp)
+  (use-package helm
+    :config (helm-mode))
+  (use-package lsp-treemacs)
+  )
+  #+end_src
 
 * Transparency
 With GNU Emacs version 29, true transparency has been added.
@@ -550,11 +593,36 @@ A built-in file manager config.
   :after dired
   :hook (evil-normalize-keymaps . peep-dired-hook)
   :config
-    (evil-define-key 'normal dired-mode-map (kbd "h") 'dired-up-directory)
-    (evil-define-key 'normal dired-mode-map (kbd "l") 'dired-open-file) ; use dired-find-file instead if not using dired-open package
-    (evil-define-key 'normal peep-dired-mode-map (kbd "j") 'peep-dired-next-file)
-    (evil-define-key 'normal peep-dired-mode-map (kbd "k") 'peep-dired-prev-file)
-)
+  (evil-define-key 'normal dired-mode-map
+    (kbd "M-RET") 'dired-display-file
+    (kbd "h") 'dired-up-directory
+    (kbd "l") 'dired-open-file                            ; use dired-find-file instead of dired-open.
+    (kbd "m") 'dired-mark
+    (kbd "t") 'dired-toggle-marks
+    (kbd "u") 'dired-unmark
+    (kbd "C") 'dired-do-copy
+    (kbd "D") 'dired-do-delete
+    (kbd "J") 'dired-goto-file
+    (kbd "M") 'dired-do-chmod
+    (kbd "O") 'dired-do-chown
+    (kbd "P") 'dired-do-print
+    (kbd "R") 'dired-do-rename
+    (kbd "T") 'dired-do-touch
+    (kbd "Y") 'dired-copy-filenamecopy-filename-as-kill   ; copies filename to kill ring.
+    (kbd "Z") 'dired-do-compress
+    (kbd "+") 'dired-create-directory
+    (kbd "-") 'dired-do-kill-lines
+    (kbd "% l") 'dired-downcase
+    (kbd "% m") 'dired-mark-files-regexp
+    (kbd "% u") 'dired-upcase
+    (kbd "* %") 'dired-mark-files-regexp
+    (kbd "* .") 'dired-mark-extension
+    (kbd "* /") 'dired-mark-directories
+    (kbd "; d") 'epa-dired-do-decrypt
+    (kbd "; e") 'epa-dired-do-encrypt)
+  ;; Get file icons in dired
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)
+  )
 #+end_src
 
 * Diminish
@@ -642,4 +710,17 @@ Github: https://github.com/seagle0128/doom-modeline#customize
         doom-modeline-bar-width 5    ;; sets right bar width
         doom-modeline-persp-name t   ;; adds perspective name to modeline
         doom-modeline-persp-icon t)) ;; adds folder icon next to persp name)
+#+end_src
+
+* Beacon
+With [[https://github.com/Malabarba/beacon][beacon]], you will never loose you cursor.
+#+begin_src emacs-lisp
+(use-package beacon)
+(beacon-mode 1)
+#+end_src
+
+* Clippy
+A very good helper
+#+begin_src emacs-lisp
+(use-package clippy)
 #+end_src
