@@ -1,7 +1,6 @@
-function Colorscheme(color)
-	color = color or "base16-ayu-dark"
+function chooseAColor(color)
+	color = color or "catppuccin-mocha"
 	vim.cmd.colorscheme(color)
 end
 
-Colorscheme()
-
+chooseAColor()

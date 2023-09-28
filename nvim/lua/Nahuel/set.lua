@@ -1,18 +1,29 @@
--- leader key => space
+-- General settings
 vim.g.maplocalleader = " "
 vim.g.mapleader = " "
-vim.opt.guicursor = ""
 
--- General settings
+-- vimwiki stuff
+-- vim.g.vimwiki_list = {
+--     path = '~/vimwiki/',
+--     syntax = 'markdown',
+--     ext = '.md'
+-- }
+-- 
+-- vim.g.vimwiki_global_ext = 0
+
 vim.opt.nu = true
 vim.opt.relativenumber = true
 vim.opt.mouse = "a"
 
-vim.opt.smartindent = true
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
 
+vim.opt.smartindent = true
 vim.opt.wrap = false
 
--- undo and backup options
+-- Deactivating swap and backup files
 vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undodir = os.getenv("HOME") .. "/.nvim/undodir"
@@ -26,7 +37,6 @@ vim.opt.termguicolors = true
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
-vim.opt.cursorline = true
 
 -- Makes neovim and host OS clipboard play nicely with each other
 vim.opt.clipboard = "unnamedplus"
@@ -52,7 +62,6 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.softtabstop = -1 -- If negative, shiftwidth value is used
 vim.opt.list = true
-vim.opt.listchars = 'eol:¬,space:·,lead: ,trail:·,nbsp:◇,tab:→-,extends:▸,precedes:◂,multispace:···⬝,leadmultispace:│'
 
 -- Remember 50 items in commandline history
 vim.opt.history = 50
@@ -77,5 +86,4 @@ vim.keymap.set('n', '<leader>h', '<CMD>split<CR>')
 -- Open alacritty
 vim.keymap.set('n', '<leader>t', '<CMD>term<CR>')
 
--- Back to dashboard
-vim.keymap.set('n', '<leader>d', '<CMD>Dashboard<CR>')
+
