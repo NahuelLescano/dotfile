@@ -1,6 +1,5 @@
 # Copyright (c) 2010 Aldo Cortesi
-# Copyright (c) 2010, 2014 dequis
-# Copyright (c) 2012 Randall Ma
+# Copyright (c) 2010, 2014 dequis Copyright (c) 2012 Randall Ma
 # Copyright (c) 2012-2014 Tycho Andersen
 # Copyright (c) 2012 Craig Barnes
 # Copyright (c) 2013 horsik
@@ -45,10 +44,8 @@ def add_treetab_section(layout):
 mod = "mod4"                                    # Sets mod key to SUPER/WINDOWS
 myTerm = "alacritty"                            # My terminal of choice
 myBrowser = "brave"                             # My browser of choice
-myEmacs = "emacsclient -c -a 'emacs' "          # The space at the end is IMPORTANT!
 dmenu = "dmenu_run -i -l 10 -g 3 -p 'Run' "     # dmenu variables
 vifm = myTerm + " -e vifm"
-emacs_launcher = "emacsclient -cF '((visibility . nil))' -e '(emacs-run-launcher)'"
 
 home = os.path.expanduser('~')
 dm_bookman = home + "/Documentos/repos/dmscript/dm-bookman"
@@ -71,13 +68,12 @@ keys = [
     Key([mod, "shift"], "Return", lazy.spawn(dmenu), desc='Run Launcher'),
     Key([mod], "b", lazy.spawn(myBrowser), desc='Run brave browser'),
     Key([mod], "v", lazy.spawn(vifm), desc='Run vifm file manager'),
-    Key([mod], "e", lazy.spawn(myEmacs), desc='Run doom emacs'),
+    Key([mod, "shift"], "p", lazy.spawn("pcmanfm"), desc='Run pcmanfm file manager'),
+    Key([mod], "z", lazy.spawn("zoom"), desc='Run zoom'),
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
     Key([mod, "shift"], "c", lazy.window.kill(), desc="Kill focused window"),
     Key([mod, "shift"], "r", lazy.reload_config(), desc="Reload the config"),
     Key([mod, "shift"], "q", lazy.shutdown(), desc="Shutdown Qtile"),
-    # Key([mod], "r", lazy.spawncmd(), desc="Spawn a command using a prompt widget"),
-    Key([mod], "r", lazy.spawn(emacs_launcher), desc="Spawn a command using a emacs prompt"),
 
     # Switch between windows
     # Some layouts like 'monadtall' only need to use j/k to move
@@ -156,6 +152,7 @@ keys = [
         Key([], "s", lazy.spawn(dm_websearch), desc='Search various engines'),
         Key([], "y", lazy.spawn(dm_youtube), desc='Search various engines'),
         Key([], "w", lazy.spawn(dm_wiki), desc='Search various engines'),
+        Key([], "d", lazy.spawn(dm_documents), desc='Search through documents'),
     ])
 
 ]
@@ -270,7 +267,7 @@ extension_defaults = widget_defaults.copy()
 def init_widgets_list():
     widgets_list = [
         widget.Image(
-                 filename="~/.config/qtile/icons/python.png",
+                 filename="~/.config/qtile/icons/python-white.png",
                  scale="False",
                  mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(dmenu)},
                  ),
@@ -364,9 +361,8 @@ def init_widgets_list():
         widget.DF(
                  update_interval=60,
                  foreground=colors[5],
-                 partition='/',
                  format='{uf}{m} free',
-                 fmt='✇  Disk: {}',
+                 fmt='Hdd: {}',
                  visible_on_warn=False,
                  decorations=[
                      BorderDecoration(
@@ -416,8 +412,8 @@ def init_widgets_screen1():
 # For ex: Screen(top=bar.Bar(widgets=init_widgets_screen2(), background="#00000000", size=24)),
 
 def init_screens():
-    return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=26)),
-            Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=26))]
+    return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=29)),
+            Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=29))]
 
 if __name__ in ["config", "__main__"]:
     screens = init_screens()
@@ -447,7 +443,7 @@ floating_layout = layout.Floating(
         Match(wm_class="maketag"),        # gitk
         Match(wm_class="ssh-askpass"),    # ssh-askpass
         Match(wm_class="zoom"),           # zoom
-        Match(title="emacs-run-launcher"), # Emacs run launcher
+        Match(wm_class="feh"),           # zoom
         Match(title="branchdialog"),      # gitk
         Match(title='Confirmation'),      # tastyworks exit box
         Match(title='Qalculate!'),        # qalculate-gtk
