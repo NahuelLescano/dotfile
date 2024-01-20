@@ -2,15 +2,6 @@
 vim.g.maplocalleader = " "
 vim.g.mapleader = " "
 
--- vimwiki stuff
--- vim.g.vimwiki_list = {
---     path = '~/vimwiki/',
---     syntax = 'markdown',
---     ext = '.md'
--- }
--- 
--- vim.g.vimwiki_global_ext = 0
-
 vim.opt.nu = true
 vim.opt.relativenumber = true
 vim.opt.mouse = "a"

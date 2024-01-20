@@ -15,8 +15,7 @@ return require('packer').startup(function(use)
 
     -- Telescope
     use {
-        'nvim-telescope/telescope.nvim', tag = '0.1.2',
-        -- or                            , branch = '0.1.x', requires = { {'nvim-lua/plenary.nvim'} }
+        'nvim-telescope/telescope.nvim'
     }
 
     -- Colorschemes
@@ -57,6 +56,8 @@ return require('packer').startup(function(use)
             {'L3MON4D3/LuaSnip'},     -- Required
         }
     }
+
+    use 'ray-x/go.nvim'
 
     -- telescope file browser
     use { "nvim-telescope/telescope-file-browser.nvim",
@@ -123,4 +124,7 @@ return require('packer').startup(function(use)
 
     -- tmux integration with nvim
     use('christoomey/vim-tmux-navigator')
+
+    -- vue lsp
+    use('yaegassy/coc-volar')
 end)
