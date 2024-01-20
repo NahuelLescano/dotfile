@@ -301,7 +301,7 @@ def init_widgets_list():
                  fontsize=14
                  ),
         widget.CurrentLayoutIcon(
-                 # custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
+                 custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
                  foreground=colors[1],
                  padding=0,
                  scale=0.7
@@ -336,6 +336,7 @@ def init_widgets_list():
         widget.Spacer(length=8),
         widget.CPU(
                  format='🏼  Cpu: {load_percent}%',
+                 mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e bashtop')},
                  foreground=colors[4],
                  decorations=[
                      BorderDecoration(
@@ -363,21 +364,11 @@ def init_widgets_list():
                  foreground=colors[5],
                  format='{uf}{m} free',
                  fmt='Hdd: {}',
+                 mouse_callbacks={'Button1': lambda: qtile.cmd_spawn(myTerm + ' -e bashtop')},
                  visible_on_warn=False,
                  decorations=[
                      BorderDecoration(
                          colour=colors[5],
-                         border_width=[0, 0, 2, 0],
-                     )
-                 ],
-                 ),
-        widget.Spacer(length=8),
-        widget.Volume(
-                 foreground=colors[7],
-                 fmt='🕫  Vol: {}',
-                 decorations=[
-                     BorderDecoration(
-                         colour=colors[7],
                          border_width=[0, 0, 2, 0],
                      )
                  ],
@@ -394,22 +385,15 @@ def init_widgets_list():
                  ],
                  ),
         widget.Spacer(length=8),
-        widget.Systray(padding=3),
+        widget.Systray(padding=5),
         widget.Spacer(length=8),
         ]
     return widgets_list
-
-# I use 3 monitors which means that I need 3 bars, but some widgets (such as the systray)
-# can only have one instance, otherwise it will crash.  So I define the follow two lists.
-# The first one creates a bar with every widget EXCEPT index 15 and 16 (systray and spacer).
-# The second one creates a bar with all widgets.
 
 def init_widgets_screen1():
     widgets_screen1 = init_widgets_list()
     return widgets_screen1
 
-# For adding transparency to your bar, add (background="#00000000") to the "Screen" line(s)
-# For ex: Screen(top=bar.Bar(widgets=init_widgets_screen2(), background="#00000000", size=24)),
 
 def init_screens():
     return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=29)),
