@@ -56,7 +56,7 @@ awesome.set_preferred_icon_size(33)
 
 -- This is used later as the default terminal and editor to run.
 local terminal = "alacritty"
-local editor = "emacsclient -c -a emacs"
+local editor = "doom run"
 local browser = "brave"
 local dmenu = "dmenu_run -i -l 10 -g 3 -p 'Run:'"
 local file_manager = "pcmanfm"
@@ -642,10 +642,8 @@ client.connect_signal("mouse::enter", function(c)
 end)
 
 -- Autostart Applications
--- awful.spawn.with_shell("feh --randomize --bg-fill ~/Pictures/wallpapers/*") -- Set a random wallpaper.
 awful.spawn.with_shell("nitrogen --restore &")
 awful.spawn.with_shell("nm-applet")
 awful.spawn.with_shell("killall volumeicon && volumeicon")
 awful.spawn.with_shell("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
-awful.spawn.with_shell("/usr/bin/emacs --daemon")
--- awful.spawn.with_shell("picom -b --experimental-backends")
+awful.spawn.with_shell("picom")
