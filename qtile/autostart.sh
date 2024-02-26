@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 lxsession &
-/usr/bin/emacs --daemon &
-volumeicon &
+killall volumeicon && volumeicon &
 nm-applet &
 nitrogen --restore &
