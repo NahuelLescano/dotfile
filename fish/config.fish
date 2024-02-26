@@ -3,16 +3,15 @@
 # First line removes the paths; second line sets it. Without the first line,
 # the path gets massive and fish become very slow.
 set -e fish_user_paths
-set -U fish_user_paths $HOME/.bin  $HOME/.local/bin $HOME/.config/emacs/bin $HOME/Applications /var/lib/flatpak/exports/bin/ $fish_user_paths
+set -U fish_user_paths $HOME/.bin  $HOME/.local/bin $HOME/.config/emacs/bin $HOME/Applications /var/lib/flatpak/exports/bin/ $fish_user_paths $HOME/.bun/bin/bun PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
 
 fish_vi_key_bindings                        # set vi mode
 set fish_greeting                           # Supresses fish's intro message
 set TERM "xterm-256color"                   # Sets the terminal type
-set EDITOR "emacsclient -t -a ''"           # $EDITOR use Emacs in terminal
-set VISUAL "emacsclient -c -a emacs"        # $VISUAL use Emacs in GUI mode
+set EDITOR "nvim"                           # $EDITOR use nvim in terminal
 
 ### "bat" as manpager
-set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
+#set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
 ### AUTOCOMPLETE AND HIGHLIGHT COLORS ###
 set fish_color_normal brcyan
@@ -139,11 +138,9 @@ end
 alias clear='echo -en "\x1b[2J\x1b[1;1H" ; echo; echo; seq 1 (tput cols) | sort -R | spark | lolcat; echo; echo'
 
 # Changing ls with exa
-alias ls='exa -al --color=always --group-directories-first' # my preferred listing
-alias la='exa -a --color=always --group-directories-first'  # all files and dirs
-alias ll='exa -l --color=always --group-directories-first'  # long format
-alias lt='exa -aT --color=always --group-directories-first' # tree listing
-alias l.='exa -a | egrep "^\."'
+alias ls='exa --icons -a --color=always --group-directories-first'    # my preferred listing
+alias ll='exa --icons -a -l --color=always --group-directories-first' # long format
+alias lt='exa --icons -a -T --color=always --group-directories-first' # tree listing
 
 # confirm before overwriting something
 alias cp='cp -i'
@@ -217,7 +214,7 @@ abbr --add nv nvim
 abbr --add feh feh -Z -.
 
 # Colorscript
-colorscript -r
+# colorscript -r
 
 # Starship
 starship init fish | source
@@ -227,3 +224,14 @@ abbr --add flatin flatpak install
 abbr --add flatup flatpak update
 abbr --add flats flatpak search
 abbr --add flatrm flatpak remove
+
+# plantuml
+abbr --add plantd plantuml -darkmode
+
+# pnpm
+set -gx PNPM_HOME "/home/arcolinux/.local/share/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+  set -gx PATH "$PNPM_HOME" $PATH
+end
+alias pnpx='pnpm dlx'
+# pnpm end
