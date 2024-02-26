@@ -110,6 +110,8 @@ set statusline="  Hint: %z%= %A %10u:%-7g %15s %20d  "
 
 " :mark mark /full/directory/path [filename]
 mark h ~/
+mark d ~/Documentos/repos
+mark o ~/Documentos/repos/Ort
 
 " ------------------------------------------------------------------------------
 
@@ -383,7 +385,7 @@ filextype */
 
 " ------------------------------------------------------------------------------
 
-" What should be saved automatically between vifm sessions.  Drop "savedirs"
+" What should be saved automatically between vifm sessions. Drop "savedirs"
 " value if you don't want vifm to remember last visited directories for you.
 set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,
     \phistory,fhistory,dirstack,registers,bookmarks,bmarks
@@ -406,6 +408,12 @@ set vifminfo=dhistory,savedirs,chistory,state,tui,shistory,
 
 " Start shell in current directory
 nnoremap s :shell<cr>
+
+" Open new tmux session
+nnoremap t :!tmux<cr>
+
+" Open last attached tmux session
+nnoremap ta :!tmux a<cr>
 
 " Display sorting dialog
 nnoremap S :sort<cr>
