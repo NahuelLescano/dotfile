@@ -1,0 +1,15 @@
+[manager]
+
+prepend_keymap = [
+    { on = ["<C-s>"], run = 'shell "$SHELL" --block --confirm', desc = "Open shell here" },
+    { on = ["l"], run = "plugin --sync smart-enter", desc = "Enter the child directory, or open the file" },
+    { on = ["p"], run = "plugin --sync smart-paste", desc = "Paste into the hovered directory or CWD" }
+]
+
+append_keymap = [
+     # Bookmarks
+     { on = ["g", "c"], run = "cd .config/", desc = "cd to .config/" },
+     { on = ["g", "b"], run = "cd Books/", desc = "cd to Books/" },
+     { on = ["g", "p"], run = "cd Projects/", desc = "cd to Projects/" },
+     { on = ["g", "d"], run = "cd Documentos/", desc = "cd to Documentos/" }
+]
