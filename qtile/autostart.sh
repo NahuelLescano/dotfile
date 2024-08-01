@@ -2,5 +2,6 @@
 
 lxsession &
 killall volumeicon && volumeicon &
+picom &
 nm-applet &
 nitrogen --restore &
