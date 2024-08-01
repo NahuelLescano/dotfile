@@ -1,17 +1,15 @@
 # This is using DT's configs: https://gitlab.com/dwt1/dotfiles/-/blob/master/.config/fish/config.fish
+
 ### ADDING TO THE PATH ###
 # First line removes the paths; second line sets it. Without the first line,
 # the path gets massive and fish become very slow.
 set -e fish_user_paths
-set -U fish_user_paths $HOME/.bin  $HOME/.local/bin $HOME/.config/emacs/bin $HOME/Applications /var/lib/flatpak/exports/bin/ $fish_user_paths $HOME/.bun/bin/bun PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
+set -U fish_user_paths $HOME/.bin  $HOME/.local/bin  /var/lib/flatpak/exports/bin/
 
 fish_vi_key_bindings                        # set vi mode
 set fish_greeting                           # Supresses fish's intro message
 set TERM "xterm-256color"                   # Sets the terminal type
 set EDITOR "nvim"                           # $EDITOR use nvim in terminal
-
-### "bat" as manpager
-#set -x MANPAGER "sh -c 'col -bx | bat -l man -p'"
 
 ### AUTOCOMPLETE AND HIGHLIGHT COLORS ###
 set fish_color_normal brcyan
@@ -159,6 +157,9 @@ alias merge='xrdb -merge ~/.Xresources'
 # Always use nvim instead of vim.
 alias suvi='sudo -E env "PATH=$PATH" nvim'
 
+# feh
+alias feh="feh -Z -."
+
 ## Abbreviations
 # navigation
 abbr --add .. cd ..
@@ -167,54 +168,44 @@ abbr --add .3 cd ../../..
 abbr --add .4 cd ../../../..
 
 # pacman
-abbr --add pacin sudo pacman -S                       # install programs
-abbr --add pacrm sudo pacman -Rns                     # remove programs and all dependencies
-abbr --add pacss pacman -Ss                           # search for specific program
-abbr --add pacsyu sudo pacman -Syu                    # update only standard packages
-abbr --add pacsyyu sudo pacman -Syyu                  # refresh pkglist and update standard pkgs
-abbr --add cleanup sudo pacman -Rns (pacman -Qtdq)    # remove orphaned packages
+abbr --add pin sudo pacman -S                       # install programs
+abbr --add prm sudo pacman -Rns                     # remove programs and all dependencies
+abbr --add pss pacman -Ss                           # search for specific program
+abbr --add psyu sudo pacman -Syu                    # update only standard packages
+abbr --add psyyu sudo pacman -Syyu                  # refresh pkglist and update standard pkgs
+abbr --add cleanup sudo pacman -Rns (pacman -Qtdq)  # remove orphaned packages
 
 # paru
-abbr --add parsua paru -Sua --noconfirm              # update only AUR packages
-abbr --add parin paru -S                             # install AUR package
-abbr --add parm paru -Rns                            # remove AUR package and all dependencies
-abbr --add parss paru -Ss                            # search for specific AUR package
-abbr --add parqua paru -Qua                          # show if a pkg has an update
+abbr --add pasua paru -Sua --noconfirm              # update only AUR packages
+abbr --add pain paru -S                             # install AUR package
+abbr --add parm paru -Rns                           # remove AUR package and all dependencies
+abbr --add pass paru -Ss                            # search for specific AUR package
+abbr --add paqua paru -Qua                          # show if a pkg has an update
 
 # git
-abbr --add init git init
-abbr --add add git add
-abbr --add addup git add -u
-abbr --add addall git add .
-abbr --add status git status
-abbr --add diff git diff
-abbr --add branch git branch
-abbr --add clone git clone
-abbr --add commit git commit -v
-abbr --add commitMes git commit -m
-abbr --add show git remote show origin
-abbr --add pull git pull origin
-abbr --add push git push origin
-abbr --add checkout git checkout
-abbr --add log git log --pretty=format:'"%h - %an, %ar: %s"'
+abbr --add gi git init
+abbr --add ga git add
+abbr --add gal git add .
+abbr --add gs git status
+abbr --add gd git diff
+abbr --add gb git branch
+abbr --add gc git clone
+abbr --add gcv git commit -v
+abbr --add gcm git commit -m
+abbr --add gsh git remote show origin
+abbr --add gpl git pull origin
+abbr --add gps git push origin
+abbr --add gsw git switch
+abbr --add gl git log --pretty=format:'"%h - %an, %ar: %s"'
 
 # get error messages from journalctl
 abbr --add jctl journalctl -p 3 -xb
 
-# npm
-abbr --add npi npm install
-abbr --add npt npm test
-abbr --add nps npm start
-abbr --add npr npm run
-
 # nvim
 abbr --add nv nvim
 
-# feh
-abbr --add feh feh -Z -.
-
-# Colorscript
-# colorscript -r
+# tmux
+abbr --add tm tmux
 
 # Starship
 starship init fish | source
@@ -233,5 +224,8 @@ set -gx PNPM_HOME "/home/arcolinux/.local/share/pnpm"
 if not string match -q -- $PNPM_HOME $PATH
   set -gx PATH "$PNPM_HOME" $PATH
 end
-alias pnpx='pnpm dlx'
 # pnpm end
+
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH
