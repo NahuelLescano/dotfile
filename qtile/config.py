@@ -33,7 +33,7 @@ from libqtile.lazy import lazy
 # Make sure 'qtile-extras' is installed or this config will not work.
 from qtile_extras import widget
 from qtile_extras.widget.decorations import BorderDecoration
-# from qtile_extras.widget import StatusNotifier
+from qtile_extras.widget import StatusNotifier
 
 # Allows you to input a name when adding treetab section.
 @lazy.layout.function
@@ -41,11 +41,11 @@ def add_treetab_section(layout):
     prompt = qtile.widgets_map["prompt"]
     prompt.start_input("Section name: ", layout.cmd_add_section)
 
-mod = "mod4"                                    # Sets mod key to SUPER/WINDOWS
-myTerm = "alacritty"                            # My terminal of choice
-myBrowser = "brave"                             # My browser of choice
-dmenu = "dmenu_run -i -l 10 -g 3 -p 'Run' "     # dmenu variables
-vifm = myTerm + " -e vifm"
+mod = "mod4"                                                           # Sets mod key to SUPER/WINDOWS
+myTerm = "kitty"                                                   # My terminal of choice
+myBrowser = "brave"                                                    # My browser of choice
+dmenu = "dmenu_run -i -g 3 -bw 2 -fn ubuntu-12 -c -l 10 -p 'Run' "     # dmenu variables
+rofi = "rofi -modi drun -show drun -display-drun 'Run:' "
 
 home = os.path.expanduser('~')
 dm_bookman = home + "/Documentos/repos/dmscript/dm-bookman"
@@ -65,9 +65,8 @@ dm_youtube = home + "/Documentos/repos/dmscript/dm-youtube"
 keys = [
     # The essentials
     Key([mod], "Return", lazy.spawn(myTerm), desc="Terminal"),
-    Key([mod, "shift"], "Return", lazy.spawn(dmenu), desc='Run Launcher'),
+    Key([mod, "shift"], "Return", lazy.spawn(rofi), desc='Run dmenu Launcher'),
     Key([mod], "b", lazy.spawn(myBrowser), desc='Run brave browser'),
-    Key([mod], "v", lazy.spawn(vifm), desc='Run vifm file manager'),
     Key([mod, "shift"], "p", lazy.spawn("pcmanfm"), desc='Run pcmanfm file manager'),
     Key([mod], "z", lazy.spawn("zoom"), desc='Run zoom'),
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
@@ -215,8 +214,8 @@ layout_theme = {"border_width": 2,
                 }
 
 layouts = [
-    # layout.Bsp(**layout_theme),
     # layout.Floating(**layout_theme)
+    # layout.Bsp(**layout_theme),
     # layout.RatioTile(**layout_theme),
     # layout.Tile(shift_windows=True, **layout_theme),
     # layout.VerticalTile(**layout_theme),
@@ -257,7 +256,7 @@ layouts = [
 # from having to type these out for each individual widget.
 widget_defaults = dict(
     font="Ubuntu Bold",
-    fontsize=12,
+    fontsize=15,
     padding=0,
     background=colors[0]
 )
@@ -376,7 +375,7 @@ def init_widgets_list():
         widget.Spacer(length=8),
         widget.Clock(
                  foreground=colors[6],
-                 format="⏱  %a, %b %d - %H:%M",
+                 format="⏱  %a %d %b - %H:%M",
                  decorations=[
                      BorderDecoration(
                          colour=colors[6],
@@ -428,6 +427,7 @@ floating_layout = layout.Floating(
         Match(wm_class="ssh-askpass"),    # ssh-askpass
         Match(wm_class="zoom"),           # zoom
         Match(wm_class="feh"),            # feh
+        Match(wm_class="steam"),          # steam
         Match(title="branchdialog"),      # gitk
         Match(title='Confirmation'),      # tastyworks exit box
         Match(wm_class='Galculator'),     # Galculator
@@ -461,4 +461,3 @@ def start_once():
 # We choose LG3D to maximize irony: it is a 3D non-reparenting WM written in
 # java that happens to be on java's whitelist.
 wmname = "LG3D"
-
