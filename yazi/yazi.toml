@@ -42,6 +42,9 @@ play = [
     { run = 'mpv "$@"', orphan = true, for = "unix" },
     { run = '''mediainfo "$1"; echo "Press enter to exit"; read _''', block = true, desc = "Show media info", for = "unix" },
 ]
+pdf = [
+    { run = 'zathura "$1" &', orphan = true, block = false, desc = "Reveal", for = "unix" },
+]
 
 [open]
 rules = [
@@ -54,6 +57,8 @@ rules = [
 
     { mime = "application/*zip", use = [ "extract", "reveal" ] },
     { mime = "application/x-{tar,bzip*,7z-compressed,xz,rar}", use = [ "extract", "reveal" ] },
+
+    { mime = "application/pdf",  use = [ "pdf", "reveal" ] },
 
     { mime = "application/json", use = [ "edit", "reveal" ] },
     { mime = "*/javascript",     use = [ "edit", "reveal" ] },

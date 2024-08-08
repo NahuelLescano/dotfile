@@ -207,6 +207,9 @@ abbr --add nv nvim
 # tmux
 abbr --add tm tmux
 
+# yazi
+abbr --add ya yazi
+
 # Starship
 starship init fish | source
 
