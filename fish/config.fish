@@ -122,13 +122,6 @@ else
   bind '$' __history_previous_command_arguments
 end
 
-# Function for creating a backup file
-# ex: backup file.txt
-# result: copies file as file.txt.bak
-function backup --argument filename
-    cp $filename $filename.bak
-end
-
 ### END OF FUNCTIONS ###
 
 ### ALIASES AND ABBREVIATIONS ###
@@ -152,13 +145,13 @@ alias mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/p
 alias mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist"
 
 # Merge Xresources
-alias merge='xrdb -merge ~/.Xresources'
+# alias merge='xrdb -merge ~/.Xresources'
 
 # Always use nvim instead of vim.
 alias suvi='sudo -E env "PATH=$PATH" nvim'
 
 # feh
-alias feh="feh -Z -."
+# alias feh="feh -Z -."
 
 ## Abbreviations
 # navigation
@@ -187,7 +180,6 @@ abbr --add gi git init
 abbr --add ga git add
 abbr --add gal git add .
 abbr --add gs git status
-abbr --add gd git diff
 abbr --add gb git branch
 abbr --add gc git clone
 abbr --add gcv git commit -v
@@ -220,7 +212,7 @@ abbr --add flats flatpak search
 abbr --add flatrm flatpak remove
 
 # plantuml
-abbr --add plantd plantuml -darkmode
+# abbr --add plantd plantuml -darkmode
 
 # pnpm
 set -gx PNPM_HOME "/home/arcolinux/.local/share/pnpm"
