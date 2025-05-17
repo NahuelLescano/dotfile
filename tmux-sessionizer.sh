@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+FZF_OP="fzf --layout=reverse --border=bold --border=rounded --margin=3% --color=dark -e"
+
 switch_to() {
     if [[ -z $TMUX ]]; then
         tmux attach-session -t $1
@@ -22,11 +25,11 @@ hydrate() {
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find $HOME/Projects $HOME/.config/nvim $HOME/.config/tmux $HOME/.config/fish $HOME/.config/awesome $HOME/.config/hypr $HOME/.config/waybar  \
+    selected=$(find $HOME/Projects $HOME/.config/ \
         \( -path '*/tmux/plugins/*' -o \
         -path '*/node_modules/*' \
         -o -path '*/build/*' -o -path '*/.git/*' \) -prune \
-        -o -type d -print | fzf)
+        -o -type d -print | $FZF_OP)
 fi
 
 if [[ -z $selected ]]; then
