@@ -11,6 +11,9 @@ set fish_greeting                           # Supresses fish's intro message
 set TERM "xterm-256color"                   # Sets the terminal type
 set EDITOR "nvim"                           # $EDITOR use nvim in terminal
 
+## Set nvim as manpager
+set -x MANPAGER "nvim +Man!"
+
 ### AUTOCOMPLETE AND HIGHLIGHT COLORS ###
 set fish_color_normal brcyan
 set fish_color_autosuggestion '#7d7d7d'
@@ -113,6 +116,11 @@ function __history_previous_command_arguments
   end
 end
 
+
+function tmux-session
+    bash $HOME/tmux-sessionizer.sh
+end
+
 # The bindings for !! and !$
 if [ "$fish_key_bindings" = "fish_vi_key_bindings" ];
   bind -Minsert ! __history_previous_command
@@ -196,8 +204,12 @@ abbr --add jctl journalctl -p 3 -xb
 # nvim
 abbr --add nv nvim
 
+# lazygit
+abbr --add lg lazygit
+
 # tmux
 abbr --add tm tmux
+abbr --add ts tmux-session
 
 # yazi
 abbr --add ya yazi
@@ -211,11 +223,15 @@ abbr --add flatup flatpak update
 abbr --add flats flatpak search
 abbr --add flatrm flatpak remove
 
-# plantuml
-# abbr --add plantd plantuml -darkmode
+# Set up fzf key bindings
+# CTRL-t -> fzf select
+# CTRL-r -> fzf history
+# ALT-c -> fzf cd
+fzf --fish | source
+set FZF_DEFAULT_OPTS "--layout=reverse --exact --border=bold --border=rounded --margin=3% --color=dark"
 
 # pnpm
-set -gx PNPM_HOME "/home/arcolinux/.local/share/pnpm"
+set -gx PNPM_HOME "$HOME/.local/share/pnpm"
 if not string match -q -- $PNPM_HOME $PATH
   set -gx PATH "$PNPM_HOME" $PATH
 end
@@ -224,3 +240,20 @@ end
 # bun
 set --export BUN_INSTALL "$HOME/.bun"
 set --export PATH $BUN_INSTALL/bin $PATH
+
+# zoxide
+if command -sq zoxide
+    zoxide init fish | source
+else
+    echo 'zoxide: command not found, please install it from https://github.com/ajeetdsouza/zoxide'
+end
+
+## Yazi setup
+function y
+	set tmp (mktemp -t "yazi-cwd.XXXXXX")
+	yazi $argv --cwd-file="$tmp"
+	if set cwd (command cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+		builtin cd -- "$cwd"
+	end
+	rm -f -- "$tmp"
+end
