@@ -248,12 +248,16 @@ else
     echo 'zoxide: command not found, please install it from https://github.com/ajeetdsouza/zoxide'
 end
 
-## Yazi setup
-function y
-	set tmp (mktemp -t "yazi-cwd.XXXXXX")
-	yazi $argv --cwd-file="$tmp"
-	if set cwd (command cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
-		builtin cd -- "$cwd"
-	end
-	rm -f -- "$tmp"
+if not set -q TMUX
+    tmux
 end
+
+## Yazi setup
+# function y
+# 	set tmp (mktemp -t "yazi-cwd.XXXXXX")
+# 	yazi $argv --cwd-file="$tmp"
+# 	if set cwd (command cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+# 		builtin cd -- "$cwd"
+# 	end
+# 	rm -f -- "$tmp"
+# end
