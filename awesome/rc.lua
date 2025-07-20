@@ -63,7 +63,7 @@ awesome.set_preferred_icon_size(33)
 
 -- This is used later as the default terminal and editor to run.
 local terminal = "kitty"
-local browser = "brave"
+local browser = "app.zen_browser.zen"
 local rofi = "rofi -modi drun -show drun -display-drun 'Run:' "
 
 local home = os.getenv("HOME")
@@ -315,10 +315,14 @@ local globalkeys = gears.table.join(
     end, { description = "select previous", group = "layout" }),
 
     -- Costum key bindings
-    -- Brave
+    -- Zen browser
     awful.key({ modkey }, "b", function()
         awful.util.spawn(browser)
-    end, { description = "run brave", group = "applications" }),
+    end, { description = "run zen browser", group = "applications" }),
+
+    awful.key({ modkey }, "g", function()
+        awful.util.spawn("ghostty")
+    end, { description = "run ghostty terminal", group = "applications" }),
 
     -- Pcmanfm
     awful.key({ modkey }, "p", function()
@@ -569,6 +573,8 @@ awful.rules.rules = {
                 "Gpick",
                 "Kruler",
                 "MessageWin", -- kalarm.
+                "Galculator",
+                "pcsx2-qt",
                 "feh",
                 "steam",
                 "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
@@ -630,6 +636,5 @@ end)
 -- Autostart Applications
 awful.spawn.with_shell("nitrogen --restore &")
 awful.spawn.with_shell("nm-applet")
-awful.spawn.with_shell("killall volumeicon && volumeicon")
+awful.spawn.with_shell("volumeicon &")
 awful.spawn.with_shell("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
-awful.spawn.with_shell("picom &")
