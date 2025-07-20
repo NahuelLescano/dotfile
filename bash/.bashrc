@@ -142,12 +142,13 @@ alias push='git push origin'
 alias log='git log --pretty=format:'"%h - %an, %ar: %s"''
 
 # Colorscript
-colorscript -r
+# colorscript -r
 
 ## Startship prompt
 eval "$(starship init bash)"
 
-#Thefuck
-eval $(thefuck --alias)
-# You can use whatever you want as an alias, like for Mondays:
-eval $(thefuck --alias FUCK)
+. "$HOME/.cargo/env"
+
+
+export DM_HOME="$HOME/Documentos/repos/dmscript"
+export DM_LOGOUT="$DM_HOME/dm-logout"

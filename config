@@ -3,45 +3,117 @@
 echo "Copying dotfiles to repository..."
 
 # Fish shell
-cp -r $HOME/.config/fish/ ${PWD}/fish/
+if [ -d "$HOME/.config/fish" ]; then
+    echo "Copying Fish config..."
+    cp -r $HOME/.config/fish/* ${PWD}/fish/ 2>/dev/null
+fi
 
 # Alacritty terminal
-cp -r $HOME/.config/alacritty/ ${PWD}/alacritty/
+if [ -d "$HOME/.config/alacritty" ]; then
+    echo "Copying Alacritty config..."
+    cp -r $HOME/.config/alacritty/* ${PWD}/alacritty/ 2>/dev/null
+fi
 
 # AwesomeWM
-cp -r $HOME/.config/awesome/ ${PWD}/awesome/
+if [ -d "$HOME/.config/awesome" ]; then
+    echo "Copying AwesomeWM config..."
+    cp -r $HOME/.config/awesome/* ${PWD}/awesome/ 2>/dev/null
+fi
 
 # Hyprland
-cp -r $HOME/.config/hypr/ ${PWD}/hypr/
+if [ -d "$HOME/.config/hypr" ]; then
+    echo "Copying Hyprland config..."
+    cp -r $HOME/.config/hypr/* ${PWD}/hypr/ 2>/dev/null
+fi
 
 # Kitty terminal
-cp -r $HOME/.config/kitty/ ${PWD}/kitty/
+if [ -d "$HOME/.config/kitty" ]; then
+    echo "Copying Kitty config..."
+    cp -r $HOME/.config/kitty/* ${PWD}/kitty/ 2>/dev/null
+fi
 
 # Polybar
-cp -r $HOME/.config/polybar/ ${PWD}/polybar/
+if [ -d "$HOME/.config/polybar" ]; then
+    echo "Copying Polybar config..."
+    cp -r $HOME/.config/polybar/* ${PWD}/polybar/ 2>/dev/null
+fi
 
 # Qtile
-cp -r $HOME/.config/qtile/ ${PWD}/qtile/
+if [ -d "$HOME/.config/qtile" ]; then
+    echo "Copying Qtile config..."
+    cp -r $HOME/.config/qtile/* ${PWD}/qtile/ 2>/dev/null
+fi
+
+# Qutebrowser
+if [ -d "$HOME/.config/qutebrowser" ]; then
+    echo "Copying Qutebrowser config..."
+    cp -r $HOME/.config/qutebrowser/* ${PWD}/qutebrowser/ 2>/dev/null
+fi
 
 # Rofi
-cp -r $HOME/.config/rofi/ ${PWD}/rofi/
+if [ -d "$HOME/.config/rofi" ]; then
+    echo "Copying Rofi config..."
+    cp -r $HOME/.config/rofi/* ${PWD}/rofi/ 2>/dev/null
+fi
 
 # Waybar
-cp -r $HOME/.config/waybar/ ${PWD}/waybar/
+if [ -d "$HOME/.config/waybar" ]; then
+    echo "Copying Waybar config..."
+    cp -r $HOME/.config/waybar/* ${PWD}/waybar/ 2>/dev/null
+fi
 
 # Vifm
-cp -r $HOME/.config/vifm/ ${PWD}/vifm/
+if [ -d "$HOME/.config/vifm" ]; then
+    echo "Copying Vifm config..."
+    cp -r $HOME/.config/vifm/* ${PWD}/vifm/ 2>/dev/null
+fi
 
 # Zathura
-cp -r $HOME/.config/zathura/ ${PWD}/zathura/
+if [ -d "$HOME/.config/zathura" ]; then
+    echo "Copying Zathura config..."
+    cp -r $HOME/.config/zathura/* ${PWD}/zathura/ 2>/dev/null
+fi
 
 # Tmux
-cp $HOME/.config/tmux/tmux.conf ${PWD}/tmux/
+if [ -f "$HOME/.config/tmux/tmux.conf" ]; then
+    echo "Copying Tmux config..."
+    cp $HOME/.config/tmux/tmux.conf ${PWD}/tmux/
+fi
+
+# Doom Emacs
+if [ -d "$HOME/.config/doom" ]; then
+    echo "Copying Doom Emacs config..."
+    cp -r $HOME/.config/doom/* ${PWD}/doom/ 2>/dev/null
+fi
+
+# Emacs
+if [ -d "$HOME/.emacs.d" ]; then
+    echo "Copying Emacs config..."
+    cp -r $HOME/.emacs.d/* ${PWD}/emacs/ 2>/dev/null
+fi
 
 # Bash
-cp $HOME/.bashrc ${PWD}/bash/
+if [ -f "$HOME/.bashrc" ]; then
+    echo "Copying Bash config..."
+    cp $HOME/.bashrc ${PWD}/bash/
+fi
+
+# X11 resources
+if [ -f "$HOME/.Xresources" ]; then
+    echo "Copying X11 resources..."
+    cp $HOME/.Xresources ${PWD}/
+fi
+
+# Picom
+if [ -f "$HOME/.config/picom.conf" ]; then
+    echo "Copying Picom config..."
+    cp $HOME/.config/picom.conf ${PWD}/
+fi
 
 # Starship prompt
-cp $HOME/.config/starship.toml ${PWD}/
+if [ -f "$HOME/.config/starship.toml" ]; then
+    echo "Copying Starship config..."
+    cp $HOME/.config/starship.toml ${PWD}/
+fi
 
 echo "Done copying dotfiles!"

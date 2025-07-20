@@ -1,6 +1,6 @@
 * {
-  font-family: JetbrainsMono Nerd Font;
-  font-size: 19px;
+  font-family: IosevkaTerm Nerd Font;
+  font-size: 21px;
   min-height: 0;
   padding-right: 2px;
   padding-left: 2px;
@@ -62,9 +62,6 @@
 
 #backlight {
   color: #e5c890;
-}
-
-#backlight {
   border-radius: 0;
 }
 
@@ -89,4 +86,3 @@
   margin-left: 1rem;
   border-radius: 5px;
 }
-

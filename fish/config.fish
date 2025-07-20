@@ -28,99 +28,9 @@ complete -xc spark -n __fish_use_subcommand -a --help -d "Show usage help"
 complete -xc spark -n __fish_use_subcommand -a --version -d "$spark_version"
 complete -xc spark -n __fish_use_subcommand -a --min -d "Minimum range value"
 complete -xc spark -n __fish_use_subcommand -a --max -d "Maximum range value"
-
-function spark -d "sparkline generator"
-    if isatty
-        switch "$argv"
-            case {,-}-v{ersion,}
-                echo "Spark version $spark_version"
-
-            case {,-}-h{elp,}
-                echo "Usage: spark [--min=<n> --max=<n>] <numbers...> Draw sparklines"
-                echo "Examples:"
-                echo "  spark 1 2 3 4"
-                echo "  seq 100 | sort -R | spark"
-                echo "  awk \\\ $0=length spark.fish | spark"
-
-            case \*
-                echo $argv | spark $argv
-
-        end
-        return
-
-    end
-
-    command awk -v FS="[[:space:]]*" -v argv="$argv" '
-        BEGIN {
-            min = match(argv, /--min=[0,9]+/) ? substr(argv, RESTART + 6, RLENGTH - 6) + 0 : ""
-            max = match(argv, /--min=[0,9]+/) ? substr(argv, RESTART + 6, RLENGTH - 6) + 0 : ""
-        }
-
-        {
-
-            for (i = j = 1; i <= NF; i++) {
-                if ($1 ~ /^--/)
-                    continue
-
-                if ($1 !~ /^-?[0-9]/)
-                    data[count + j++] = ""
-
-                else {
-                    v = data[count + j++] = int($1)
-                    if (max == "" && min == "")
-                        max = min = v
-
-                    if (max < v)
-                        max = v
-
-                    if (min > v)
-                        min = v
-                }
-            }
-
-            count += j - 1
-        }
-
-        END {
-            n = split(min == max && max ? "▅ ▅" : "▁ ▂ ▃ ▄ ▅ ▆ ▇ █", blocks, " ")
-            scale = (scale = int(256 * (max - min) / (n - 1))) ? scale : i
-            for (i = 1; i <= count; i++)
-                out = out (data[i] == "" ? " " : blocks[idx = int(256 * (data[i] - min) / scale) + 1])
-
-            print out
-        }
-    '
-end
 ## END OF SPARK ##
 
 ## FUNCTIONS ##
-# Functions needed for !! and !$
-function __history_previous_command
-  switch (commandline -t)
-  case "!"
-    commandline -t $history[1]; commandline -f repaint
-
-  case "*"
-    commandline -i !
-  end
-end
-
-function __history_previous_command_arguments
-  switch (commandline -t)
-  case "!"
-    commandline -t ""
-    commandline -f history-token-search-backward
-
-  case "*"
-    commandline -i '$'
-  end
-end
-
-
-function tmux-session
-    bash $HOME/tmux-sessionizer.sh
-end
-
 # The bindings for !! and !$
 if [ "$fish_key_bindings" = "fish_vi_key_bindings" ];
   bind -Minsert ! __history_previous_command
@@ -136,10 +46,10 @@ end
 ## Aliases
 alias clear='echo -en "\x1b[2J\x1b[1;1H" ; echo; echo; seq 1 (tput cols) | sort -R | spark | lolcat; echo; echo'
 
-# Changing ls with exa
-alias ls='exa --icons -a --color=always --group-directories-first'    # my preferred listing
-alias ll='exa --icons -a -l --color=always --group-directories-first' # long format
-alias lt='exa --icons -a -T --color=always --group-directories-first' # tree listing
+# Changing ls with eza
+alias ls='eza --icons -a --color=always --group-directories-first'    # my preferred listing
+alias ll='eza --icons -a -l --color=always --group-directories-first' # long format
+alias lt='eza --icons -a -T --color=always --group-directories-first' # tree listing
 
 # confirm before overwriting something
 alias cp='cp -i'
@@ -152,14 +62,11 @@ alias mirrord="sudo reflector --latest 50 --number 20 --sort delay --save /etc/p
 alias mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
 alias mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist"
 
-# Merge Xresources
-# alias merge='xrdb -merge ~/.Xresources'
-
 # Always use nvim instead of vim.
 alias suvi='sudo -E env "PATH=$PATH" nvim'
 
 # feh
-# alias feh="feh -Z -."
+alias feh="feh -Z -."
 
 ## Abbreviations
 # navigation
@@ -211,9 +118,6 @@ abbr --add lg lazygit
 abbr --add tm tmux
 abbr --add ts tmux-session
 
-# yazi
-abbr --add ya yazi
-
 # Starship
 starship init fish | source
 
@@ -249,15 +153,7 @@ else
 end
 
 if not set -q TMUX
-    tmux
+    tmux_session_manager
 end
 
-## Yazi setup
-# function y
-# 	set tmp (mktemp -t "yazi-cwd.XXXXXX")
-# 	yazi $argv --cwd-file="$tmp"
-# 	if set cwd (command cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
-# 		builtin cd -- "$cwd"
-# 	end
-# 	rm -f -- "$tmp"
-# end
+thefuck --alias | source

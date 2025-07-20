@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 lxsession &
-killall volumeicon && volumeicon &
+volumeicon &
 picom &
 nm-applet &
 nitrogen --restore &

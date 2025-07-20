@@ -1,0 +1,11 @@
+##[pylyzer] succeed /home/nahuel/.config/qtile/colors.py 1709000967 3766
+.doom_one: global::List!(global::List!({"#c678dd", "#282c34", "#da8548", "#51afef", "#ff6c6b", "#98be65", "#46d9ff", "#bbc2cf", "#1c1f24"}, 2), 9)
+.dracula: global::List!(global::List!({"#f8f8f2", "#bd93f9", "#000000", "#ff79c6", "#50fa7b", "#9aedfe", "#ff5555", "#f1fa8c", "#282a36"}, 2), 9)
+.gruvbox_dark: global::List!(global::List!({"#ebdbb2", "#98971a", "#83a598", "#000000", "#282828", "#fb4934", "#d79921", "#d3869b", "#b8bb26"}, 2), 9)
+.monokai_pro: global::List!(global::List!({"#403E41", "#FC9867", "#FF6188", "#AB9DF2", "#2D2A2E", "#FFD866", "#A9DC76", "#78DCE8", "#FCFCFA"}, 2), 9)
+.nord: global::List!(global::List!({"#EBCB8B", "#2E3440", "#BF616A", "#A3BE8C", "#81A1C1", "#D8DEE9", "#3B4252", "#88C0D0", "#B48EAD"}, 2), 9)
+.oceanic_next: global::List!(global::List!({"#d8dee9", "#6699cc", "#1b2b34", "#99c794", "#5fb3b3", "#ec5f67", "#fac863", "#c594c5", "#29414f"}, 2), 9)
+.palenight: global::List!(global::List!({"#292d3e", "#ffcb6b", "#c3e88d", "#d0d0d0", "#434758", "#82aaff", "#f07178", "#89ddff", "#c792ea"}, 2), 9)
+.solarized_dark: global::List!(global::List!({"#dc322f", "#268bd2", "#b58900", "#073642", "#859900", "#d33682", "#002b36", "#2aa198", "#839496"}, 2), 9)
+.solarized_light: global::List!(global::List!({"#dc322f", "#268bd2", "#fdf6e3", "#ece5ac", "#859900", "#b58900", "#2aa198", "#657b83", "#d33682"}, 2), 9)
+.tomorrow_night: global::List!(global::List!({"#1d1f21", "#b294bb", "#373b41", "#81a2be", "#b5bd68", "#c5c8c6", "#cc6666", "#e6c547", "#70c0ba"}, 2), 9)
