@@ -1,0 +1,47 @@
+#!/bin/bash
+
+echo "Copying dotfiles to repository..."
+
+# Fish shell
+cp -r $HOME/.config/fish/ ${PWD}/fish/
+
+# Alacritty terminal
+cp -r $HOME/.config/alacritty/ ${PWD}/alacritty/
+
+# AwesomeWM
+cp -r $HOME/.config/awesome/ ${PWD}/awesome/
+
+# Hyprland
+cp -r $HOME/.config/hypr/ ${PWD}/hypr/
+
+# Kitty terminal
+cp -r $HOME/.config/kitty/ ${PWD}/kitty/
+
+# Polybar
+cp -r $HOME/.config/polybar/ ${PWD}/polybar/
+
+# Qtile
+cp -r $HOME/.config/qtile/ ${PWD}/qtile/
+
+# Rofi
+cp -r $HOME/.config/rofi/ ${PWD}/rofi/
+
+# Waybar
+cp -r $HOME/.config/waybar/ ${PWD}/waybar/
+
+# Vifm
+cp -r $HOME/.config/vifm/ ${PWD}/vifm/
+
+# Zathura
+cp -r $HOME/.config/zathura/ ${PWD}/zathura/
+
+# Tmux
+cp $HOME/.config/tmux/tmux.conf ${PWD}/tmux/
+
+# Bash
+cp $HOME/.bashrc ${PWD}/bash/
+
+# Starship prompt
+cp $HOME/.config/starship.toml ${PWD}/
+
+echo "Done copying dotfiles!"

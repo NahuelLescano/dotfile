@@ -19,13 +19,13 @@ show_always = true
 # Make a different hostname for the user
 [hostname]
 ssh_only = false
-format = 'on [$hostname](bold purple) '
+format = 'on [arch](bold purple) '
 trim_at = "."
 disabled = false
 
 # configure directory
 [directory]
-read_only = " "
+read_only = "  "
 truncation_length = 10
 truncate_to_repo = true # truncates directory to root folder if in github repo
 style = "bold italic blue"
@@ -42,8 +42,8 @@ disabled = true
 
 # Language view config
 [python]
-symbol = " "
-format = 'via [${symbol}python (${version} )(\($virtualenv\) )]($style)'
+symbol = "🐍 "
+format = 'via [${symbol}python (${version} )]($style)'
 style = "bold yellow"
 pyenv_prefix = "venv "
 python_binary = ["./venv/bin/python", "python", "python3", "python2"]
@@ -54,20 +54,16 @@ version_format = "v${raw}"
 symbol = " "
 format = "via [$name $version]($style)"
 
-[helm]
-symbol = " "
-format = "via [⎈ $version](bold white) "
-
 [lua]
-format = "via [ $version](bold white) "
+format = "via [🌙 $version](bold white) "
 
 [nodejs]
-format = "via [ $version](bold green) "
+format = "via [  $version](bold green) "
 detect_files = ["package.json", ".node-version"]
 detect_folders = ["node_modules"]
 
 [git_branch]
-symbol = " "
+symbol = " "
 
 [git_status]
 format = '([\[$all_status$ahead_behind\]]($style) )'
