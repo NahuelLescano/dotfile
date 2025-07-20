@@ -81,6 +81,11 @@
   color: #babbf1;
 }
 
+#custom-spotify {
+  border-radius: 5px 0px 0px 5px;
+  color: #1db954;
+}
+
 #tray {
   margin-right: 1rem;
   margin-left: 1rem;

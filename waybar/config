@@ -65,7 +65,7 @@
       "format": ""
     },
     "custom/spotify": {
-        "format": " {artist} - {title}",
+        "format": "  {artist} - {title}",
         "format-icons": {
             "spotify": ""
         },
