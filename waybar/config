@@ -6,6 +6,7 @@
     ],
     "modules-center": ["clock"],
     "modules-right": [
+      "custom/spotify",
       "pulseaudio",
       "cpu",
       "memory",
@@ -20,7 +21,7 @@
       "spacing": 10
     },
     "clock": {
-        "format": " {:%H:%M}",
+        "format": "  {:%H:%M}",
         "interval": 60,
         "tooltip": true,
         "tooltip-format": "<tt><small>{calendar}</small></tt>",
@@ -63,4 +64,18 @@
       "on-click": "sh -c '(sleep 0.5s; hyprlock)' & disown",
       "format": ""
     },
+    "custom/spotify": {
+        "format": " {artist} - {title}",
+        "format-icons": {
+            "spotify": ""
+        },
+        "return-type": "json",
+        "exec": "./scripts/spotify",
+        "exec-if": "pgrep spotify",
+        "interval": 5,
+        "on-click": "playerctl --player=spotify play-pause",
+        "on-click-right": "playerctl --player=spotify next",
+        "escape": true,
+        "format": " {}",
+    }
 }

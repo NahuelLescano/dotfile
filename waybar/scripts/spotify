@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Get player status
+player_status=$(playerctl -p spotify status 2>/dev/null)
+
+# Handle playing state
+if [ "$player_status" = "Playing" ]; then
+    artist=$(playerctl -p spotify metadata artist)
+    title=$(playerctl -p spotify metadata title)
+    # Escape special characters for JSON
+    artist=$(echo "$artist" | sed 's/&/&amp;/g')
+    title=$(echo "$title" | sed 's/&/&amp;/g')
+    echo '{"text": "'"$artist - $title"'", "class": "playing", "alt": "Spotify (Playing)"}'
+# Handle paused state
+elif [ "$player_status" = "Paused" ]; then
+    echo '{"text": "Paused", "class": "paused", "alt": "Spotify (Paused)"}'
+# Handle stopped state
+else
+    echo '{"text": "", "class": "stopped", "alt": "Spotify (Stopped)"}'
+fi
