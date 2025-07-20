@@ -1,0 +1,94 @@
+import = [
+  "~/.config/alacritty/catppuccin-mocha.toml"
+]
+
+[colors.bright]
+black = "#666666"
+blue = "#7aa6da"
+cyan = "#70c0b1"
+green = "#b9ca4a"
+magenta = "#c397d8"
+red = "#d54e53"
+white = "#eaeaea"
+yellow = "#e7c547"
+
+[colors.cursor]
+cursor = "CellForeground"
+text = "CellBackground"
+
+[colors.hints.end]
+background = "#1d1f21"
+foreground = "#e9ff5e"
+
+[colors.hints.start]
+background = "#e9ff5e"
+foreground = "#1d1f21"
+
+[colors.line_indicator]
+background = "#c5c8c6"
+foreground = "#b5bd68"
+
+[colors.normal]
+black = "#1d1f21"
+blue = "#81a2be"
+cyan = "#8abeb7"
+green = "#b5bd68"
+magenta = "#b294bb"
+red = "#cc6666"
+white = "#c5c8c6"
+yellow = "#f0c674"
+
+[colors.primary]
+background = "#040F19"
+foreground = "#c5c8c6"
+
+[colors.search.focused_match]
+background = "#000000"
+foreground = "#ffffff"
+
+[colors.search.matches]
+background = "#282A2E"
+foreground = "#8B971E"
+
+[colors.selection]
+background = "CellForeground"
+text = "CellBackground"
+
+[colors.vi_mode_cursor]
+cursor = "CellForeground"
+text = "CellBackground"
+
+[cursor]
+unfocused_hollow = true
+vi_mode_style = "Beam"
+
+[cursor.style]
+shape = "Beam"
+
+[env]
+TERM = "xterm-256color"
+title = "Alacritty"
+
+[font]
+size = 12.0
+
+[font.italic]
+family = "monospace"
+style = "Italic"
+
+[font.normal]
+family = "JetBrainsMono Nerd font"
+style = "Regular"
+
+[mouse]
+hide_when_typing = true
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[selection]
+save_to_clipboard = true
+
+[window]
+opacity = 0.8
