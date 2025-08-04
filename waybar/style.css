@@ -1,39 +1,39 @@
 * {
-  font-family: IosevkaTerm Nerd Font;
-  font-size: 21px;
-  min-height: 0;
-  padding-right: 2px;
-  padding-left: 2px;
-  padding-bottom: 0px;
+    font-family: IosevkaTerm Nerd Font;
+    font-size: 21px;
+    min-height: 0;
+    padding-right: 2px;
+    padding-left: 2px;
+    padding-bottom: 0px;
 }
 
 #waybar {
-  background: transparent;
-  color: #c6d0f5;
-  margin: 2px 2px;
+    background: transparent;
+    color: #c6d0f5;
+    margin: 2px 2px;
 }
 
 #workspaces {
-  border-radius: 5px;
-  margin: 5px;
-  background: #101010;
-  margin-left: 1rem;
+    border-radius: 5px;
+    margin: 5px;
+    background: #101010;
+    margin-left: 1rem;
 }
 
 #workspaces button {
-  color: #babbf1;
-  border-radius: 5px;
-  padding: 0.4rem;
+    color: #babbf1;
+    border-radius: 5px;
+    padding: 0.4rem;
 }
 
 #workspaces button.active {
-  color: #99d1db;
-  border-radius: 5px;
+    color: #99d1db;
+    border-radius: 5px;
 }
 
 #workspaces button:hover {
-  color: #85c1dc;
-  border-radius: 5px;
+    color: #85c1dc;
+    border-radius: 5px;
 }
 
 #tray,
@@ -44,50 +44,45 @@
 #memory,
 #custom-lock,
 #custom-spotify {
-  background-color: #101010;
-  padding: 0.5rem 1rem;
-  margin: 5px 0;
-  border-radius: 0px 5px 5px 0px;
+    background-color: #101010;
+    padding: 0.5rem 1rem;
+    margin: 5px 0;
+    border-radius: 0px 5px 5px 0px;
 }
 
 #memory {
-  border-radius: 0px 5px 5px 0px;
+    border-radius: 0px 5px 5px 0px;
 }
 
 #clock {
-  color: #8caaee;
-  border-radius: 5px;
-  margin-right: 1rem;
+    color: #8caaee;
+    border-radius: 5px;
+    margin-right: 1rem;
 }
 
 #backlight {
-  color: #e5c890;
-  border-radius: 0;
+    color: #e5c890;
+    border-radius: 0;
 }
 
 #pulseaudio {
-  color: #ea999c;
-  border-radius: 5px 0px 0px 5%;
-  margin-left: 1rem;
-}
-
-#custom-music {
-  color: #ca9ee6;
-  border-radius: 5px;
+    color: #ea999c;
+    border-radius: 5px 0px 0px 5%;
+    margin-left: 1rem;
 }
 
 #custom-lock {
-  border-radius: 5px 0px 0px 5px;
-  color: #babbf1;
+    border-radius: 5px 0px 0px 5px;
+    color: #babbf1;
 }
 
 #custom-spotify {
-  border-radius: 5px 0px 0px 5px;
-  color: #1db954;
+    border-radius: 5px 0px 0px 5px;
+    color: #1db954;
 }
 
 #tray {
-  margin-right: 1rem;
-  margin-left: 1rem;
-  border-radius: 5px;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    border-radius: 5px;
 }
