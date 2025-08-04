@@ -68,6 +68,9 @@ alias suvi='sudo -E env "PATH=$PATH" nvim'
 # feh
 alias feh="feh -Z -."
 
+# pass menu on terminal
+alias passmenu="pass-menu -- fzf --layout=reverse --exact --border=bold --border=rounded --margin=3% --color=dark"
+
 ## Abbreviations
 # navigation
 abbr --add .. cd ..
@@ -87,7 +90,7 @@ abbr --add cleanup sudo pacman -Rns (pacman -Qtdq)  # remove orphaned packages
 abbr --add pasua paru -Sua --noconfirm              # update only AUR packages
 abbr --add pain paru -S                             # install AUR package
 abbr --add parm paru -Rns                           # remove AUR package and all dependencies
-abbr --add pass paru -Ss                            # search for specific AUR package
+abbr --add prss paru -Ss                            # search for specific AUR package
 abbr --add paqua paru -Qua                          # show if a pkg has an update
 
 # git
@@ -153,7 +156,8 @@ else
 end
 
 if not set -q TMUX
-    tmux_session_manager
+    tmux
 end
 
+# Fuck
 thefuck --alias | source
