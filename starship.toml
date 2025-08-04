@@ -4,10 +4,6 @@
 # Don't inserts a blank line between shell prompts
 add_newline = false
 
-# Make prompt single line instead of two lines
-#[line_break]
-#disabled = true
-
 # Make a different user prompt
 [username]
 style_user = "green bold"
@@ -35,54 +31,3 @@ style = "bold italic blue"
 error_symbol = "[✗](bold red) "             # The "error_symbol" segment is being set to "x" with the color "bold red"
 vicmd_symbol = "[N](bold green) "           # The "vicmd_symbol" segment is being set to "N" (Normal mode) with the color "bold green"
 vimcmd_visual_symbol = "[V](bold yellow)"   # The "vimcmd_visual_symbol" segment is being set to "V" (Visual mode) with the color "bold yellow"
-
-# Disable the package module, hiding it from the prompt completely
-[package]
-disabled = true
-
-# Language view config
-[python]
-symbol = "🐍 "
-format = 'via [${symbol}python (${version} )]($style)'
-style = "bold yellow"
-pyenv_prefix = "venv "
-python_binary = ["./venv/bin/python", "python", "python3", "python2"]
-detect_extensions = ["py"]
-version_format = "v${raw}"
-
-[c]
-symbol = " "
-format = "via [$name $version]($style)"
-
-[lua]
-format = "via [🌙 $version](bold white) "
-
-[nodejs]
-format = "via [  $version](bold green) "
-detect_files = ["package.json", ".node-version"]
-detect_folders = ["node_modules"]
-
-[git_branch]
-symbol = " "
-
-[git_status]
-format = '([\[$all_status$ahead_behind\]]($style) )'
-stashed = "[${count}*](green)"
-modified = "[${count}+](yellow)"
-deleted =  "[${count}-](red)"
-conflicted =  "[${count}~](red)"
-ahead = "⇡${count}"
-behind = "⇣${count}"
-untracked = "[${count}?](blue)"
-staged = "[${count}+](green)"
-
-[git_state]
-style ="bold red"
-format = "[$state( $progress_current/$progress_total) ]($style)"
-rebase = "rebase"
-merge = "merge"
-revert = "revert"
-cherry_pick = "cherry"
-bisect = "bisect"
-am = "am"
-am_or_rebase = "am/rebase"
