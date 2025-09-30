@@ -2,7 +2,7 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
 # Don't inserts a blank line between shell prompts
-add_newline = false
+add_newline = true
 
 # Make a different user prompt
 [username]

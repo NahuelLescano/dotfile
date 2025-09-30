@@ -7,14 +7,12 @@
 # https://gitlab.com/dwt1/dotfiles/-/blob/master/.bashrc
 
 ### EXPORT
-export TERM="xterm-256color"                      # getting proper colors
-export HISTCONTROL=ignoredups:erasedups           # no duplicate entries
-export ALTERNATE_EDITOR=""                        # setting for emacsclient
-export EDITOR="emacsclient -t -a ''"              # $EDITOR use Emacs in terminal
-export VISUAL="emacsclient -c -a emacs"
+export TERM="xterm-256color"                    # getting proper colors
+export HISTCONTROL=ignoredups:erasedups         # no duplicate entries
+export EDITOR="nvim"                            # $EDITOR use nvim
 
 ### "bat" as manpager
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+# export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
 # Comment this line out to enable default emacs-like bindings
 set -o vi
@@ -31,19 +29,6 @@ bind -m vi-insert 'Control-l: clear-screen'
 if [ -d "$HOME/.bin" ] ;
   then PATH="$HOME/.bin:$PATH"
 fi
-
-if [ -d "$HOME/.local/bin" ] ;
-  then PATH="$HOME/.local/bin:$PATH"
-fi
-
-if [ -d "$HOME/.emacs.d/bin" ] ;
-  then PATH="$HOME/.emacs.d/bin:$PATH"
-fi
-
-if [ -d "$HOME/Applications" ] ;
-  then PATH="$HOME/Applications:$PATH"
-fi
-
 if [ -d "/var/lib/flatpak/exports/bin/" ] ;
   then PATH="/var/lib/flatpak/exports/bin/:$PATH"
 fi
@@ -88,32 +73,26 @@ ex () {
 }
 
 ## ALIASES ##
-# emacs
-alias emacs="emacsclient -c -a 'emacs'"
-
-# Changing "ls" to "exa"
-alias ls='exa -al --color=always --group-directories-first' # my preferred listing
-alias la='exa -a --color=always --group-directories-first'  # all files and dirs
-alias ll='exa -l --color=always --group-directories-first'  # long format
-alias lt='exa -aT --color=always --group-directories-first' # tree listing
-alias l.='exa -a | egrep "^\."'
+# Changing "ls" to "eza"
+alias ls='eza -al --color=always --group-directories-first' # my preferred listing
+alias la='eza -a --color=always --group-directories-first'  # all files and dirs
+alias ll='eza -l --color=always --group-directories-first'  # long format
+alias lt='eza -aT --color=always --group-directories-first' # tree listing
+alias l.='eza -a | egrep "^\."'
 
 # pacman and paru
-alias pacsyu='doas pacman -Syu'                  # update only standard pkgs
-alias pacsyyu='doas pacman -Syyu'                # Refresh pkglist & update standard pkgs
+alias pacsyu='sudo pacman -Syu'                  # update only standard pkgs
+alias pacsyyu='sudo pacman -Syyu'                # Refresh pkglist & update standard pkgs
 alias parsua='paru -Sua --noconfirm'             # update only AUR pkgs (paru)
 alias parsyu='paru -Syu --noconfirm'             # update standard pkgs and AUR pkgs (paru)
-alias unlock='doas rm /var/lib/pacman/db.lck'    # remove pacman lock
-alias cleanup='doas pacman -Rns $(pacman -Qtdq)' # remove orphaned packages
+alias unlock='sudo rm /var/lib/pacman/db.lck'    # remove pacman lock
+alias cleanup='sudo pacman -Rns $(pacman -Qtdq)' # remove orphaned packages
 
 # get fastest mirrors
-alias mirror="doas reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
-alias mirrord="doas reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist"
-alias mirrors="doas reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
-alias mirrora="doas reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist"
-
-# Merge Xresources
-alias merge='xrdb -merge ~/.Xresources'
+alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
+alias mirrord="sudo reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist"
+alias mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
+alias mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist"
 
 # confirm before overwriting something
 alias cp="cp -i"
@@ -149,6 +128,3 @@ eval "$(starship init bash)"
 
 . "$HOME/.cargo/env"
 
-
-export DM_HOME="$HOME/Documentos/repos/dmscript"
-export DM_LOGOUT="$DM_HOME/dm-logout"
