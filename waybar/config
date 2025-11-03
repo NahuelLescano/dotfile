@@ -2,23 +2,25 @@
     "layer": "top",
     "position": "top",
     "modules-left": [
-          "hyprland/workspaces"
+        "hyprland/workspaces"
     ],
-    "modules-center": ["clock"],
+    "modules-center": [
+        "clock"
+    ],
     "modules-right": [
-      "custom/spotify",
-      "pulseaudio",
-      "cpu",
-      "memory",
-      "tray",
-      "custom/lock"
+        "custom/spotify",
+        "pulseaudio",
+        "cpu",
+        "memory",
+        "tray",
+        "custom/lock"
     ],
     "hyprland/workspaces": {
-      "format": "{name}",
+        "format": "{name}"
     },
     "tray": {
-      "icon-size": 21,
-      "spacing": 10
+        "icon-size": 21,
+        "spacing": 10
     },
     "clock": {
         "format": "  {:%H:%M}",
@@ -26,43 +28,56 @@
         "tooltip": true,
         "tooltip-format": "<tt><small>{calendar}</small></tt>",
         "calendar": {
-          "mode": "month",
-          "format": {
-            "months": "<span color='#2986cc'><b>{}</b></span>",
-            "days": "<span color='#cdd6f4'><b>{}</b></span>",
-            "weekdays": "<span color='#7CD37C'><b>{}</b></span>",
-            "today": "<span color='#ffcc66'><b>{}</b></span>"
-          }
+            "mode": "month",
+            "format": {
+                "months": "<span color='#2986cc'><b>{}</b></span>",
+                "days": "<span color='#cdd6f4'><b>{}</b></span>",
+                "weekdays": "<span color='#7CD37C'><b>{}</b></span>",
+                "today": "<span color='#ffcc66'><b>{}</b></span>"
+            }
         },
         "actions": {
-          "on-click-right": "mode",
-          "on-click-forward": "tz_up",
-          "on-click-backward": "tz_down",
-          "on-scroll-up": "shift_up",
-          "on-scroll-down": "shift_down"
+            "on-click-right": "mode",
+            "on-click-forward": "tz_up",
+            "on-click-backward": "tz_down",
+            "on-scroll-up": "shift_up",
+            "on-scroll-down": "shift_down"
         }
-      },
+    },
     "cpu": {
-      "interval": 1,
-      "format": "  {icon0}{icon1}{icon2}{icon3} {usage:>2}%",
-      "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"]
+        "interval": 1,
+        "format": "  {icon0}{icon1}{icon2}{icon3} {usage:>2}%",
+        "format-icons": [
+            "▁",
+            "▂",
+            "▃",
+            "▄",
+            "▅",
+            "▆",
+            "▇",
+            "█"
+        ]
     },
     "memory": {
-      "interval": 30,
-      "format": "  {used:0.1f}G/{total:0.1f}G"
+        "interval": 30,
+        "format": "  {used:0.1f}G/{total:0.1f}G"
     },
     "pulseaudio": {
-      "format": "{icon} {volume}%",
-      "format-muted": "",
-      "format-icons": {
-        "default": ["", "", " "]
-      },
-      "on-click": "pavucontrol"
+        "format": "{icon} {volume}%",
+        "format-muted": "",
+        "format-icons": {
+            "default": [
+                "",
+                "",
+                " "
+            ]
+        },
+        "on-click": "pavucontrol"
     },
     "custom/lock": {
-      "tooltip": false,
-      "on-click": "sh -c '(sleep 0.5s; hyprlock)' & disown",
-      "format": ""
+        "tooltip": false,
+        "on-click": "sh -c '(sleep 0.5s; hyprlock)' & disown",
+        "format": ""
     },
     "custom/spotify": {
         "format": "  {artist} - {title}",
@@ -75,7 +90,6 @@
         "interval": 5,
         "on-click": "playerctl --player=spotify play-pause",
         "on-click-right": "playerctl --player=spotify next",
-        "escape": true,
-        "format": " {}",
+        "escape": true
     }
 }
