@@ -159,7 +159,4 @@ if status --is-interactive;
     if not set -q TMUX
         tmux
     end
-    
-    # Fuck
-    thefuck --alias | source
 end
