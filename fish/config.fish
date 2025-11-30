@@ -93,8 +93,8 @@ if status --is-interactive;
     else
         echo 'zoxide: command not found, please install it from https://github.com/ajeetdsouza/zoxide'
     end
-    
-    if status --is-login; and not set -q TMUX
+
+    if  not set -q TMUX;
         tmux
     end
 end
