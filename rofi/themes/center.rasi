@@ -2,8 +2,8 @@
     background-color:            #282c34;
     border-color:                #51afef;
     text-color:                  #fff;
-    font:                        "Ubuntu 15";
-    prompt-font:                 "Ubuntu 15";
+    font:                        "IosevkaTerm Nerd Font";
+    prompt-font:                 "IosevkaTerm Nerd Font";
     prompt-background:           #51afef;
     prompt-foreground:           #282c34;
     prompt-padding:              4px;
