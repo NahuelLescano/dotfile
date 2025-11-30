@@ -4,6 +4,10 @@
 # Don't inserts a blank line between shell prompts
 add_newline = true
 
+# Limit prompt command and scan timeouts
+command_timeout = 100
+scan_timeout = 30
+
 # Make a different user prompt
 [username]
 style_user = "green bold"

@@ -1,10 +1,10 @@
 # This is using DT's configs: https://gitlab.com/dwt1/dotfiles/-/blob/master/.config/fish/config.fish
 
 ### ADDING TO THE PATH ###
-# First line removes the paths; second line sets it. Without the first line,
-# the path gets massive and fish become very slow.
-set -e fish_user_paths
-set -U fish_user_paths $HOME/.bin  $HOME/.local/bin  /var/lib/flatpak/exports/bin/
+# Initialize universal path only once
+if not set -q fish_user_paths
+    set -U fish_user_paths $HOME/.bin $HOME/.local/bin /var/lib/flatpak/exports/bin/
+end
 
 fish_vi_key_bindings                        # set vi mode
 set fish_greeting                           # Supresses fish's intro message
@@ -24,7 +24,6 @@ if status --is-interactive;
     
     ## SPARK ##
     set -g spark_version 1.0.0
-    
     complete -xc spark -n __fish_use_subcommand -a --help -d "Show usage help"
     complete -xc spark -n __fish_use_subcommand -a --version -d "$spark_version"
     complete -xc spark -n __fish_use_subcommand -a --min -d "Minimum range value"
@@ -40,101 +39,37 @@ if status --is-interactive;
       bind ! __history_previous_command
       bind '$' __history_previous_command_arguments
     end
-    
     ### END OF FUNCTIONS ###
-    
+
     ### ALIASES AND ABBREVIATIONS ###
-    ## Aliases
-    alias clear='echo -en "\x1b[2J\x1b[1;1H" ; echo; echo; seq 1 (tput cols) | sort -R | spark | lolcat; echo; echo'
-    
-    # Changing ls with eza
-    alias ls='eza --icons -a --color=always --group-directories-first'    # my preferred listing
-    alias ll='eza --icons -a -l --color=always --group-directories-first' # long format
-    alias lt='eza --icons -a -T --color=always --group-directories-first' # tree listing
-    
-    # confirm before overwriting something
-    alias cp='cp -i'
-    alias mv='mv -i'
-    alias rm='rm -i'
-    
-    # get fastest mirrors
-    alias mirror="sudo reflector -f 30 -l 30 --number 10 --verbose --save /etc/pacman.d/mirrorlist"
-    alias mirrord="sudo reflector --latest 50 --number 20 --sort delay --save /etc/pacman.d/mirrorlist"
-    alias mirrors="sudo reflector --latest 50 --number 20 --sort score --save /etc/pacman.d/mirrorlist"
-    alias mirrora="sudo reflector --latest 50 --number 20 --sort age --save /etc/pacman.d/mirrorlist"
-    
-    # Always use nvim instead of vim.
-    alias suvi='sudo -E env "PATH=$PATH" nvim'
-    
-    # feh
-    alias feh="feh -Z -."
-    
-    # pass menu on terminal
-    alias passmenu="pass-menu -- fzf --layout=reverse --exact --border=bold --border=rounded --margin=3% --color=dark"
-    
-    ## Abbreviations
-    # navigation
-    abbr --add .. cd ..
-    abbr --add ... cd ../..
-    abbr --add .3 cd ../../..
-    abbr --add .4 cd ../../../..
-    
-    # pacman
-    abbr --add pin sudo pacman -S                       # install programs
-    abbr --add prm sudo pacman -Rns                     # remove programs and all dependencies
-    abbr --add pss pacman -Ss                           # search for specific program
-    abbr --add psyu sudo pacman -Syu                    # update only standard packages
-    abbr --add psyyu sudo pacman -Syyu                  # refresh pkglist and update standard pkgs
-    abbr --add cleanup sudo pacman -Rns (pacman -Qtdq)  # remove orphaned packages
-    
-    # paru
-    abbr --add pasua paru -Sua --noconfirm              # update only AUR packages
-    abbr --add pain paru -S                             # install AUR package
-    abbr --add parm paru -Rns                           # remove AUR package and all dependencies
-    abbr --add prss paru -Ss                            # search for specific AUR package
-    abbr --add paqua paru -Qua                          # show if a pkg has an update
-    
-    # git
-    abbr --add gi git init
-    abbr --add ga git add
-    abbr --add gal git add .
-    abbr --add gs git status
-    abbr --add gb git branch
-    abbr --add gc git clone
-    abbr --add gcv git commit -v
-    abbr --add gcm git commit -m
-    abbr --add gsh git remote show origin
-    abbr --add gpl git pull origin
-    abbr --add gps git push origin
-    abbr --add gsw git switch
-    abbr --add gl git log --pretty=format:'"%h - %an, %ar: %s"'
-    
-    # get error messages from journalctl
-    abbr --add jctl journalctl -p 3 -xb
-    
-    # nvim
-    abbr --add nv nvim
-    
-    # lazygit
-    abbr --add lg lazygit
-    
-    # tmux
-    abbr --add tm tmux
-    abbr --add ts tmux-session
-    
-    # Starship
-    starship init fish | source
-    
-    # flatpak
-    abbr --add flatin flatpak install
-    abbr --add flatup flatpak update
-    abbr --add flats flatpak search
-    abbr --add flatrm flatpak remove
-    
+
+    ## PACMAN abbreviations
+    abbr --query pin   ; or abbr --add pin   sudo pacman -S
+    abbr --query prm   ; or abbr --add prm   sudo pacman -Rns
+    abbr --query pss   ; or abbr --add pss   pacman -Ss
+    abbr --query psyu  ; or abbr --add psyu  sudo pacman -Syu
+    abbr --query psyyu ; or abbr --add psyyu sudo pacman -Syyu
+    abbr --query cleanup; or abbr --add cleanup sudo pacman -Rns (pacman -Qtdq)
+
+    ## PARU abbreviations
+    abbr --query pasua ; or abbr --add pasua paru -Sua --noconfirm
+    abbr --query pain  ; or abbr --add pain  paru -S
+    abbr --query parm  ; or abbr --add parm  paru -Rns
+    abbr --query prss  ; or abbr --add prss  paru -Ss
+    abbr --query paqua ; or abbr --add paqua paru -Qua
+
+    ## Misc abbreviations
+    abbr --query jctl; or abbr --add jctl journalctl -p 3 -xb
+    abbr --query nv  ; or abbr --add nv nvim
+    abbr --query lg  ; or abbr --add lg lazygit
+    abbr --query tm  ; or abbr --add tm tmux
+    abbr --query ts  ; or abbr --add ts tmux-session
+    abbr --query flin; or abbr --add flin flatpak install
+    abbr --query flup; or abbr --add flup flatpak update
+    abbr --query flss ; or abbr --add flss flatpak search
+    abbr --query flrm; or abbr --add flrm flatpak remove
+
     # Set up fzf key bindings
-    # CTRL-t -> fzf select
-    # CTRL-r -> fzf history
-    # ALT-c -> fzf cd
     fzf --fish | source
     set FZF_DEFAULT_OPTS "--layout=reverse --exact --border=bold --border=rounded --margin=3% --color=dark"
     
@@ -148,6 +83,9 @@ if status --is-interactive;
     # bun
     set --export BUN_INSTALL "$HOME/.bun"
     set --export PATH $BUN_INSTALL/bin $PATH
+
+    # Starship
+    starship init fish | source
     
     # zoxide
     if command -sq zoxide
@@ -156,7 +94,7 @@ if status --is-interactive;
         echo 'zoxide: command not found, please install it from https://github.com/ajeetdsouza/zoxide'
     end
     
-    if not set -q TMUX
+    if status --is-login; and not set -q TMUX
         tmux
     end
 end
