@@ -23,11 +23,11 @@ if status --is-interactive;
     set fish_color_param brcyan
     
     ## SPARK ##
-    set -g spark_version 1.0.0
-    complete -xc spark -n __fish_use_subcommand -a --help -d "Show usage help"
-    complete -xc spark -n __fish_use_subcommand -a --version -d "$spark_version"
-    complete -xc spark -n __fish_use_subcommand -a --min -d "Minimum range value"
-    complete -xc spark -n __fish_use_subcommand -a --max -d "Maximum range value"
+    # set -g spark_version 1.0.0
+    # complete -xc spark -n __fish_use_subcommand -a --help -d "Show usage help"
+    # complete -xc spark -n __fish_use_subcommand -a --version -d "$spark_version"
+    # complete -xc spark -n __fish_use_subcommand -a --min -d "Minimum range value"
+    # complete -xc spark -n __fish_use_subcommand -a --max -d "Maximum range value"
     ## END OF SPARK ##
     
     ## FUNCTIONS ##
@@ -72,13 +72,6 @@ if status --is-interactive;
     # Set up fzf key bindings
     fzf --fish | source
     set FZF_DEFAULT_OPTS "--layout=reverse --exact --border=bold --border=rounded --margin=3% --color=dark"
-    
-    # pnpm
-    set -gx PNPM_HOME "$HOME/.local/share/pnpm"
-    if not string match -q -- $PNPM_HOME $PATH
-      set -gx PATH "$PNPM_HOME" $PATH
-    end
-    # pnpm end
     
     # bun
     set --export BUN_INSTALL "$HOME/.bun"

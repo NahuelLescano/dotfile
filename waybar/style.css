@@ -42,8 +42,7 @@
 #pulseaudio,
 #cpu,
 #memory,
-#custom-lock,
-#custom-spotify {
+#custom-lock {
     background-color: #101010;
     padding: 0.5rem 1rem;
     margin: 5px 0;
@@ -74,11 +73,6 @@
 #custom-lock {
     border-radius: 5px 0px 0px 5px;
     color: #babbf1;
-}
-
-#custom-spotify {
-    border-radius: 5px 0px 0px 5px;
-    color: #1db954;
 }
 
 #tray {
