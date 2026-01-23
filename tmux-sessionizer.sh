@@ -25,7 +25,7 @@ hydrate() {
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find $HOME/Projects $HOME/.config/ \
+    selected=$(find $HOME/Projects/ $HOME/.config/ $HOME/repos/ \
         \( -path '*/tmux/plugins/*' -o \
         -path '*/node_modules/*' \
         -o -path '*/build/*' -o -path '*/.git/*' \) -prune \

@@ -44,11 +44,11 @@ if status --is-interactive;
     ### ALIASES AND ABBREVIATIONS ###
 
     ## PACMAN abbreviations
-    abbr --query pin   ; or abbr --add pin   sudo pacman -S
-    abbr --query prm   ; or abbr --add prm   sudo pacman -Rns
-    abbr --query pss   ; or abbr --add pss   pacman -Ss
-    abbr --query psyu  ; or abbr --add psyu  sudo pacman -Syu
-    abbr --query psyyu ; or abbr --add psyyu sudo pacman -Syyu
+    abbr --query pin   ; or abbr --add pin      sudo pacman -S
+    abbr --query prm   ; or abbr --add prm      sudo pacman -Rns
+    abbr --query pss   ; or abbr --add pss      pacman -Ss
+    abbr --query psyu  ; or abbr --add psyu     sudo pacman -Syu
+    abbr --query psyyu ; or abbr --add psyyu    sudo pacman -Syyu
     abbr --query cleanup; or abbr --add cleanup sudo pacman -Rns (pacman -Qtdq)
 
     ## PARU abbreviations
@@ -87,7 +87,7 @@ if status --is-interactive;
         echo 'zoxide: command not found, please install it from https://github.com/ajeetdsouza/zoxide'
     end
 
-    if  not set -q TMUX;
-        tmux
-    end
+    # if not set -q TMUX;
+    #     tmux
+    # end
 end
