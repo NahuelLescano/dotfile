@@ -64,6 +64,7 @@ awesome.set_preferred_icon_size(33)
 -- This is used later as the default terminal and editor to run.
 local terminal = "ghostty"
 local browser = "app.zen_browser.zen"
+local xournal = "xournalpp"
 local rofi = "rofi -modi drun -show drun -display-drun 'Run:' "
 
 local home = os.getenv("HOME")
@@ -319,6 +320,10 @@ local globalkeys = gears.table.join(
     awful.key({ modkey }, "b", function()
         awful.util.spawn(browser)
     end, { description = "run zen browser", group = "applications" }),
+
+    awful.key({ modkey }, "x", function()
+        awful.util.spawn(xournal)
+    end, { description = "run xournal", group = "applications" }),
 
     -- Pcmanfm
     awful.key({ modkey }, "p", function()

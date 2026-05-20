@@ -1,6 +1,6 @@
 * {
     font-family: IosevkaTerm Nerd Font;
-    font-size: 21px;
+    font-size: 16px;
     min-height: 0;
     padding-right: 2px;
     padding-left: 2px;
@@ -20,15 +20,21 @@
     margin-left: 1rem;
 }
 
-#workspaces button {
+#workspaces button,
+#workspaces button * {
     color: #babbf1;
     border-radius: 5px;
-    padding: 0.4rem;
+    padding: 0.2rem 0.5rem;
+    font-size: 14px;
 }
 
-#workspaces button.active {
+#workspaces button.active,
+#workspaces button.active *,
+#workspaces button.focused,
+#workspaces button.focused * {
     color: #99d1db;
-    border-radius: 5px;
+    font-size: 30px;
+    font-weight: 700;
 }
 
 #workspaces button:hover {
@@ -36,20 +42,22 @@
     border-radius: 5px;
 }
 
+#workspaces button.urgent {
+    color: #e78284;
+}
+
 #tray,
 #backlight,
+#window,
 #clock,
 #pulseaudio,
 #cpu,
 #memory,
+#custom-keyboard-state,
 #custom-lock {
     background-color: #101010;
     padding: 0.5rem 1rem;
-    margin: 5px 0;
-    border-radius: 0px 5px 5px 0px;
-}
-
-#memory {
+    margin: 5px 4px;
     border-radius: 0px 5px 5px 0px;
 }
 
@@ -59,9 +67,11 @@
     margin-right: 1rem;
 }
 
-#backlight {
-    color: #e5c890;
-    border-radius: 0;
+#window {
+    color: #babbf1;
+    padding: 0.5rem 1rem;
+    margin: 5px 0;
+    border-radius: 5px;
 }
 
 #pulseaudio {

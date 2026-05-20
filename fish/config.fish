@@ -3,7 +3,7 @@
 ### ADDING TO THE PATH ###
 # Initialize universal path only once
 if not set -q fish_user_paths
-    set -U fish_user_paths $HOME/.bin $HOME/.local/bin /var/lib/flatpak/exports/bin/
+    set -U fish_user_paths $HOME/.bin $HOME/.local/bin /var/lib/flatpak/exports/bin/ $HOME/.config/emacs
 end
 
 fish_vi_key_bindings                        # set vi mode
