@@ -1,4 +1,5 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
+SETUVAR --export GEMINI_API_KEY:AIzaSyDT\x2dHEVHPXbrS_Eb9TAL3q7iCRBD8ECZUc
 SETUVAR __fish_initialized:4300
 SETUVAR fish_user_paths:/home/nahuel/\x2ebin\x1e/home/nahuel/\x2elocal/bin\x1e/var/lib/flatpak/exports/bin/

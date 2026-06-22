@@ -5,8 +5,8 @@
 add_newline = true
 
 # Limit prompt command and scan timeouts
-command_timeout = 400
-scan_timeout = 60
+command_timeout = 600
+scan_timeout = 80
 
 # Make a different user prompt
 [username]
