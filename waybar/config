@@ -2,7 +2,8 @@
     "layer": "top",
     "position": "top",
     "modules-left": [
-        "hyprland/workspaces"
+        /* "hyprland/workspaces" */
+        "niri/workspaces"
     ],
     "modules-center": [
         "clock"
@@ -14,6 +15,20 @@
         "tray",
         "custom/lock"
     ],
+    "niri/workspaces": {
+        "format": "{icon}",
+        "format-icons": {
+            "default": "•",
+            "active":  "•",
+            "urgent":  "•"
+        }
+    },
+    "niri/active_window": {
+        "format": "{title}",
+        "max-length": 40,
+        "ellipsis": true
+    },
+    /*
     "hyprland/workspaces": {
         "format": "{icon}",
         "format-icons": {
@@ -27,6 +42,7 @@
         "max-length": 40,
         "ellipsis": true
     },
+    */
     "tray": {
         "icon-size": 21,
         "spacing": 10
@@ -68,6 +84,7 @@
         ],
         "on-click": "ghostty -e bashtop >/dev/null 2>&1 & disown"
     },
+    /*
     "custom/keyboard-state": {
         "exec": "python3 ~/.config/waybar/keyboard_state.py",
         "interval": 1,
@@ -75,6 +92,7 @@
         "format": "{}",
         "tooltip": false
     },
+    */
     "pulseaudio": {
         "format": "{icon} {volume}%",
         "format-muted": "",

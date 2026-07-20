@@ -8,4 +8,4 @@ if pgrep -x "waybar" > /dev/null; then
 fi
 
 # Inicia Waybar nuevamente
-waybar & >/dev/null 2>&1 & disown
+waybar >/dev/null 2>&1 & disown

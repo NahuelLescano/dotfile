@@ -62,10 +62,11 @@ beautiful.init(os.getenv("HOME") .. "/.config/awesome/theme.lua")
 awesome.set_preferred_icon_size(33)
 
 -- This is used later as the default terminal and editor to run.
-local terminal = "ghostty"
+local terminal = "kitty"
 local browser = "app.zen_browser.zen"
 local xournal = "xournalpp"
 local rofi = "rofi -modi drun -show drun -display-drun 'Run:' "
+local emacs = "emacsclient -c -a 'emacs' "
 
 local home = os.getenv("HOME")
 
@@ -324,6 +325,12 @@ local globalkeys = gears.table.join(
     awful.key({ modkey }, "x", function()
         awful.util.spawn(xournal)
     end, { description = "run xournal", group = "applications" }),
+
+    -- Doom emacs
+    awful.key({ modkey, "Shift" }, "d", function()
+        awful.util.spawn(emacs)
+    end, { description = "run emacs", group = "dev" }),
+
 
     -- Pcmanfm
     awful.key({ modkey }, "p", function()
@@ -637,5 +644,6 @@ end)
 -- Autostart Applications
 awful.spawn.with_shell("nitrogen --restore &")
 awful.spawn.with_shell("nm-applet")
-awful.spawn.with_shell("volumeicon &")
+awful.spawn.with_shell("killall volumeicon && volumeicon &")
 awful.spawn.with_shell("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+awful.spawn.with_shell("emacs --daemon &")
