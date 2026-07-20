@@ -14,6 +14,7 @@ configs=(
     # "${HOME}/.config/vifm"
     # "${HOME}/.config/zathura"
     "${HOME}/.config/tmux/tmux.conf"
+    "${HOME}/.config/starship.toml"
     "${HOME}/.doom.d"
     "${HOME}/.bashrc"
     "${HOME}/tmux-sessionizer.sh"
