@@ -118,9 +118,10 @@
 (add-hook 'js-ts-mode-hook (lambda () (setq-local js-indent-level 2)))
 
 (after! lsp-mode
-  (setq lsp-deno-active nil)
-  
-  ;; Desactivar deno para JS/TS y usar typescript-language-server
+  (setq lsp-deno-active nil
+        lsp-enable-hover t
+        lsp-enable-completion-at-point t)
+
   (lsp-register-client
    (make-lsp-client :new-connection (lsp-stdio-connection "typescript-language-server" "--stdio")
                     :major-modes '(js-mode js-ts-mode typescript-mode typescript-ts-mode)
@@ -164,22 +165,34 @@
       (:prefix ("l", "lsp")
         :desc "LSP format buffer" "f" #'lsp-format-buffer))
 
-;; Magit configuration to remove certain sections from the status buffer
-(after! magit
-  (setq magit-status-sections-hook
-        (remove 'magit-insert-rebase-sequence magit-status-sections-hook))
-  (setq magit-status-sections-hook
-        (remove 'magit-insert-am-sequence magit-status-sections-hook))
-  (setq magit-status-sections-hook
-        (remove 'magit-insert-sequencer-sequence magit-status-sections-hook))
-  (setq magit-status-sections-hook
-        (remove 'magit-insert-bisect-output magit-status-sections-hook))
-  (setq magit-status-sections-hook
-        (remove 'magit-insert-bisect-rest magit-status-sections-hook))
-  (setq magit-status-sections-hook
-        (remove 'magit-insert-bisect-log magit-status-sections-hook))
-  (setq magit-status-sections-hook
-        (remove 'magit-insert-stashes magit-status-sections-hook)))
 
 ;; Set a custom splash image for Doom Emacs
 (setq fancy-splash-image "~/.doom.d/doom-emacs-dash.png")
+
+;; Disable SGR sequences in Groff output to prevent color codes from appearing in the terminal
+;; Emacs 31 solves it
+(setenv "GROFF_NO_SGR" "1")
+
+;; Compilation buffer opens fullscreen
+(add-hook 'compilation-mode-hook #'delete-other-windows)
+
+
+;; Compilation buffers para frontend y backend
+(defun project/backend-start ()
+  "Inicia el backend del proyecto en un buffer de compilation."
+  (interactive)
+  (let ((default-directory (doom-project-root)))
+    ;; (compile "make back" t)
+    (compilation-start "make back" t nil "*backend*")))
+
+(defun project/frontend-start ()
+  "Inicia el frontend del proyecto en un buffer de compilation."
+  (interactive)
+  (let ((default-directory (doom-project-root)))
+    ;; (compile "make front" t)
+    (compilation-start "make front" t nil "*frontend*")))
+
+(map! :leader
+      (:prefix ("c" . "code")
+       :desc "Start backend" "b" #'project/backend-start
+       :desc "Start frontend" "f" #'project/frontend-start))
