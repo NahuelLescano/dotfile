@@ -31,6 +31,14 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
+;; Fix compatibilidad Emacs 31 + doom-themes (rompe ciclo de herencia en Gnus)
+
+(require 'gnus-group nil t)
+(defface gnus-group-news-low-empty '((t :inherit default)) "Emacs 31 fix" :group 'gnus-group)
+(defface gnus-group-news-low '((t :inherit default)) "Emacs 31 fix" :group 'gnus-group)
+(set-face-attribute 'gnus-group-news-low nil :inherit 'default)
+(set-face-attribute 'gnus-group-news-low-empty nil :inherit 'default)
+
 (setq doom-theme 'doom-tokyo-night)
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -73,6 +81,10 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+
+(setq doom-font (font-spec :family "IosevkaTerm Nerd Font" :size 18 :weight 'semi-light)
+     doom-variable-pitch-font (font-spec :family "IosevkaTerm Nerd Font" :size 18))
+
 (setq doom-font (font-spec :family "IosevkaTerm Nerd Font" :size 18 :weight 'semi-light)
      doom-variable-pitch-font (font-spec :family "IosevkaTerm Nerd Font" :size 18))
 
@@ -91,14 +103,27 @@
               explicit-shell-file-name "/usr/bin/fish")
 
 ;; accept completion from copilot and fallback to company
+;; Carga diferida de Copilot sin bloquear el inicio ni la apertura de buffers
 (use-package! copilot
   :defer t
-  :hook (prog-mode . copilot-mode)
+  :commands (copilot-mode copilot-complete)
+  ;; Se activa sólo tras 1.5 segundos de inactividad al editar código
+  :hook (prog-mode . (lambda ()
+                       (run-with-idle-timer 1.5 nil
+                                            (lambda (buf)
+                                              (when (buffer-live-p buf)
+                                                (with-current-buffer buf
+                                                  (copilot-mode 1))))
+                                            (current-buffer))))
   :bind (:map copilot-completion-map
-              ("<C-j>" . 'copilot-accept-completion)
-              ("TAB" . 'copilot-accept-completion)
-              ("C-TAB" . 'copilot-accept-completion-by-word)
-              ("C-<tab>" . 'copilot-accept-completion-by-word)))
+              ("<C-j>" . copilot-accept-completion)
+              ("TAB" . copilot-accept-completion)
+              ("C-TAB" . copilot-accept-completion-by-word)
+              ("C-<tab>" . copilot-accept-completion-by-word))
+  :config
+  (setq copilot-indent-offset-warning-disable t
+        ;; Aumenta el tiempo de espera antes de pedir sugerencias (reduce llamadas continuas)
+        copilot-idle-delay 0.3))
 
 ;; Minimap configuration
 (after! minimap
@@ -109,25 +134,7 @@
   (setq minimap-hide-fringes t)
   (setq minimap-highlight-line t))
 
-;; Configuración de indentación para JavaScript y TypeScript
-(setq-default tab-width 2)
-(setq evil-shift-width 2)
-(setq-default indent-tabs-mode nil)
-
-(add-hook 'js-mode-hook (lambda () (setq-local js-indent-level 2)))
-(add-hook 'js-ts-mode-hook (lambda () (setq-local js-indent-level 2)))
-
-(after! lsp-mode
-  (setq lsp-deno-active nil
-        lsp-enable-hover t
-        lsp-enable-completion-at-point t)
-
-  (lsp-register-client
-   (make-lsp-client :new-connection (lsp-stdio-connection "typescript-language-server" "--stdio")
-                    :major-modes '(js-mode js-ts-mode typescript-mode typescript-ts-mode)
-                    :server-id 'ts-ls)))
-
-;; Beacon activation
+; Beacon activation
 (beacon-mode t)
 
 
@@ -143,13 +150,16 @@
         :desc "Dired view file" "d v" #'dired-view-file)))
 
 
-;; Org mode
+;; Org-mode configuration
 (after! org
   (setq org-ellipsis " ▼ "
-        org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
-        org-superstar-itembullet-alist '((?+ . ?➤) (?- . ?✦)) ; changes +/- symbols in item lists
         org-log-done 'time
         org-hide-emphasis-markers t))
+
+(after! org-superstar
+  (setq org-superstar-headline-bullets-list '("◉" "●" "○" "◆" "●" "○" "◆")
+        org-superstar-itembullet-alist '((?+ . ?➤) (?- . ?✦)))
+  (add-hook 'org-mode-hook #'org-superstar-mode))
 
 ;; Tree-sitter configuration for TypeScript and TSX
 (after! treesit
@@ -158,41 +168,119 @@
           (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src" nil nil)
           (css "https://github.com/tree-sitter/tree-sitter-css" nil nil nil nil))))
 
-;; Keybinding for LSP format buffer
-(map! :after lsp-mode
-      :map lsp-mode-map
-      :leader
-      (:prefix ("l", "lsp")
-        :desc "LSP format buffer" "f" #'lsp-format-buffer))
+;; Global indentation settings
+(setq-default indent-tabs-mode nil
+              tab-width 2)
+(setq evil-shift-width 2)
 
+(add-hook! 'prog-mode-hook
+  (setq-local tab-width 2
+              evil-shift-width 2))
+
+;; C/C++ indentation settings
+(after! cc-vars
+  (setq-default c-basic-offset 2)
+  (c-set-offset 'substatement-open 0)
+  (c-set-offset 'inline-open 0))
+
+(add-hook! '(java-mode-hook java-ts-mode-hook)
+  (setq-local c-basic-offset 2))
+
+;; JavaScript and TypeScript indentation settings
+(setq-default tab-width 2)
+(setq evil-shift-width 2)
+(setq-default indent-tabs-mode nil)
+
+(setq-default tab-width 2)
+(setq evil-shift-width 2)
+(setq-default indent-tabs-mode nil)
+
+(setq js-indent-level 2
+      typescript-indent-level 2)
+
+(add-hook! '(js-mode-hook js-ts-mode-hook rjsx-mode-hook typescript-ts-mode-hook)
+  (setq-local js-indent-level 2
+              typescript-indent-level 2))
+
+
+;; lsp mode and java configuration
+(setq gc-cons-threshold 100000000)              ; 100 MB para evitar pauses constantes de GC
+(setq read-process-output-max (* 3 1024 1024))  ; 3 MB (mejora la lectura de pipes de JDTLS)
+
+(after! lsp-mode
+  (setq lsp-idle-delay 0.500
+        lsp-log-io nil                          ; Desactivar el logging masivo en disco/buffer
+        lsp-enable-file-watchers nil            ; NO escanear recursivamente carpetas (evita freezes gigantes)
+        lsp-enable-folding nil                  ; Desactiva folding por LSP (Tree-sitter/Doom ya lo hacen)
+        lsp-enable-symbol-highlighting nil      ; Evita recalcular referencias cada vez que mueves el cursor
+        lsp-lens-enable nil                     ; CRUCIAL: lenses hace llamadas pesadas de conteo de referencias
+        lsp-headerline-breadcrumb-enable nil)   ; Desactiva la barra superior si notas lag de renderizado
+
+  ;; Evitar que el autocompletado bloquee la UI
+  (setq lsp-completion-provider :capf))
+
+(after! lsp-ui
+  ;; lsp-ui-doc y sideline son los mayores culpables de stuttering visual
+  (setq lsp-ui-doc-enable t
+        lsp-ui-doc-delay 1.5               ; Aumentar el delay para que no intente renderizar en cada movimiento
+        lsp-ui-sideline-enable nil))       ; Desactivar el sideline (lo que se dibuja al margen derecho)
+
+(after! lsp-java
+  ;; Darle suficiente memoria heap a JDTLS para que no haga thrashing de GC
+  (setq lsp-java-vmargs
+        '("-XX:+UseParallelGC"
+          "-XX:GCTimeRatio=4"
+          "-XX:AdaptiveSizePolicyWeight=90"
+          "-Dsun.zip.disableMemoryMapping=true"
+          "-Xmx2G"                         ; Asigna hasta 2GB de RAM a la JVM del LSP
+          "-Xms512m"))                     ; Arranca con 512MB de base
+
+  ;; Desactivar descargas o indexaciones automáticas secundarias
+  (setq lsp-java-sources-organize-imports-on-format nil
+        lsp-java-autobuild-subprojects nil))
+
+;; Configuración específica para Java (lsp-java + Eclipse JDTLS)
+(after! lsp-java
+  (setq lsp-java-format-enabled t
+        lsp-java-save-actions-organize-imports t))
 
 ;; Set a custom splash image for Doom Emacs
 (setq fancy-splash-image "~/.doom.d/doom-emacs-dash.png")
 
-;; Disable SGR sequences in Groff output to prevent color codes from appearing in the terminal
-;; Emacs 31 solves it
-(setenv "GROFF_NO_SGR" "1")
+;; plantuml-mode configuration
+(add-to-list 'auto-mode-alist '("\\.puml\\'" . plantuml-mode))
 
-;; Compilation buffer opens fullscreen
-(add-hook 'compilation-mode-hook #'delete-other-windows)
+;; eww weird background and foreground colors.
+(after! eww
+  (setq shr-use-colors nil
+        shr-use-fonts nil)
 
+  (custom-set-faces!
+    '(shr-text
+      :inherit default
+      :background unspecified
+      :foreground unspecified)
 
-;; Compilation buffers para frontend y backend
-(defun project/backend-start ()
-  "Inicia el backend del proyecto en un buffer de compilation."
-  (interactive)
-  (let ((default-directory (doom-project-root)))
-    ;; (compile "make back" t)
-    (compilation-start "make back" t nil "*backend*")))
+    '(shr-h1
+      :inherit (default bold)
+      :background unspecified)
 
-(defun project/frontend-start ()
-  "Inicia el frontend del proyecto en un buffer de compilation."
-  (interactive)
-  (let ((default-directory (doom-project-root)))
-    ;; (compile "make front" t)
-    (compilation-start "make front" t nil "*frontend*")))
+    '(shr-h2
+      :inherit (default bold)
+      :background unspecified)
 
-(map! :leader
-      (:prefix ("c" . "code")
-       :desc "Start backend" "b" #'project/backend-start
-       :desc "Start frontend" "f" #'project/frontend-start))
+    '(shr-h3
+      :inherit (default bold)
+      :background unspecified)
+
+    '(shr-link
+      :inherit link
+      :background unspecified)
+
+    '(shr-code
+      :inherit fixed-pitch
+      :background unspecified)
+
+    '(shr-pre
+      :inherit fixed-pitch
+      :background unspecified)))

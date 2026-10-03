@@ -2,8 +2,9 @@
     "layer": "top",
     "position": "top",
     "modules-left": [
-        /* "hyprland/workspaces" */
-        "niri/workspaces"
+        "hyprland/workspaces",
+        "hyprland/window"
+        /*"niri/workspaces" */
     ],
     "modules-center": [
         "clock"
@@ -15,6 +16,7 @@
         "tray",
         "custom/lock"
     ],
+    /*
     "niri/workspaces": {
         "format": "{icon}",
         "format-icons": {
@@ -28,7 +30,10 @@
         "max-length": 40,
         "ellipsis": true
     },
-    /*
+    */
+    "hyprland/window": {
+      "separate-outputs": true
+    },
     "hyprland/workspaces": {
         "format": "{icon}",
         "format-icons": {
@@ -42,7 +47,6 @@
         "max-length": 40,
         "ellipsis": true
     },
-    */
     "tray": {
         "icon-size": 21,
         "spacing": 10
@@ -82,7 +86,7 @@
             "▇",
             "█"
         ],
-        "on-click": "ghostty -e bashtop >/dev/null 2>&1 & disown"
+        "on-click": "kitty -e bashtop >/dev/null 2>&1 & disown"
     },
     /*
     "custom/keyboard-state": {
